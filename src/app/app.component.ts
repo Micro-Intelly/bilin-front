@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { PostService } from './services/post.service';
+
 
 @Component({
   selector: 'app-root',
@@ -7,4 +9,16 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'bilin-front';
+
+  posts:any;
+
+  constructor(private service:PostService) {}
+
+  ngOnInit() {
+    this.service.getPosts()
+      .subscribe(response => {
+        this.posts = response;
+      });
+  }
+
 }
