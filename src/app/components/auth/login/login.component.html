@@ -1,23 +1,41 @@
 <div class="m-5" fxLayout="row" fxLayoutAlign="center center">
   <mat-card class="box">
     <mat-card-header class="d-flex justify-content-center">
-      <mat-card-title>Introduce Your Bilin Account</mat-card-title>
+      <mat-card-title>{{'Login-message-1'|translate}}</mat-card-title>
     </mat-card-header>
-    <form class="example-form">
+    <form (ngSubmit)="onSubmit(f)" #f="ngForm">
       <mat-card-content>
         <p>
           <mat-form-field class="w-100">
-            <input matInput placeholder="Username">
+            <input matInput
+                   placeholder="Username"
+                   type="text"
+                   id="email"
+                   name="email"
+                   ngModel
+                   required
+                   pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+            >
           </mat-form-field>
         </p>
         <p>
           <mat-form-field class="w-100">
-            <input matInput placeholder="Password">
+            <input matInput
+                   placeholder="Password"
+                   type="text"
+                   id="password"
+                   name="password"
+                   ngModel
+                   required
+                   [type]="hidePassword ? 'password' : 'text'"
+            >
+<!--            <mat-icon matSuffix class="icon-display" (click)="hidePassword = !hidePassword">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>-->
+<!--            <mat-hint *ngIf="!passwordInput.value">Enter your password</mat-hint>-->
           </mat-form-field>
         </p>
       </mat-card-content>
       <div class="d-flex justify-content-center">
-        <button mat-stroked-button color="primary" class="btn-block">Log in</button>
+        <button mat-stroked-button color="primary" class="btn-block"  type="submit">Log in</button>
       </div>
     </form>
   </mat-card>
