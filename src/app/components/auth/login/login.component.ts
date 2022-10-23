@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from "@angular/forms";
+import { UserService } from '@app/services/user.service'
 
 import axios from 'axios';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -11,26 +13,20 @@ import axios from 'axios';
 
 
 export class LoginComponent implements OnInit {
-  user:String = '';
+  user:string = '';
 
-  constructor() { }
+  constructor(private router: Router,private userService: UserService) { }
 
   ngOnInit(): void {
   }
 
   onSubmit(form: NgForm) {
     const value = form.value;
-    console.log(value);
     axios.get('/sanctum/csrf-cookie' ).then(() => {
       axios.post('/api/login', value).then(res => {
-        console.log(res);
+        this.userService.userIdChange(res.data.id);
+        this.router.navigate(['/']);
       })
     })
-  }
-
-  onClick(){
-      axios.get('/api/example').then(res => {
-        this.user = res.data;
-      })
   }
 }

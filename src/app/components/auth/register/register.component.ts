@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import axios from "axios";
-import {environment} from "../../../../environments/environment";
+import { environment } from "@environments/environment";
 
 @Component({
   selector: 'app-register',
@@ -8,15 +8,15 @@ import {environment} from "../../../../environments/environment";
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-  user:String = '';
-  viewUser:Boolean = false;
-  deleteUser:Boolean = false;
-  admin:Boolean = false;
+  user:string = '';
+  viewUser:boolean = false;
+  deleteUser:boolean = false;
+  admin:boolean = false;
 
   constructor() { }
 
   ngOnInit(): void {
-    axios.get(environment.domain + '/api/user/viewTest').then(res => {
+    axios.get(environment.domain + '/api/user').then(res => {
       this.viewUser = true;
       this.user = JSON.stringify(res.data);
     }).catch(err => { console.log(err); })
