@@ -12,7 +12,6 @@ import axios from 'axios';
 
 export class LoginComponent implements OnInit {
   user:String = '';
-  hidePassword: boolean = true;
 
   constructor() { }
 

@@ -1,1 +1,12 @@
 <p>register works! :: {{ user }} </p>
+<div *ngIf="viewUser; then thenViewUserBlock else elseViewUserBlock"></div>
+<ng-template #thenViewUserBlock>You have access to view user.</ng-template>
+<ng-template #elseViewUserBlock>You do not have access to view user.</ng-template>
+<br/>
+<div *ngIf="deleteUser; then thenDeleteUserBlock else elseDeleteUserBlock"></div>
+<ng-template #thenDeleteUserBlock>You have access to delete user.</ng-template>
+<ng-template #elseDeleteUserBlock>You do not have access to delete user.</ng-template>
+<br/>
+<div *ngIf="admin; then thenAdminBlock else elseAdminBlock"></div>
+<ng-template #thenAdminBlock>You have access to admin section.</ng-template>
+<ng-template #elseAdminBlock>You do not have access to admin section.</ng-template>
