@@ -8,7 +8,6 @@
         <mat-card-content>
           <p>
             <mat-form-field class="w-100">
-<!--              <mat-label>Username</mat-label>-->
               <input matInput
                      placeholder="Username"
                      type="text"
@@ -17,7 +16,11 @@
                      formControlName="username"
                      required
               >
-<!--              <mat-error>At least 2 character</mat-error>-->
+              <mat-error *ngIf="formService.checkHasErrors('username')">
+                <mat-error *ngIf="formService.checkRequired('username')">{{'field-required' | translate}}</mat-error>
+                <mat-error *ngIf="formService.checkMinLength('username')">This field require minimum length 2 character</mat-error>
+                <mat-error *ngIf="formService.checkMaxLength('username')">This field require maximum length 50 character</mat-error>
+              </mat-error>
             </mat-form-field>
           </p>
           <p>
@@ -30,6 +33,11 @@
                      formControlName="email"
                      required
               >
+              <mat-error *ngIf="formService.checkHasErrors('email')">
+                <mat-error *ngIf="formService.checkRequired('email')">{{'field-required' | translate}}</mat-error>
+                <mat-error *ngIf="formService.checkMaxLength('email')">This field require maximum length 50 character</mat-error>
+                <mat-error *ngIf="formService.checkEmail('email')">Error email format</mat-error>
+              </mat-error>
             </mat-form-field>
           </p>
           <p>
@@ -42,18 +50,27 @@
                      formControlName="password"
                      required
               >
+              <mat-error *ngIf="formService.checkHasErrors('password')">
+                <mat-error *ngIf="formService.checkRequired('password')">{{'field-required' | translate}}</mat-error>
+                <mat-error *ngIf="formService.checkMinLength('password')">This field require minimum length 8 character</mat-error>
+                <mat-error *ngIf="formService.checkMaxLength('password')">This field require maximum length 50 character</mat-error>
+              </mat-error>
             </mat-form-field>
           </p>
           <p>
             <mat-form-field class="w-100">
               <input matInput
-                     placeholder="Repeat your password"
+                     placeholder="Confirm your password"
                      type="password"
-                     id="passwordRep"
-                     name="password"
+                     id="passwordRepeat"
+                     name="passwordRepeat"
                      formControlName="passwordRepeat"
                      required
               >
+              <mat-error *ngIf="formService.checkHasErrors('passwordRepeat')">
+                <mat-error *ngIf="formService.checkRequired('passwordRepeat')">{{'field-required' | translate}}</mat-error>
+                <mat-error *ngIf="formService.checkMatchValues('passwordRepeat')">The confirm password mast match with the password</mat-error>
+              </mat-error>
             </mat-form-field>
           </p>
           <p>
@@ -70,16 +87,19 @@
           <p *ngIf="getNeedKey()">
             <mat-form-field class="w-100">
               <input matInput
-                     placeholder="Verification Key"
+                     placeholder="Verification Key *"
                      type="text"
                      id="verificationKey"
                      name="verificationKey"
-                     formControlName="key"
+                     formControlName="verificationKey"
               >
+              <mat-error *ngIf="formService.checkHasErrors('verificationKey')">
+                <mat-error *ngIf="checkKeyRequired('verificationKey')">A verification key is required for this rol</mat-error>
+              </mat-error>
             </mat-form-field>
             <mat-hint>
               You pick up a role which require an internal verification key,
-              please get contact to site admin whether you do not want to get it.
+              please get contact to site admin whether you want to get it.
             </mat-hint>
           </p>
           <div class="row">
@@ -89,9 +109,14 @@
             </div>
           </div>
         </mat-card-content>
-        <div class="d-flex justify-content-center">
-          <button mat-stroked-button color="primary" class="btn-block"  type="submit" [disabled]="userRegisterFormGroup.invalid">Sign up</button>
+        <div *ngIf="loading" class="d-flex justify-content-center my-4">
+          <mat-spinner></mat-spinner>
         </div>
+        <div class="d-flex justify-content-center">
+          <button mat-stroked-button color="primary" class="btn-block"  type="submit" [disabled]="formService.checkFromHasErrors()">Sign up</button>
+        </div>
+        <mat-error *ngIf="formService.checkFromHasErrors() && onSubmitted">This form has some errors, please validate that</mat-error>
+        <mat-error *ngIf="errorAxios">Some errors occur sending request, please retry later</mat-error>
       </form>
     </mat-card>
   </div>

@@ -12,6 +12,7 @@ import {
   ValidationErrors, AbstractControlOptions
 } from "@angular/forms";
 import { Router } from "@angular/router";
+import {FormService} from "@app/services/form.service";
 
 interface Role {
   id: string;
@@ -27,26 +28,33 @@ interface Role {
 export class RegisterComponent implements OnInit {
 
   privacyCheck:boolean = false;
+  onSubmitted:boolean = false;
+  loading:boolean = false;
+  errorAxios:boolean = false;
   selectedRoleId:string = '';
   roles: Role[] = [];
   rolesIdMap: Map<string, Role> = new Map<string, Role>();
   userRegisterFormGroup: FormGroup;
 
-  constructor(private router: Router, private formBuilder: FormBuilder) {
+  constructor(private router: Router,
+              private formBuilder: FormBuilder,
+              public formService: FormService) {
     this.userRegisterFormGroup = this.formBuilder.group({
       username: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
-      email: ['', [Validators.required, Validators.minLength(2),Validators.maxLength(50),Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(2),Validators.maxLength(50)]],
+      email: ['', [Validators.required, Validators.maxLength(50),Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(8),Validators.maxLength(50)]],
       passwordRepeat: ['', [Validators.required]],
       role: ['', [Validators.required]],
-      key: ['', []],
+      verificationKey: ['', []],
       privacy: ['', [Validators.requiredTrue]]
     }, {
       validators: [
-        this.matchValues('password', 'passwordRepeat'),
-        this.keyRequired('role', 'key'),
+        this.formService.matchValues('password', 'passwordRepeat'),
+        this.keyRequired('role', 'verificationKey'),
       ]
     } as AbstractControlOptions);
+
+    formService.setFormGroup(this.userRegisterFormGroup);
 
     axios.get(environment.domain + '/api/roles').then(res => {
       this.roles = res.data;
@@ -61,24 +69,16 @@ export class RegisterComponent implements OnInit {
 
   getNeedKey(){return this.roles.find(r => r.id == this.selectedRoleId)?.need_key;}
 
-  matchValues(controlName: string, matchingControlName: string){
-    return (formGroup: FormGroup) => {
-      const control = formGroup.controls[controlName];
-      const matchingControl = formGroup.controls[matchingControlName];
-      if (control.value !== matchingControl.value) {
-        matchingControl.setErrors({ matchValues: true });
-      } else {
-        matchingControl.setErrors(null);
-      }
-    };
+  checkKeyRequired(controlName:string){
+    return this.userRegisterFormGroup.controls[controlName]?.hasError('keyRequired');
   }
-
   keyRequired(controlName: string, matchingControlName: string){
     return (formGroup: FormGroup) => {
       const control = formGroup.controls[controlName];
       const matchingControl = formGroup.controls[matchingControlName];
-      console.log(control.value);
-      console.log(!matchingControl.value);
+      if (matchingControl.errors && !matchingControl.errors?.['keyRequired']) {
+        return;
+      }
       if (this.rolesIdMap.get(control.value)?.need_key && !matchingControl.value) {
         matchingControl.setErrors({ keyRequired: true });
       } else {
@@ -86,18 +86,26 @@ export class RegisterComponent implements OnInit {
       }
     };
   }
+  // keyRequired(): ValidatorFn {
+  //   return (control: AbstractControl): { [key: string]: any } | null =>
+  //     (this.rolesIdMap.get(this.userRegisterFormGroup?.controls['role'].value)?.need_key && !control.value)
+  //       ? {keyRequired: true} : null;
+  // }
 
   onSubmit() {
+    this.onSubmitted = true;
     if(this.userRegisterFormGroup.valid){
-      console.log(JSON.stringify(this.userRegisterFormGroup.getRawValue()));
-      // let value = form.value;
-      // value['role'] = this.selectedRole['name'];
-      // value['privacy'] = this.privacyCheck;
-      //
-      // console.log (JSON.stringify(value));
-      // axios.post('/api/signup', value).then(res => {
-      //   this.router.navigate(['/']);
-      // }).catch(err => { console.log(err); })
+      let body = this.userRegisterFormGroup.getRawValue();
+      body['role'] = this.rolesIdMap.get(body['role'])?.name;
+      this.loading = true;
+      axios.post('/api/signup', body).then(res => {
+        this.loading = false;
+        this.router.navigate(['/login']);
+      }).catch(err => {
+        this.loading = false;
+        this.errorAxios = true;
+        console.log(err);
+      })
     }
   }
 }
