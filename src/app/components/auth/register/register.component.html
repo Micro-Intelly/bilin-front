@@ -1,12 +1,98 @@
-<p>register works! :: {{ user }} </p>
-<div *ngIf="viewUser; then thenViewUserBlock else elseViewUserBlock"></div>
-<ng-template #thenViewUserBlock>You have access to view user.</ng-template>
-<ng-template #elseViewUserBlock>You do not have access to view user.</ng-template>
-<br/>
-<div *ngIf="deleteUser; then thenDeleteUserBlock else elseDeleteUserBlock"></div>
-<ng-template #thenDeleteUserBlock>You have access to delete user.</ng-template>
-<ng-template #elseDeleteUserBlock>You do not have access to delete user.</ng-template>
-<br/>
-<div *ngIf="admin; then thenAdminBlock else elseAdminBlock"></div>
-<ng-template #thenAdminBlock>You have access to admin section.</ng-template>
-<ng-template #elseAdminBlock>You do not have access to admin section.</ng-template>
+<div class="row justify-content-center">
+  <div class="col-lg-4 col-sm-10 mt-4">
+    <mat-card class="box w-100">
+      <mat-card-header class="d-flex justify-content-center">
+        <mat-card-title>BILIN</mat-card-title>
+      </mat-card-header>
+      <form novalidate [formGroup]="userRegisterFormGroup" (ngSubmit)="onSubmit()">
+        <mat-card-content>
+          <p>
+            <mat-form-field class="w-100">
+<!--              <mat-label>Username</mat-label>-->
+              <input matInput
+                     placeholder="Username"
+                     type="text"
+                     id="username"
+                     name="username"
+                     formControlName="username"
+                     required
+              >
+<!--              <mat-error>At least 2 character</mat-error>-->
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-form-field class="w-100">
+              <input matInput
+                     placeholder="Email"
+                     type="text"
+                     id="email"
+                     name="email"
+                     formControlName="email"
+                     required
+              >
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-form-field class="w-100">
+              <input matInput
+                     placeholder="Password"
+                     type="password"
+                     id="password"
+                     name="password"
+                     formControlName="password"
+                     required
+              >
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-form-field class="w-100">
+              <input matInput
+                     placeholder="Repeat your password"
+                     type="password"
+                     id="passwordRep"
+                     name="password"
+                     formControlName="passwordRepeat"
+                     required
+              >
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-form-field appearance="legacy" class="w-100">
+              <mat-label>Select your role</mat-label>
+              <mat-select formControlName="role" required [(ngModel)]="selectedRoleId">
+                <mat-option *ngFor="let r of roles" [value]="r.id">
+                  {{r.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </p>
+
+          <p *ngIf="getNeedKey()">
+            <mat-form-field class="w-100">
+              <input matInput
+                     placeholder="Verification Key"
+                     type="text"
+                     id="verificationKey"
+                     name="verificationKey"
+                     formControlName="key"
+              >
+            </mat-form-field>
+            <mat-hint>
+              You pick up a role which require an internal verification key,
+              please get contact to site admin whether you do not want to get it.
+            </mat-hint>
+          </p>
+          <div class="row">
+            <div class="d-inline-flex">
+                <mat-checkbox formControlName="privacy"></mat-checkbox>
+                <p class="text-justify mx-2">I am agree to <a href="#">Privacy Policy</a> and <a href="#">Terms of Service</a></p>
+            </div>
+          </div>
+        </mat-card-content>
+        <div class="d-flex justify-content-center">
+          <button mat-stroked-button color="primary" class="btn-block"  type="submit" [disabled]="userRegisterFormGroup.invalid">Sign up</button>
+        </div>
+      </form>
+    </mat-card>
+  </div>
+</div>
