@@ -31,6 +31,12 @@ export class RegisterComponent implements OnInit {
   rolesIdMap: Map<string, Role> = new Map<string, Role>();
   userRegisterFormGroup: FormGroup;
 
+  /**
+   * Constructor
+   * @param router  - Router service to redirect page
+   * @param formBuilder - Form Builder service to create form group
+   * @param formService - Form service to check form errors
+   */
   constructor(private router: Router,
               private formBuilder: FormBuilder,
               public formService: FormService) {
@@ -62,11 +68,27 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  /**
+   * Method that return whether the role selected need a verification key
+   * @return {boolean} - Require or not a verification key
+   */
   getNeedKey(){return this.roles.find(r => r.id == this.selectedRoleId)?.need_key;}
 
+  /**
+   * Method that check whether there is error for verification key required
+   * @param controlName - Form control name of input field
+   * @return {boolean} - There is error of key required
+   */
   checkKeyRequired(controlName:string){
     return this.userRegisterFormGroup.controls[controlName]?.hasError('keyRequired');
   }
+
+  /**
+   * Validator that validate and set error for verification key input field
+   * @param controlName - Form control name of input field, in this case we depend on role field
+   * @param matchingControlName - Form control name which is checked, in this case, the verification key field
+   * @return {function} - Return the verification function for form group
+   */
   keyRequired(controlName: string, matchingControlName: string){
     return (formGroup: FormGroup) => {
       const control = formGroup.controls[controlName];
@@ -87,6 +109,9 @@ export class RegisterComponent implements OnInit {
   //       ? {keyRequired: true} : null;
   // }
 
+  /**
+   * onSubmit method to submit the register form
+   */
   onSubmit() {
     this.onSubmitted = true;
     if(this.userRegisterFormGroup.valid){

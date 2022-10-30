@@ -16,19 +16,21 @@ axios.defaults.withCredentials = true;
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  /**
+   * Instance of translate service.
+   * @type {TranslateService}
+   */
   public translate: TranslateService;
 
+  /**
+   * Constructor
+   * @param trans - Translate service to provide the translation function on our application
+   */
   constructor(trans: TranslateService) {
     trans.addLangs(['en','es']);
     trans.setDefaultLang('en');
     this.translate = trans;
   }
 
-  ngOnInit() {
-
-  }
-
-  switchLanguage(lang: string){
-    this.translate.use(lang);
-  }
+  ngOnInit() {}
 }

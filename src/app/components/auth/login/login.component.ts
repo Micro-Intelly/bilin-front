@@ -20,6 +20,13 @@ export class LoginComponent implements OnInit {
   errorAxios:boolean = false;
   userLoginFormGroup: FormGroup;
 
+  /**
+   * Constructor
+   * @param router - Router service to redirect page
+   * @param userService - User service to save logged user data
+   * @param formBuilder - Form Builder service to create form group
+   * @param formService - Form service to check form errors
+   */
   constructor(private router: Router,
               private userService: UserService,
               private formBuilder: FormBuilder,
@@ -36,10 +43,14 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  /**
+   * onSubmit method to submit the login form
+   */
   onSubmit() {
     this.onSubmitted = true;
     if(this.userLoginFormGroup.valid){
       let body = this.userLoginFormGroup.getRawValue();
+      this.loading = true;
       axios.get('/sanctum/csrf-cookie' ).then(() => {
         axios.post('/api/login', body).then(res => {
           this.loading = false;
