@@ -4,7 +4,7 @@
       <mat-card-header class="d-flex justify-content-center">
         <mat-card-title>{{'Login-message-1'|translate}}</mat-card-title>
       </mat-card-header>
-      <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+      <form novalidate [formGroup]="userLoginFormGroup" (ngSubmit)="onSubmit()">
         <mat-card-content>
           <p>
             <mat-form-field class="w-100">
@@ -13,10 +13,14 @@
                      type="text"
                      id="email"
                      name="email"
-                     ngModel
+                     formControlName="email"
                      required
-                     pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
               >
+              <mat-error *ngIf="formService.checkHasErrors('email')">
+                <mat-error *ngIf="formService.checkRequired('email')">{{'field-required' | translate}}</mat-error>
+                <mat-error *ngIf="formService.checkMaxLength('email')">This field require maximum length 50 character</mat-error>
+                <mat-error *ngIf="formService.checkEmail('email')">Error email format</mat-error>
+              </mat-error>
             </mat-form-field>
           </p>
           <p>
@@ -26,15 +30,25 @@
                      type="password"
                      id="password"
                      name="password"
-                     ngModel
+                     formControlName="password"
                      required
               >
+              <mat-error *ngIf="formService.checkHasErrors('password')">
+                <mat-error *ngIf="formService.checkRequired('password')">{{'field-required' | translate}}</mat-error>
+                <mat-error *ngIf="formService.checkMinLength('password')">This field require minimum length 8 character</mat-error>
+                <mat-error *ngIf="formService.checkMaxLength('password')">This field require maximum length 50 character</mat-error>
+              </mat-error>
             </mat-form-field>
           </p>
         </mat-card-content>
-        <div class="d-flex justify-content-center">
-          <button mat-stroked-button color="primary" class="btn-block"  type="submit">Log in</button>
+        <div *ngIf="loading" class="d-flex justify-content-center my-4">
+          <mat-spinner></mat-spinner>
         </div>
+        <div class="d-flex justify-content-center">
+          <button mat-stroked-button color="primary" class="btn-block"  type="submit" [disabled]="formService.checkFromHasErrors()">Log in</button>
+        </div>
+        <mat-error *ngIf="formService.checkFromHasErrors() && onSubmitted">This form has some errors, please validate that</mat-error>
+        <mat-error *ngIf="errorAxios">Some errors occur sending request, please retry later</mat-error>
       </form>
     </mat-card>
   </div>

@@ -4,12 +4,8 @@ import { environment } from "@environments/environment";
 import {
   FormBuilder,
   FormGroup,
-  FormControl,
-  NgForm,
   Validators,
-  ValidatorFn,
-  AbstractControl,
-  ValidationErrors, AbstractControlOptions
+  AbstractControlOptions
 } from "@angular/forms";
 import { Router } from "@angular/router";
 import {FormService} from "@app/services/form.service";
@@ -27,7 +23,6 @@ interface Role {
 })
 export class RegisterComponent implements OnInit {
 
-  privacyCheck:boolean = false;
   onSubmitted:boolean = false;
   loading:boolean = false;
   errorAxios:boolean = false;
