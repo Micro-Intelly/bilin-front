@@ -19,7 +19,7 @@ export class UserService {
       axios.get(environment.domain + '/api/user').then(res => {
         this.userIdChange(res.data.id);
         isLogged = true;
-      })
+      }).catch(err => {console.log(err);})
     }
     return isLogged;
   }

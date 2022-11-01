@@ -31,6 +31,34 @@
     </div>
     <div class="navbar-default">
       <div class="collapse navbar-collapse ms-xxl-4" >
+        <div>
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <button class="navbar-toggler"
+                    type="button"
+                    data-toggle="collapse"
+                    data-target="#languageDropdown"
+                    aria-controls="languageDropdown"
+                    aria-expanded="false"
+                    aria-label="Toggle language dropdown">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <li class="nav-item dropdown mx-3">
+              <a class="nav-link dropdown-toggle"
+                 role="button"
+                 data-bs-toggle="dropdown"
+                 aria-expanded="false"
+                 aria-haspopup="true"
+                 id="languageDropdown">
+                Language
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                <li *ngFor="let dropLan of dropdownLanguageItem | keyvalue">
+                  <a class="{{getLangClass(dropLan.key)}}" (click)="switchLanguage(dropLan.key)">{{ dropLan.value.name }}</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
         <div *ngIf="isLoggedIn; then loggedInBlock else notLoggedInBlock"></div>
         <ng-template #loggedInBlock>
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">

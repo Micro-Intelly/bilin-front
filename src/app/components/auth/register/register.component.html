@@ -1,12 +1,123 @@
-<p>register works! :: {{ user }} </p>
-<div *ngIf="viewUser; then thenViewUserBlock else elseViewUserBlock"></div>
-<ng-template #thenViewUserBlock>You have access to view user.</ng-template>
-<ng-template #elseViewUserBlock>You do not have access to view user.</ng-template>
-<br/>
-<div *ngIf="deleteUser; then thenDeleteUserBlock else elseDeleteUserBlock"></div>
-<ng-template #thenDeleteUserBlock>You have access to delete user.</ng-template>
-<ng-template #elseDeleteUserBlock>You do not have access to delete user.</ng-template>
-<br/>
-<div *ngIf="admin; then thenAdminBlock else elseAdminBlock"></div>
-<ng-template #thenAdminBlock>You have access to admin section.</ng-template>
-<ng-template #elseAdminBlock>You do not have access to admin section.</ng-template>
+<div class="row justify-content-center">
+  <div class="col-lg-4 col-sm-10 mt-4">
+    <mat-card class="box w-100">
+      <mat-card-header class="d-flex justify-content-center">
+        <mat-card-title>BILIN</mat-card-title>
+      </mat-card-header>
+      <form novalidate [formGroup]="userRegisterFormGroup" (ngSubmit)="onSubmit()">
+        <mat-card-content>
+          <p>
+            <mat-form-field class="w-100">
+              <input matInput
+                     placeholder="Username"
+                     type="text"
+                     id="username"
+                     name="username"
+                     formControlName="username"
+                     required
+              >
+              <mat-error *ngIf="formService.checkHasErrors('username')">
+                <mat-error *ngIf="formService.checkRequired('username')">{{'field-required' | translate}}</mat-error>
+                <mat-error *ngIf="formService.checkMinLength('username')">This field require minimum length 2 character</mat-error>
+                <mat-error *ngIf="formService.checkMaxLength('username')">This field require maximum length 50 character</mat-error>
+              </mat-error>
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-form-field class="w-100">
+              <input matInput
+                     placeholder="Email"
+                     type="text"
+                     id="email"
+                     name="email"
+                     formControlName="email"
+                     required
+              >
+              <mat-error *ngIf="formService.checkHasErrors('email')">
+                <mat-error *ngIf="formService.checkRequired('email')">{{'field-required' | translate}}</mat-error>
+                <mat-error *ngIf="formService.checkMaxLength('email')">This field require maximum length 50 character</mat-error>
+                <mat-error *ngIf="formService.checkEmail('email')">Error email format</mat-error>
+              </mat-error>
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-form-field class="w-100">
+              <input matInput
+                     placeholder="Password"
+                     type="password"
+                     id="password"
+                     name="password"
+                     formControlName="password"
+                     required
+              >
+              <mat-error *ngIf="formService.checkHasErrors('password')">
+                <mat-error *ngIf="formService.checkRequired('password')">{{'field-required' | translate}}</mat-error>
+                <mat-error *ngIf="formService.checkMinLength('password')">This field require minimum length 8 character</mat-error>
+                <mat-error *ngIf="formService.checkMaxLength('password')">This field require maximum length 50 character</mat-error>
+              </mat-error>
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-form-field class="w-100">
+              <input matInput
+                     placeholder="Confirm your password"
+                     type="password"
+                     id="passwordRepeat"
+                     name="passwordRepeat"
+                     formControlName="passwordRepeat"
+                     required
+              >
+              <mat-error *ngIf="formService.checkHasErrors('passwordRepeat')">
+                <mat-error *ngIf="formService.checkRequired('passwordRepeat')">{{'field-required' | translate}}</mat-error>
+                <mat-error *ngIf="formService.checkMatchValues('passwordRepeat')">The confirm password mast match with the password</mat-error>
+              </mat-error>
+            </mat-form-field>
+          </p>
+          <p>
+            <mat-form-field appearance="legacy" class="w-100">
+              <mat-label>Select your role</mat-label>
+              <mat-select formControlName="role" required [(ngModel)]="selectedRoleId">
+                <mat-option *ngFor="let r of roles" [value]="r.id">
+                  {{r.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </p>
+
+          <p *ngIf="getNeedKey()">
+            <mat-form-field class="w-100">
+              <input matInput
+                     placeholder="Verification Key *"
+                     type="text"
+                     id="verificationKey"
+                     name="verificationKey"
+                     formControlName="verificationKey"
+              >
+              <mat-error *ngIf="formService.checkHasErrors('verificationKey')">
+                <mat-error *ngIf="checkKeyRequired('verificationKey')">A verification key is required for this rol</mat-error>
+              </mat-error>
+            </mat-form-field>
+            <mat-hint>
+              You pick up a role which require an internal verification key,
+              please get contact to site admin whether you want to get it.
+            </mat-hint>
+          </p>
+          <div class="row">
+            <div class="d-inline-flex">
+                <mat-checkbox formControlName="privacy"></mat-checkbox>
+                <p class="text-justify mx-2">I am agree to <a href="#">Privacy Policy</a> and <a href="#">Terms of Service</a></p>
+            </div>
+          </div>
+        </mat-card-content>
+        <div *ngIf="loading" class="d-flex justify-content-center my-4">
+          <mat-spinner></mat-spinner>
+        </div>
+        <div class="d-flex justify-content-center">
+          <button mat-stroked-button color="primary" class="btn-block"  type="submit" [disabled]="formService.checkFromHasErrors()">Sign up</button>
+        </div>
+        <mat-error *ngIf="formService.checkFromHasErrors() && onSubmitted">This form has some errors, please validate that</mat-error>
+        <mat-error *ngIf="errorAxios">Some errors occur sending request, please retry later</mat-error>
+      </form>
+    </mat-card>
+  </div>
+</div>
