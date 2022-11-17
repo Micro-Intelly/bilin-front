@@ -13,10 +13,16 @@ import { AngularMaterialModule } from '@app/angular-material.module';
 import { AuthGuard } from '@app/guards/auth.guard';
 import { CookieService } from 'ngx-cookie-service';
 
+import { VgCoreModule } from '@videogular/ngx-videogular/core';
+import { VgControlsModule } from '@videogular/ngx-videogular/controls';
+import { VgOverlayPlayModule } from '@videogular/ngx-videogular/overlay-play';
+import { VgBufferingModule } from '@videogular/ngx-videogular/buffering';
+
 import { HeaderComponent } from '@app/components/header/header.component';
 import { LoginComponent } from '@app/components/auth/login/login.component';
 import { RegisterComponent } from '@app/components/auth/register/register.component';
 import { HomeComponent } from '@app/components/home/home.component';
+
 
 
 @NgModule({
@@ -36,6 +42,10 @@ import { HomeComponent } from '@app/components/home/home.component';
     FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
+    VgCoreModule,
+    VgControlsModule,
+    VgOverlayPlayModule,
+    VgBufferingModule,
 
     TranslateModule.forRoot({
       loader: {
