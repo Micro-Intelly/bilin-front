@@ -1,0 +1,9 @@
+.session-card {
+  min-width: 500px;
+}
+
+@media(max-width: 959px){
+  .session-card{
+    min-width: 300px;
+  }
+}

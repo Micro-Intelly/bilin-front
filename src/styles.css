@@ -2,3 +2,40 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.card:hover{
+  box-shadow: -1px 10px 29px 0px rgba(0,0,0,0.8);
+}
+.img-cover {
+  object-fit: cover;
+}
+
+.general-body-margin {
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+.ngx-pagination {
+  padding: 0px !important;
+  margin: 0px !important;
+}
+
+/*.ngx-pagination .current,*/
+/*.btn-info {*/
+/*  background: #17a2b8 !important;*/
+/*  border: transparent !important;*/
+/*  border-radius: 20px !important;*/
+/*}*/
+
+/*.ngx-pagination .current:hover {*/
+/*  background: #17a2b8 !important;*/
+/*  border-radius: 20px !important;*/
+/*  border: transparent !important;*/
+/*}*/
+
+@media (min-width: 1200px) {
+  .general-body-margin {
+    margin-left: 15%;
+    margin-right: 15%;
+  }
+}

@@ -1,86 +1,171 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container-fluid">
-    <div class="navbar-header">
+<mat-toolbar color="{{toolbarColor}}" (window:scroll)="onwindowScroll()">
+  <div fxLayout="row" fxLayoutAlign="center center" class="mx-5 w-100">
+    <div fxShow="true" fxHide.gt-sm="true" fxFlex="20">
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item routerLink="/">
+          <mat-icon>home</mat-icon>
+          <span>Home</span>
+        </button>
+        <button mat-menu-item [matMenuTriggerFor]="vertebrates" >
+          <mat-icon>class</mat-icon>
+          <span>Class</span>
+        </button>
+        <mat-menu #vertebrates="matMenu">
+          <button mat-menu-item routerLink="/class/all" >All classes</button>
+          <button mat-menu-item>Mammals</button>
+        </mat-menu>
+        <button mat-menu-item>
+          <mat-icon>forum</mat-icon>
+          <span>Forum</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>library_books</mat-icon>
+          <span>Test</span>
+        </button>
+      </mat-menu>
+    </div>
+    <div fxShow="true" fxHide.lt-md="true" class="mx-5" fxFlex="20" fxLayout="row" fxLayoutAlign="center center">
       <a href="#" class="navbar-brand">
         <img src="./assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt="">
       </a>
     </div>
-    <div class="collapse navbar-collapse ms-xxl-4" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item mx-3">
-          <a class="nav-link active" aria-current="page" routerLink="/">Home</a>
-        </li>
-        <li class="nav-item mx-3">
-          <a class="nav-link" routerLink="/register">Forum</a>
-        </li>
-        <li class="nav-item dropdown mx-3">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-        </li>
-        <li class="nav-item mx-3">
-          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-        </li>
-      </ul>
+    <div fxShow="true" fxHide.gt-sm="true" class="mx-5" fxFlex="80" fxLayout="row" fxLayoutAlign="center center">
+      <a href="#" class="navbar-brand">
+        <img src="./assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt="">
+      </a>
     </div>
-    <div class="navbar-default">
-      <div class="collapse navbar-collapse ms-xxl-4" >
-        <div>
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <button class="navbar-toggler"
-                    type="button"
-                    data-toggle="collapse"
-                    data-target="#languageDropdown"
-                    aria-controls="languageDropdown"
-                    aria-expanded="false"
-                    aria-label="Toggle language dropdown">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <li class="nav-item dropdown mx-3">
-              <a class="nav-link dropdown-toggle"
-                 role="button"
-                 data-bs-toggle="dropdown"
-                 aria-expanded="false"
-                 aria-haspopup="true"
-                 id="languageDropdown">
-                Language
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="languageDropdown">
-                <li *ngFor="let dropLan of dropdownLanguageItem | keyvalue">
-                  <a class="{{getLangClass(dropLan.key)}}" (click)="switchLanguage(dropLan.key)">{{ dropLan.value.name }}</a>
-                </li>
-              </ul>
-            </li>
-          </ul>
+    <div fxShow="true" fxHide.lt-md="true" fxFlex="60" class="w-100">
+      <!-- The following menu items will be hidden on both SM and XS screen sizes -->
+      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="30">
+        <a class="nav-link active" aria-current="page" routerLink="/">Home</a>
+        <div fxLayout="row" fxLayoutGap="5">
+        <a class="nav-link" aria-current="page" routerLink="/class/all">Class</a>
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <li><a class="dropdown-item" href="#">Action</a></li>
+          <li><a class="dropdown-item" href="#">Another action</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" href="#">Something else here</a></li>
+        </ul>
         </div>
-        <div *ngIf="isLoggedIn; then loggedInBlock else notLoggedInBlock"></div>
-        <ng-template #loggedInBlock>
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item mx-3">
-              <a class="nav-link" routerLink="/profile">Profile</a>
-            </li>
-            <li class="nav-item mx-3">
-              <a class="nav-link" (click)="logout()">Logout</a>
-            </li>
-          </ul>
-        </ng-template>
-        <ng-template #notLoggedInBlock>
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item mx-3">
-              <a class="nav-link" routerLink="/login">Login</a>
-            </li>
-            <li class="nav-item mx-3">
-              <a class="nav-link" routerLink="/register">Sign Up</a>
-            </li>
-          </ul>
-        </ng-template>
+        <a class="nav-link" routerLink="/register">Forum</a>
+        <a class="nav-link" routerLink="/register">Test</a>
       </div>
     </div>
+    <div fxFlex="20" fxLayoutAlign="end center">
+      <button mat-icon-button [matMenuTriggerFor]="lanMenu">
+        <mat-icon>language</mat-icon>
+      </button>
+      <mat-menu #lanMenu="matMenu">
+        <div *ngFor="let dropLan of dropdownLanguageItem | keyvalue">
+          <button mat-menu-item class="{{ getLangClass(dropLan.key) }}" (click)="switchLanguage(dropLan.key)">
+            <span>{{ dropLan.value.name }}</span>
+          </button>
+        </div>
+      </mat-menu>
+      <button mat-icon-button [matMenuTriggerFor]="accMenu">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+      <mat-menu #accMenu="matMenu">
+        <button mat-menu-item>
+          <span>Login</span>
+        </button>
+        <button mat-menu-item>
+          <span>Register</span>
+        </button>
+      </mat-menu>
+    </div>
   </div>
-</nav>
+</mat-toolbar>
+
+
+          <!--<nav class="navbar navbar-expand-lg navbar-light bg-light">-->
+<!--  <div class="container-fluid">-->
+<!--    <div class="navbar-header">-->
+<!--      <a href="#" class="navbar-brand">-->
+<!--        <img src="./assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt="">-->
+<!--      </a>-->
+<!--    </div>-->
+<!--    <div class="collapse navbar-collapse ms-xxl-4" id="navbarSupportedContent">-->
+<!--      <ul class="navbar-nav me-auto mb-2 mb-lg-0">-->
+<!--        <li class="nav-item mx-3">-->
+<!--          <a class="nav-link active" aria-current="page" routerLink="/">Home</a>-->
+<!--        </li>-->
+<!--        <li class="nav-item mx-3">-->
+<!--          <a class="nav-link" routerLink="/register">Forum</a>-->
+<!--        </li>-->
+<!--        <li class="nav-item dropdown mx-3">-->
+<!--          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--            Dropdown-->
+<!--          </a>-->
+<!--          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">-->
+<!--            <li><a class="dropdown-item" href="#">Action</a></li>-->
+<!--            <li><a class="dropdown-item" href="#">Another action</a></li>-->
+<!--            <li><hr class="dropdown-divider"></li>-->
+<!--            <li><a class="dropdown-item" href="#">Something else here</a></li>-->
+<!--          </ul>-->
+<!--        </li>-->
+<!--        <li class="nav-item mx-3">-->
+<!--          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>-->
+<!--        </li>-->
+<!--      </ul>-->
+<!--    </div>-->
+<!--    <div class="navbar-default">-->
+<!--      <div class="collapse navbar-collapse ms-xxl-4" >-->
+<!--        <div>-->
+<!--          <ul class="navbar-nav me-auto mb-2 mb-lg-0">-->
+<!--            <button class="navbar-toggler"-->
+<!--                    type="button"-->
+<!--                    data-toggle="collapse"-->
+<!--                    data-target="#languageDropdown"-->
+<!--                    aria-controls="languageDropdown"-->
+<!--                    aria-expanded="false"-->
+<!--                    aria-label="Toggle language dropdown">-->
+<!--              <span class="navbar-toggler-icon"></span>-->
+<!--            </button>-->
+<!--            <li class="nav-item dropdown mx-3">-->
+<!--              <a class="nav-link dropdown-toggle"-->
+<!--                 role="button"-->
+<!--                 data-bs-toggle="dropdown"-->
+<!--                 aria-expanded="false"-->
+<!--                 aria-haspopup="true"-->
+<!--                 id="languageDropdown">-->
+<!--                Language-->
+<!--              </a>-->
+<!--              <ul class="dropdown-menu" aria-labelledby="languageDropdown">-->
+<!--                <li *ngFor="let dropLan of dropdownLanguageItem | keyvalue">-->
+<!--                  <a class="{{getLangClass(dropLan.key)}}" (click)="switchLanguage(dropLan.key)">{{ dropLan.value.name }}</a>-->
+<!--                </li>-->
+<!--              </ul>-->
+<!--            </li>-->
+<!--          </ul>-->
+<!--        </div>-->
+<!--        <div *ngIf="isLoggedIn; then loggedInBlock else notLoggedInBlock"></div>-->
+<!--        <ng-template #loggedInBlock>-->
+<!--          <ul class="navbar-nav me-auto mb-2 mb-lg-0">-->
+<!--            <li class="nav-item mx-3">-->
+<!--              <a class="nav-link" routerLink="/profile">Profile</a>-->
+<!--            </li>-->
+<!--            <li class="nav-item mx-3">-->
+<!--              <a class="nav-link" (click)="logout()">Logout</a>-->
+<!--            </li>-->
+<!--          </ul>-->
+<!--        </ng-template>-->
+<!--        <ng-template #notLoggedInBlock>-->
+<!--          <ul class="navbar-nav me-auto mb-2 mb-lg-0">-->
+<!--            <li class="nav-item mx-3">-->
+<!--              <a class="nav-link" routerLink="/login">Login</a>-->
+<!--            </li>-->
+<!--            <li class="nav-item mx-3">-->
+<!--              <a class="nav-link" routerLink="/register">Sign Up</a>-->
+<!--            </li>-->
+<!--          </ul>-->
+<!--        </ng-template>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</nav>-->

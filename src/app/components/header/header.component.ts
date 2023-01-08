@@ -21,6 +21,7 @@ export class HeaderComponent implements OnInit {
   subscriptionUserId: Subscription;
   dropdownLanguageItem:Map<string,DropdownItem>;
   activeLanguage:string = 'en';
+  toolbarColor = '';
 
   @Input()
   translateService: TranslateService | undefined;
@@ -38,8 +39,8 @@ export class HeaderComponent implements OnInit {
     });
 
     this.dropdownLanguageItem = new Map<string,DropdownItem>();
-    this.dropdownLanguageItem.set('es', {name:'Español', code:'es', class:['dropdown-item']});
-    this.dropdownLanguageItem.set('en', {name:'English', code:'en', class:['dropdown-item', 'active']});
+    this.dropdownLanguageItem.set('es', {name:'Español', code:'es', class:[]});
+    this.dropdownLanguageItem.set('en', {name:'English', code:'en', class:['bg-secondary', 'text-light']});
   }
 
   ngOnInit(): void {
@@ -73,8 +74,16 @@ export class HeaderComponent implements OnInit {
    */
   switchLanguage(langCode: string){
     this.translateService?.use(langCode);
-    this.dropdownLanguageItem.get(this.activeLanguage)!.class = ['dropdown-item'];
-    this.dropdownLanguageItem.get(langCode)!.class = ['dropdown-item','active'];
+    this.dropdownLanguageItem.get(this.activeLanguage)!.class = [];
+    this.dropdownLanguageItem.get(langCode)!.class = ['bg-secondary', 'text-light'];
     this.activeLanguage = langCode;
+  }
+
+  onwindowScroll(){
+    if (window.scrollY === 0) {
+      this.toolbarColor = '';
+    } else {
+      this.toolbarColor = 'primary';
+    }
   }
 }

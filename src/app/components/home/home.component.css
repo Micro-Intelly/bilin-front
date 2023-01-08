@@ -1,0 +1,18 @@
+.landing-img {
+  height: 400px;
+}
+
+.card:hover{
+  box-shadow: -1px 10px 29px 0px rgba(0,0,0,0.8);
+}
+
+@media (min-width: 1200px) {
+  .grid-centered {
+    padding: 0 20% !important;
+  }
+
+  .landing-img {
+    height: 600px;
+  }
+}
+

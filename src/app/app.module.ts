@@ -10,6 +10,7 @@ import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { AppComponent } from '@app/app.component';
 import { AppRoutingModule } from '@app/app-routing.module';
 import { AngularMaterialModule } from '@app/angular-material.module';
+import { MatChipsModule } from "@angular/material/chips";
 import { AuthGuard } from '@app/guards/auth.guard';
 import { CookieService } from 'ngx-cookie-service';
 
@@ -18,10 +19,21 @@ import { VgControlsModule } from '@videogular/ngx-videogular/controls';
 import { VgOverlayPlayModule } from '@videogular/ngx-videogular/overlay-play';
 import { VgBufferingModule } from '@videogular/ngx-videogular/buffering';
 
+import { NgxPaginationModule } from 'ngx-pagination';
+
 import { HeaderComponent } from '@app/components/header/header.component';
 import { LoginComponent } from '@app/components/auth/login/login.component';
 import { RegisterComponent } from '@app/components/auth/register/register.component';
 import { HomeComponent } from '@app/components/home/home.component';
+import { FooterComponent } from '@app/components/footer/footer.component';
+import { ClassAllComponent } from '@app/components/class/class-all/class-all.component';
+import { ClassSerieComponent } from '@app/components/class/class-serie/class-serie.component';
+import { ClassEpisodeComponent } from '@app/components/class/class-episode/class-episode.component';
+import { ForumAllComponent } from '@app/components/forum/forum-all/forum-all.component';
+import { TestAllComponent } from '@app/components/test/test-all/test-all.component';
+import { TestDetailComponent } from '@app/components/test/test-detail/test-detail.component';
+import { ForumDetailComponent } from '@app/components/forum/forum-detail/forum-detail.component';
+
 
 
 
@@ -31,7 +43,16 @@ import { HomeComponent } from '@app/components/home/home.component';
     HeaderComponent,
     LoginComponent,
     RegisterComponent,
-    HomeComponent
+    HomeComponent,
+    FooterComponent,
+    ClassAllComponent,
+    ClassSerieComponent,
+    ClassEpisodeComponent,
+    ForumAllComponent,
+    TestAllComponent,
+    TestDetailComponent,
+    ForumDetailComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -46,6 +67,8 @@ import { HomeComponent } from '@app/components/home/home.component';
     VgControlsModule,
     VgOverlayPlayModule,
     VgBufferingModule,
+    MatChipsModule,
+    NgxPaginationModule,
 
     TranslateModule.forRoot({
       loader: {

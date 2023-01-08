@@ -1,9 +1,56 @@
-<p>home works!</p>
-
-<div>
-  <h3>Basic Video Player</h3>
-  <div class="w-50">
-    <vg-player>
+<div fxLayout="column" fxLayoutGap="10px">
+  <div fxLayout="row" fxLayoutAlign="space-around center" class="mx-3 mb-5 landing-img">
+    <div fxLayout="column" fxFlex="75%" class="w-100 h-100">
+      <div fxLayout="row" fxLayoutAlign="center center" class="w-100 h-50 pb-1">
+        <mat-card class="mat-elevation-z4 card w-100 h-100 p-0" routerLink="/class/en-US">
+          <img class="w-100 h-100 img-cover" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Example_image.svg/600px-Example_image.svg.png" alt="alt">
+        </mat-card>
+      </div>
+      <div fxLayout="row" fxLayoutGap="5px" class="w-100 h-50">
+        <div fxLayout="row" class="w-25 h-100">
+          <mat-card class="mat-elevation-z4 card w-100 h-100 p-0" routerLink="/class/all">
+            <img class="w-100 h-100 img-cover" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Example_image.svg/600px-Example_image.svg.png" alt="alt">
+          </mat-card>
+        </div>
+        <div fxLayout="row" class="w-75 h-100">
+          <mat-card class="mat-elevation-z4 card w-100 h-100 p-0" routerLink="/class/all">
+            <img class="w-100 h-100 img-cover" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Example_image.svg/600px-Example_image.svg.png" alt="alt">
+          </mat-card>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="column" fxFlex="25%" fxLayoutGap="5px" class="w-100 h-100 ps-1">
+      <mat-card class="mat-elevation-z4 card w-100 h-100 p-0" routerLink="/class/all">
+        <img class="w-100 h-100 img-cover" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Example_image.svg/600px-Example_image.svg.png" alt="alt">
+      </mat-card>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="space-around center" class="px-3 grid-centered">
+    <div fxLayout="row wrap" fxLayoutGap="16px grid">
+      <div fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="33%" *ngFor="let num of [1,2,3,4,5,6,7]">
+        <mat-card class="mat-elevation-z4 card" routerLink="/class/all">
+          <mat-card-header>
+            <mat-card-title>Language {{num}}</mat-card-title>
+          </mat-card-header>
+          <img mat-card-image src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Example_image.svg/600px-Example_image.svg.png" alt="alt">
+          <mat-card-content>
+            <p>
+              The Himalayas is a mountain range in Asia.
+            </p>
+          </mat-card-content>
+<!--          <mat-card-actions> &lt;!&ndash; recordar si quiere usar boton un prevent propagacion&ndash;&gt;-->
+<!--            <button mat-button>LIKE</button>-->
+<!--            <button mat-button>SHARE</button>-->
+<!--          </mat-card-actions>-->
+        </mat-card>
+      </div>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="space-around center">
+    <h3>Basic Video Player</h3>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="space-around center">
+    <vg-player fxFlex="50">
       <vg-overlay-play></vg-overlay-play>
       <vg-buffering></vg-buffering>
       <vg-scrub-bar>
@@ -29,32 +76,33 @@
       </video>
     </vg-player>
   </div>
-  <h3>Basic Audio Player</h3>
-<!--  <audio controls autoplay muted controlsList="nodownload">-->
-<!--    <source src="http://localhost:8000/api/podcast" type="audio/mpeg" >-->
-<!--  </audio>-->
-  <div class="w-50">
-    <vg-player style="height: 50px;">
-      <vg-controls>
-        <vg-play-pause></vg-play-pause>
-        <vg-playback-button></vg-playback-button>
+  <div fxLayout="row" fxLayoutAlign="space-around center">
+    <h3>Basic Audio Player</h3>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="space-around center">
+    <div fxFlex="50">
+      <vg-player style="height: 50px;">
+        <vg-controls>
+          <vg-play-pause></vg-play-pause>
+          <vg-playback-button></vg-playback-button>
 
-        <vg-time-display vgProperty="current" vgFormat="mm:ss"></vg-time-display>
+          <vg-time-display vgProperty="current" vgFormat="mm:ss"></vg-time-display>
 
-        <vg-scrub-bar>
-          <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
-          <vg-scrub-bar-buffering-time></vg-scrub-bar-buffering-time>
-        </vg-scrub-bar>
+          <vg-scrub-bar>
+            <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
+            <vg-scrub-bar-buffering-time></vg-scrub-bar-buffering-time>
+          </vg-scrub-bar>
 
-        <vg-time-display vgProperty="total" vgFormat="mm:ss"></vg-time-display>
+          <vg-time-display vgProperty="total" vgFormat="mm:ss"></vg-time-display>
 
-        <vg-mute></vg-mute>
-        <vg-volume class="me-3"></vg-volume>
-      </vg-controls>
+          <vg-mute></vg-mute>
+          <vg-volume class="me-3"></vg-volume>
+        </vg-controls>
 
-      <audio #media1 [vgMedia]="$any(media1)" id="myAudio" preload="auto">
-        <source src="http://localhost:8000/api/podcast" type="audio/mp3">
-      </audio>
-    </vg-player>
+        <audio #media1 [vgMedia]="$any(media1)" id="myAudio" preload="auto">
+          <source src="http://localhost:8000/api/podcast" type="audio/mp3">
+        </audio>
+      </vg-player>
+    </div>
   </div>
 </div>

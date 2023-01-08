@@ -9,7 +9,7 @@ import {FormService} from "@app/services/form.service";
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css', '../auth.css']
 })
 
 
