@@ -7,20 +7,36 @@ import {ClassAllComponent} from "@app/components/class/class-all/class-all.compo
 import {Title} from "@angular/platform-browser";
 import {ClassSerieComponent} from "@app/components/class/class-serie/class-serie.component";
 import {ClassEpisodeComponent} from "@app/components/class/class-episode/class-episode.component";
+import {ForumAllComponent} from "@app/components/forum/forum-all/forum-all.component";
+import {TestAllComponent} from "@app/components/test/test-all/test-all.component";
+import {ForumDetailComponent} from "@app/components/forum/forum-detail/forum-detail.component";
+import {TestDetailComponent} from "@app/components/test/test-detail/test-detail.component";
+import {ClassStreamComponent} from "@app/components/class/class-stream/class-stream.component";
 
 const routes: Routes = [
   { path: '', title: 'Home', component: HomeComponent },
   { path: 'login', title: 'Login', component: LoginComponent },
   { path: 'register', title: 'Register', component: RegisterComponent },
-  { path: 'class/:language', title: 'Class', component: ClassAllComponent,
+  { path: 'class/series/:series-id', title: 'Series', component: ClassSerieComponent },
+  { path: 'class/series/:series-id/ep', component: ClassEpisodeComponent,
     children: [
-      { path: ':series-id', component: ClassSerieComponent,
-        children: [
-          {path: ':episode-id', component: ClassEpisodeComponent}
-        ]
-      }
+      { path: ':episode-id', component: ClassStreamComponent }
     ]
   },
+  { path: 'class/:language', title: 'Class', component: ClassAllComponent },
+  { path: 'forum/:language', title: 'Forum', component: ForumAllComponent,
+    children: [
+      { path: ':post-id', component: ForumDetailComponent }
+    ]
+  },
+  { path: 'test/:language', title: 'Test', component: TestAllComponent,
+    children: [
+      { path: ':test-id', component: TestDetailComponent }
+    ]
+  },
+  { path: 'class', redirectTo: "/class/all" },
+  { path: 'forum', redirectTo: "/forum/all" },
+  { path: 'test', redirectTo: "/test/all" },
   // { path: '**', component: PageNotFoundComponent },
 ];
 

@@ -1,1 +1,99 @@
-<p>class-serie works!</p>
+<div fxLayout="column" fxLayoutGap="10px" class="general-body-margin">
+  <div fxLayout="row" fxLayoutAlign="center center">
+    <mat-card class="mat-elevation-z4 w-100">
+<!--      <img mat-card-image src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Example_image.svg/600px-Example_image.svg.png" alt="alt">-->
+      <mat-card-content>
+        <mat-card-title>Title</mat-card-title>
+        <mat-card-subtitle>Author: ssss </mat-card-subtitle>
+        <p>
+          Description
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="center center">
+    <mat-card class="mat-elevation-z4 w-100">
+      <!--      <img mat-card-image src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Example_image.svg/600px-Example_image.svg.png" alt="alt">-->
+      <mat-card-content>
+        <mat-card-title>Related Files</mat-card-title>
+        <mat-list>
+<!--          <mat-list-item *ngFor ="let folder of folders">-->
+<!--            <mat-icon matListIcon> folder </mat-icon>-->
+<!--            <h4 matLine> {{ folder.name }} </h4>-->
+<!--            <p matLine> {{ folder.updated | date}}</p>-->
+<!--          </mat-list-item>-->
+          <mat-list-item class="card mt-1" (click)="showInfo('b')">
+            <button mat-icon-button (click)="showInfo('a')" matListItemMeta>
+              <mat-icon>info</mat-icon>
+            </button>
+            <mat-icon matListIcon> insert_drive_file </mat-icon>
+            <h4 matLine> f1 </h4>
+            <p matLine> des1</p>
+          </mat-list-item>
+          <mat-list-item class="card mt-1" (click)="showInfo('b')">
+            <button mat-icon-button (click)="showInfo('a')" matListItemMeta>
+              <mat-icon>info</mat-icon>
+            </button>
+            <mat-icon matListIcon> format_align_justify </mat-icon>
+            <h4 matLine> f1 </h4>
+            <p matLine> des1</p>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="center center">
+    <mat-card class="mat-elevation-z4 w-100">
+      <!--      <img mat-card-image src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Example_image.svg/600px-Example_image.svg.png" alt="alt">-->
+      <mat-card-content>
+        <mat-card-title>Episodes</mat-card-title>
+        <div class="mt-3">
+          <mat-expansion-panel [expanded]="true" class="mt-1">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Introduction
+              </mat-panel-title>
+              <mat-panel-description>
+                This is introduction of my lesson
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-list>
+              <mat-list-item class="card mt-1" routerLink="ep/ep1">
+                <mat-icon matListIcon> movie </mat-icon>
+                <h4 matLine> f1 </h4>
+                <p matLine> des1</p>
+              </mat-list-item>
+              <mat-list-item class="card mt-1" routerLink="ep/ep1">
+                <mat-icon matListIcon> radio </mat-icon>
+                <h4 matLine> f1 </h4>
+                <p matLine> des1</p>
+              </mat-list-item>
+            </mat-list>
+          </mat-expansion-panel>
+          <mat-expansion-panel [expanded]="true" class="mt-1">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Vocabulary
+              </mat-panel-title>
+              <mat-panel-description>
+                This is vocabulary of my lesson
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-list>
+              <mat-list-item class="card mt-1" routerLink="ep/ep1">
+                <mat-icon matListIcon> movie </mat-icon>
+                <h4 matLine> f1 </h4>
+                <p matLine> des1</p>
+              </mat-list-item>
+              <mat-list-item class="card mt-1" routerLink="ep/ep1">
+                <mat-icon matListIcon> radio </mat-icon>
+                <h4 matLine> f1 </h4>
+                <p matLine> des1</p>
+              </mat-list-item>
+            </mat-list>
+          </mat-expansion-panel>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

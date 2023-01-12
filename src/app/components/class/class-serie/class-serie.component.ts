@@ -12,4 +12,7 @@ export class ClassSerieComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  showInfo(link: string){
+
+  }
 }

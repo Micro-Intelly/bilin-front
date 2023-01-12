@@ -33,6 +33,8 @@ import { ForumAllComponent } from '@app/components/forum/forum-all/forum-all.com
 import { TestAllComponent } from '@app/components/test/test-all/test-all.component';
 import { TestDetailComponent } from '@app/components/test/test-detail/test-detail.component';
 import { ForumDetailComponent } from '@app/components/forum/forum-detail/forum-detail.component';
+import { ClassStreamComponent } from './components/class/class-stream/class-stream.component';
+import { CommentComponent } from './components/comment/comment/comment.component';
 
 
 
@@ -52,6 +54,8 @@ import { ForumDetailComponent } from '@app/components/forum/forum-detail/forum-d
     TestAllComponent,
     TestDetailComponent,
     ForumDetailComponent,
+    ClassStreamComponent,
+    CommentComponent,
 
   ],
   imports: [
