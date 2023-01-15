@@ -36,6 +36,9 @@ import { TestDetailComponent } from '@app/components/test/test-detail/test-detai
 import { ForumDetailComponent } from '@app/components/forum/forum-detail/forum-detail.component';
 import { ClassStreamComponent } from './components/class/class-stream/class-stream.component';
 import { CommentComponent } from './components/comment/comment/comment.component';
+import { ProfileComponent } from './components/auth/profile/profile.component';
+import { TestDialogComponent } from './components/test/test-dialog/test-dialog.component';
+import {MatDialogModule} from "@angular/material/dialog";
 
 
 
@@ -57,6 +60,8 @@ import { CommentComponent } from './components/comment/comment/comment.component
     ForumDetailComponent,
     ClassStreamComponent,
     CommentComponent,
+    ProfileComponent,
+    TestDialogComponent,
 
   ],
   imports: [
@@ -75,6 +80,7 @@ import { CommentComponent } from './components/comment/comment/comment.component
     MatChipsModule,
     NgxPaginationModule,
     AngularEditorModule,
+    MatDialogModule,
 
     TranslateModule.forRoot({
       loader: {
@@ -82,7 +88,8 @@ import { CommentComponent } from './components/comment/comment/comment.component
         useFactory: httpTranslateLoader,
         deps: [HttpClient]
       }
-    })
+    }),
+
   ],
   providers: [CookieService,AuthGuard],
   bootstrap: [AppComponent],

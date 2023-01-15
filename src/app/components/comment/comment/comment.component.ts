@@ -10,9 +10,8 @@ import {AngularEditorConfig} from "@kolkov/angular-editor";
 export class CommentComponent implements OnInit {
   submitComment: FormGroup;
   submitNote: FormGroup;
-  htmlContent: string = '';
   commentTypeSelected: string = 'comment';
-  isRegisteredUser: boolean = false;
+  isRegisteredUser: boolean = true;
   editorConfig: AngularEditorConfig = {
     editable: true,
     spellcheck: true,

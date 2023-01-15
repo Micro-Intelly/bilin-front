@@ -2,19 +2,19 @@
   <div fxLayout="row" fxLayoutAlign="left center" fxLayoutGap="15px">
     <mat-form-field appearance="outline">
       <mat-label>Search by</mat-label>
-      <mat-select [(value)]="selectedSearch">
+      <mat-select [(value)]="selectedSearch" (selectionChange)="onSearchChange()">
         <mat-option *ngFor="let search of searchBy" [value]="search.value">
           {{search.label}}
         </mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field appearance="outline" fxFlex="55">
-      <input matInput placeholder="Search class" value="">
+      <input matInput placeholder="Search class" [(ngModel)]="searchFilter" (change)="onSearchChange()">
     </mat-form-field>
   </div>
 
   <div fxLayout="row" fxLayoutAlign="left top" fxLayoutGap="25px">
-    <mat-tab-group dynamicHeight mat-stretch-tabs="true" fxFlex="75">
+    <mat-tab-group dynamicHeight mat-stretch-tabs="true" fxFlex="75" [(selectedIndex)]="tabIndex" (selectedTabChange)="onSearchChange()">
       <mat-tab label="Videos">
         <div fxLayout="row" class="mt-2 mb-5">
           <div fxLayout="row wrap" fxLayoutGap="16px grid">

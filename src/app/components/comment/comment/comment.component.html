@@ -2,9 +2,9 @@
   <div fxLayout="row" class="mb-4">
     <mat-card class="w-100">
       <mat-card-content>
-        <mat-button-toggle-group name="commentType" aria-label="Comment Type" [(ngModel)]="commentTypeSelected" [disabled]="!isRegisteredUser">
-          <mat-button-toggle value="comment">Comment</mat-button-toggle>
-          <mat-button-toggle value="note">Note</mat-button-toggle>
+        <mat-button-toggle-group class="w-100" appearance="legacy" name="commentType" aria-label="Comment Type" [(ngModel)]="commentTypeSelected" [disabled]="!isRegisteredUser">
+          <mat-button-toggle value="comment" class="w-100">Comment</mat-button-toggle>
+          <mat-button-toggle value="note" class="w-100">Note</mat-button-toggle>
         </mat-button-toggle-group>
         <div *ngIf="!isRegisteredUser">
           <div fxLayoutAlign="center center" class="w-100 mt-2 req-login-div align-middle">
@@ -30,9 +30,9 @@
           </form>
         </div>
         <div *ngIf="commentTypeSelected == 'note' && isRegisteredUser">
-          <form [formGroup]="submitComment" (ngSubmit)="onSubmit()">
+          <form [formGroup]="submitNote" (ngSubmit)="onSubmit()">
             <div class="my-2">
-              <angular-editor [(ngModel)]="htmlContent" [config]="editorConfig"></angular-editor>
+              <angular-editor formControlName="note" [config]="editorConfig"></angular-editor>
             </div>
             <button mat-raised-button [disabled]="submitComment.invalid">
               Submit
