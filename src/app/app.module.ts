@@ -20,6 +20,7 @@ import { VgOverlayPlayModule } from '@videogular/ngx-videogular/overlay-play';
 import { VgBufferingModule } from '@videogular/ngx-videogular/buffering';
 
 import { NgxPaginationModule } from 'ngx-pagination';
+import { AngularEditorModule } from '@kolkov/angular-editor';
 
 import { HeaderComponent } from '@app/components/header/header.component';
 import { LoginComponent } from '@app/components/auth/login/login.component';
@@ -73,6 +74,7 @@ import { CommentComponent } from './components/comment/comment/comment.component
     VgBufferingModule,
     MatChipsModule,
     NgxPaginationModule,
+    AngularEditorModule,
 
     TranslateModule.forRoot({
       loader: {

@@ -1,7 +1,41 @@
 <div fxLayout="column" fxLayoutGap="10px" class="general-body-margin">
-  <div fxLayout="row" fxLayoutAlign="left center">
+  <div fxLayout="row" fxLayoutAlign="left top" fxLayoutGap="10px">
     <div fxLayout="column" fxFlex="20">
-      <p>class-episode works!</p>
+      <mat-card-title>Episodes</mat-card-title>
+      <mat-card-content>
+        <div class="mt-3">
+          <mat-expansion-panel [expanded]="true" class="mt-1">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Introduction
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-list>
+              <mat-list-item class="card mt-1" routerLink="ep1">
+                <h4 matLine> v1 </h4>
+              </mat-list-item>
+              <mat-list-item class="card mt-1" routerLink="ep2">
+                <h4 matLine> v2 </h4>
+              </mat-list-item>
+            </mat-list>
+          </mat-expansion-panel>
+          <mat-expansion-panel [expanded]="true" class="mt-1">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Vocabulary
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-list>
+              <mat-list-item class="card mt-1" routerLink="ep3">
+                <h4 matLine> v3 </h4>
+              </mat-list-item>
+              <mat-list-item class="card mt-1" routerLink="ep4">
+                <h4 matLine> v4 </h4>
+              </mat-list-item>
+            </mat-list>
+          </mat-expansion-panel>
+        </div>
+      </mat-card-content>
     </div>
     <div fxLayout="column" fxFlex="80">
       <router-outlet></router-outlet>

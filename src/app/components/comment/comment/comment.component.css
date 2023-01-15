@@ -1,0 +1,8 @@
+.req-login-div {
+  height: 250px;
+  border: 0.2em solid #898989;
+  background-color: lightgrey;
+  border-radius: 10px;
+  color: #505050;
+  font-style: italic;
+}

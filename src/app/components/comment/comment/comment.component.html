@@ -1,1 +1,86 @@
-<p>comment works!</p>
+<div fxLayout="column" fxLayoutGap="10px">
+  <div fxLayout="row" class="mb-4">
+    <mat-card class="w-100">
+      <mat-card-content>
+        <mat-button-toggle-group name="commentType" aria-label="Comment Type" [(ngModel)]="commentTypeSelected" [disabled]="!isRegisteredUser">
+          <mat-button-toggle value="comment">Comment</mat-button-toggle>
+          <mat-button-toggle value="note">Note</mat-button-toggle>
+        </mat-button-toggle-group>
+        <div *ngIf="!isRegisteredUser">
+          <div fxLayoutAlign="center center" class="w-100 mt-2 req-login-div align-middle">
+            Please &nbsp;
+            <a routerLink="/login"> login </a>&nbsp;
+            your account
+          </div>
+        </div>
+        <div *ngIf="commentTypeSelected == 'comment' && isRegisteredUser">
+          <form [formGroup]="submitComment" (ngSubmit)="onSubmit()">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Leave your comment</mat-label>
+              <textarea matInput
+                        cdkTextareaAutosize
+                        #autosize="cdkTextareaAutosize"
+                        cdkAutosizeMinRows="7"
+                        cdkAutosizeMaxRows="12"
+                        formControlName="comment"></textarea>
+            </mat-form-field>
+            <button mat-raised-button [disabled]="submitComment.invalid">
+              Submit
+            </button>
+          </form>
+        </div>
+        <div *ngIf="commentTypeSelected == 'note' && isRegisteredUser">
+          <form [formGroup]="submitComment" (ngSubmit)="onSubmit()">
+            <div class="my-2">
+              <angular-editor [(ngModel)]="htmlContent" [config]="editorConfig"></angular-editor>
+            </div>
+            <button mat-raised-button [disabled]="submitComment.invalid">
+              Submit
+            </button>
+          </form>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div fxLayout="row">
+    <mat-tab-group dynamicHeight mat-stretch-tabs="true" class="w-100">
+      <mat-tab label="Comments">
+        <mat-card class="w-100">
+          <mat-card-content>
+            <mat-list role="list">
+              <mat-list-item role="listitem">Item 1</mat-list-item>
+              <mat-list style="margin-left:30px;">
+                <!--            <div *ngFor="let subItem of item.subItems">-->
+                <mat-list-item>sub item</mat-list-item>
+                <!--            </div>-->
+              </mat-list>
+              <mat-divider></mat-divider>
+              <mat-list-item role="listitem">Item 2</mat-list-item>
+              <mat-divider></mat-divider>
+              <mat-list-item role="listitem">Item 3</mat-list-item>
+            </mat-list>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
+      <mat-tab label="Notes">
+        <mat-card class="w-100">
+          <mat-card-content>
+            <mat-list role="list">
+              <mat-list-item role="listitem">Item 1</mat-list-item>
+              <mat-list style="margin-left:30px;">
+                <!--            <div *ngFor="let subItem of item.subItems">-->
+                <mat-list-item>sub item</mat-list-item>
+                <!--            </div>-->
+              </mat-list>
+              <mat-divider></mat-divider>
+              <mat-list-item role="listitem">Item 2</mat-list-item>
+              <mat-divider></mat-divider>
+              <mat-list-item role="listitem">Item 3</mat-list-item>
+            </mat-list>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
+    </mat-tab-group>
+
+  </div>
+</div>
