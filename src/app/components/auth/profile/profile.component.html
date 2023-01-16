@@ -1,1 +1,90 @@
-<p>profile works!</p>
+<div fxLayout="column" fxLayoutGap="10px" class="general-body-margin">
+  <mat-card class="mat-elevation-z3">
+    <mat-card-content fxLayoutAlign="center center" class="login-not">
+      <mat-card-title>Please login your account </mat-card-title>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="mat-elevation-z3">
+    <!--              <img mat-card-image src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Example_image.svg/600px-Example_image.svg.png" alt="alt">-->
+    <mat-card-content>
+      <mat-card-title>User name </mat-card-title>
+      <p>
+        user datas
+      </p>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-stroked-button color="primary">Edit</button>
+    </mat-card-actions>
+  </mat-card>
+
+  <mat-expansion-panel [expanded]="true" class="mt-1">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <div fxFlexAlign="center center">
+          Progress
+        </div>
+
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-list>
+      <mat-list-item class="card mt-1" routerLink="ep1">
+        <h4 matLine> v1 </h4>
+      </mat-list-item>
+      <mat-list-item class="card mt-1" routerLink="ep2">
+        <h4 matLine> v2 </h4>
+      </mat-list-item>
+    </mat-list>
+  </mat-expansion-panel>
+  <mat-expansion-panel [expanded]="true" class="mt-1">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Favorite
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-list>
+      <mat-list-item class="card mt-1" routerLink="ep3">
+        <h4 matLine> v3 </h4>
+      </mat-list-item>
+      <mat-list-item class="card mt-1" routerLink="ep4">
+        <h4 matLine> v4 </h4>
+      </mat-list-item>
+    </mat-list>
+  </mat-expansion-panel>
+  <mat-expansion-panel [expanded]="true" class="mt-1">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Report
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-list>
+      <mat-list-item class="card mt-1" routerLink="ep3">
+        <h4 matLine> v3 </h4>
+      </mat-list-item>
+      <mat-list-item class="card mt-1" routerLink="ep4">
+        <h4 matLine> v4 </h4>
+      </mat-list-item>
+    </mat-list>
+  </mat-expansion-panel>
+  <mat-expansion-panel [expanded]="true" class="mt-1">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Security
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-list>
+      <mat-list-item class="mt-1">
+        <h4 matLine> Reset password </h4>
+        <button mat-stroked-button color="primary">Reset</button>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item class="mt-1">
+        <h4 matLine> Delete your account </h4>
+        <p mat-line class="text-secondary">
+          <span> Delete your account and all related data, notice that this action is irreversible </span>
+        </p>
+        <button mat-flat-button color="warn">Delete</button>
+      </mat-list-item>
+    </mat-list>
+  </mat-expansion-panel>
+</div>

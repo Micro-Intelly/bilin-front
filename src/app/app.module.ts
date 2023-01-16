@@ -39,6 +39,7 @@ import { CommentComponent } from './components/comment/comment/comment.component
 import { ProfileComponent } from './components/auth/profile/profile.component';
 import { TestDialogComponent } from './components/test/test-dialog/test-dialog.component';
 import {MatDialogModule} from "@angular/material/dialog";
+import { GeneralDialogComponent } from './components/common/general-dialog/general-dialog.component';
 
 
 
@@ -62,6 +63,7 @@ import {MatDialogModule} from "@angular/material/dialog";
     CommentComponent,
     ProfileComponent,
     TestDialogComponent,
+    GeneralDialogComponent,
 
   ],
   imports: [
