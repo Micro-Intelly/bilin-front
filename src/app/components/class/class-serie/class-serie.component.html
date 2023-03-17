@@ -101,7 +101,7 @@
             <mat-list>
               <mat-list-item
                 class="card mt-1"
-                (click)="goToDetailPage(episode)"
+                routerLink="ep/{{episode.id}}"
                 *ngFor="let episode of section.episodes"
               >
                 <mat-icon matListIcon> {{getIcon(episode)}} </mat-icon>

@@ -31,8 +31,7 @@ export class ClassSerieComponent implements OnInit {
 
   constructor(private activatedRoute: ActivatedRoute,
               private snackBar: MatSnackBar,
-              private dialog: MatDialog,
-              private location: Location) { }
+              private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.seriesId = this.activatedRoute.snapshot!.params['series-id'];
@@ -80,12 +79,6 @@ export class ClassSerieComponent implements OnInit {
       left: 0,
       behavior: 'smooth'
     });
-    let path = this.location.path().split('ep')[0];
-    let epString = '/ep/';
-    if(path !== this.location.path()){
-      epString = 'ep/'
-    }
-    this.location.replaceState( path + epString + ep.id);
   }
 
   getSeries(){

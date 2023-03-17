@@ -46,8 +46,4 @@ export class ClassEpisodeComponent implements OnInit {
     })
     return res;
   }
-
-  goBack(){
-    this.router.navigate(['/class/series/' + this.series?.id]);
-  }
 }
