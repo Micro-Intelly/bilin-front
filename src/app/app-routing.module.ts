@@ -19,9 +19,9 @@ const routes: Routes = [
   { path: 'login', title: 'Login', component: LoginComponent },
   { path: 'register', title: 'Register', component: RegisterComponent },
   { path: 'class/series/:series-id', title: 'Series', component: ClassSerieComponent },
-  { path: 'class/series/:series-id/ep', component: ClassEpisodeComponent,
+  { path: 'class/series/:series-id/ep', title: 'Episode', component: ClassSerieComponent,
     children: [
-      { path: ':episode-id', component: ClassStreamComponent }
+      { path: ':episode-id', title: 'Episode', component: ClassSerieComponent }
     ]
   },
   { path: 'class/:language', title: 'Class', component: ClassAllComponent },
@@ -45,12 +45,12 @@ export class TemplatePageTitleStrategy extends TitleStrategy {
   override updateTitle(routerState: RouterStateSnapshot) {
     let suffixes: string[] = [];
 
-    if(routerState.url.includes('/class')){
-      const paramList = routerState.url.split('/');
-      switch (paramList.length) {
-        case 3: {suffixes.push(paramList[2]);break;}
-      }
-    }
+    // if(routerState.url.includes('/class')){
+    //   const paramList = routerState.url.split('/');
+    //   switch (paramList.length) {
+    //     case 3: {suffixes.push(paramList[2].split(';')[0]);break;}
+    //   }
+    // }
     const title = this.buildTitle(routerState);
     if (title !== undefined) {
       let newTitle = `Bilin | ${title}`;

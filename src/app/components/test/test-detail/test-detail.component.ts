@@ -10,7 +10,9 @@ import {TestDialogComponent} from "@app/components/test/test-dialog/test-dialog.
 export class TestDetailComponent implements OnInit {
   animal:string = '';
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog) {
+    
+  }
 
   ngOnInit(): void {
   }

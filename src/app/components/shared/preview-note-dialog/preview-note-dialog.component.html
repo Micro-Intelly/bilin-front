@@ -1,0 +1,5 @@
+<button mat-icon-button class="close-button" [mat-dialog-close]="true">
+  <mat-icon class="close-icon">close</mat-icon>
+</button>
+<h2 mat-dialog-title align="center">{{data.title}}</h2>
+<div [innerHTML]="data.body" class="w-100 note-body p-3"></div>

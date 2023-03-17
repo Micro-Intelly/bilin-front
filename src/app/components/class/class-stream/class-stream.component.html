@@ -1,7 +1,7 @@
 <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
-  <mat-card-title> Title {{streamId}}</mat-card-title>
+  <mat-card-title> {{episode?.name}}</mat-card-title>
 
-  <div fxLayout="row" fxLayoutAlign="space-around center" *ngIf="isVideo; then videoBlock else audioBlock">
+  <div fxLayout="row" fxLayoutAlign="space-around center" *ngIf="isVideo(); then videoBlock else audioBlock">
   </div>
   <ng-template #videoBlock>
     <vg-player fxFlex="100">
@@ -22,12 +22,13 @@
         <vg-volume></vg-volume>
         <vg-fullscreen></vg-fullscreen>
       </vg-controls>
-      <!--    <video [vgMedia]="$any(media)" #media id="singleVideo" preload="auto" crossorigin>-->
-      <video [vgMedia]="$any(media)" #media id="singleVideo" preload="auto">
-        <source src="http://localhost:8000/api/video" type="video/mp4">
-        <!--      <track kind="subtitles" label="English" src="http://static.videogular.com/assets/subs/pale-blue-dot.vtt" srclang="en" default>-->
-        <!--      <track kind="subtitles" label="Español" src="http://static.videogular.com/assets/subs/pale-blue-dot-es.vtt" srclang="es">-->
-      </video>
+      <video
+        [vgMedia]="$any(media)"
+        #media
+        id="myVideo"
+        preload="auto"
+        [src]=streamUrl
+      ></video>
     </vg-player>
   </ng-template>
   <ng-template #audioBlock>
@@ -50,14 +51,19 @@
           <vg-volume class="me-3"></vg-volume>
         </vg-controls>
 
-        <audio #media1 [vgMedia]="$any(media1)" id="myAudio" preload="auto">
-          <source src="http://localhost:8000/api/podcast" type="audio/mp3">
-        </audio>
+        <audio
+          #media1
+          [vgMedia]="$any(media1)"
+          id="myAudio"
+          preload="auto"
+          [src]=streamUrl
+        ></audio>
       </vg-player>
     </div>
   </ng-template>
 
-  <p>{{streamId}}</p>
+  <p>Author: {{episode?.author?.name}}</p>
+  <p>{{episode?.description}}</p>
   <div fxLayout="row" fxLayoutAlign="space-around center" class="w-100">
     <app-comment class="w-100"></app-comment>
   </div>

@@ -4,6 +4,8 @@ import { Router } from "@angular/router";
 import axios from "axios";
 import { Subscription } from "rxjs";
 import {TranslateService} from "@ngx-translate/core";
+import {User} from "@app/models/user.model";
+import {environment} from "@environments/environment";
 
 interface DropdownItem {
   name:string;
@@ -18,10 +20,13 @@ interface DropdownItem {
 })
 export class HeaderComponent implements OnInit {
   isLoggedIn: boolean = false;
-  subscriptionUserId: Subscription;
-  dropdownLanguageItem:Map<string,DropdownItem>;
+  subscriptionUser: Subscription | undefined;
+  dropdownLanguageItem:Map<string,DropdownItem> = new Map<string,DropdownItem>();
   activeLanguage:string = 'en';
   toolbarColor = '';
+  currentUser: User = null as any;
+  currentUserThumbnail: string = '';
+
 
   @Input()
   translateService: TranslateService | undefined;
@@ -33,17 +38,19 @@ export class HeaderComponent implements OnInit {
    * @param userService - User service to check logged user data
    */
   constructor(private router: Router,private userService: UserService) {
-    this.userService.isLoggedIn();
-    this.subscriptionUserId = this.userService.userId.subscribe((value) => {
-      this.isLoggedIn = Boolean(value); // this.username will hold your value and modify it every time it changes
-    });
-
-    this.dropdownLanguageItem = new Map<string,DropdownItem>();
-    this.dropdownLanguageItem.set('es', {name:'Español', code:'es', class:[]});
-    this.dropdownLanguageItem.set('en', {name:'English', code:'en', class:['bg-secondary', 'text-light']});
   }
 
   ngOnInit(): void {
+    this.userService.isLoggedIn();
+    this.subscriptionUser = this.userService.user.subscribe((value) => {
+      this.isLoggedIn = Boolean(value); // this.username will hold your value and modify it every time it changes
+      if(this.isLoggedIn){
+        this.currentUser = value;
+        this.currentUserThumbnail = environment.domain + '/'+ value.thumbnail;
+      }
+    });
+    this.dropdownLanguageItem.set('es', {name:'Español', code:'es', class:[]});
+    this.dropdownLanguageItem.set('en', {name:'English', code:'en', class:['bg-secondary', 'text-light']});
   }
 
   /**
@@ -51,7 +58,7 @@ export class HeaderComponent implements OnInit {
    */
   logout(){
     axios.post('/api/logout').then(res => {
-      this.userService.userIdChange('');
+      this.userService.userChange(null as any);
       this.router.navigate(['/']);
     })
   }
@@ -64,7 +71,7 @@ export class HeaderComponent implements OnInit {
    * Unsubscribe the user refresh event when component is destroyed
    */
   ngOnDestroy() {
-    this.subscriptionUserId.unsubscribe();
+    this.subscriptionUser?.unsubscribe();
   }
 
 

@@ -4,7 +4,25 @@
 
 export const environment = {
   production: false,
-  domain: 'http://localhost:8000'
+  domain: 'http://localhost:8000',
+  apiEndpoints: {
+    series: {
+      index: '/api/series',
+      show: '/api/series/{:id}'
+    },
+    posts: {
+      index: '/api/posts'
+    },
+    tests: {
+      index: '/api/tests'
+    },
+    files: {
+      show: '/api/files/{:id}'
+    },
+    episodes: {
+      stream: '/api/stream/{:id}'
+    }
+  }
 };
 
 /*

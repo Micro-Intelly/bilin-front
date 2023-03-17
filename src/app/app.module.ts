@@ -40,7 +40,10 @@ import { ProfileComponent } from './components/auth/profile/profile.component';
 import { TestDialogComponent } from './components/test/test-dialog/test-dialog.component';
 import {MatDialogModule} from "@angular/material/dialog";
 import { GeneralDialogComponent } from './components/common/general-dialog/general-dialog.component';
-
+import { FiltersTemplateComponent } from './components/shared/filters-template/filters-template.component';
+import { PreviewPdfDialogComponent } from './components/shared/preview-pdf-dialog/preview-pdf-dialog.component';
+import { PreviewNoteDialogComponent } from './components/shared/preview-note-dialog/preview-note-dialog.component';
+import {PdfViewerModule} from "ng2-pdf-viewer";
 
 
 
@@ -64,6 +67,9 @@ import { GeneralDialogComponent } from './components/common/general-dialog/gener
     ProfileComponent,
     TestDialogComponent,
     GeneralDialogComponent,
+    FiltersTemplateComponent,
+    PreviewPdfDialogComponent,
+    PreviewNoteDialogComponent,
 
   ],
   imports: [
@@ -83,6 +89,7 @@ import { GeneralDialogComponent } from './components/common/general-dialog/gener
     NgxPaginationModule,
     AngularEditorModule,
     MatDialogModule,
+    PdfViewerModule,
 
     TranslateModule.forRoot({
       loader: {

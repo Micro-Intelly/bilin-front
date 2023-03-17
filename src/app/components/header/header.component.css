@@ -3,3 +3,13 @@ mat-toolbar {
   top: 0px;
   z-index:500;
 }
+
+.thumbnail {
+  border-radius: 50%;
+}
+
+@media (max-width: 800px){
+  .profile-button {
+    font-size:5px;
+  }
+}

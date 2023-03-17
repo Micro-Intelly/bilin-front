@@ -28,11 +28,14 @@
     "@videogular/ngx-videogular": "^6.0.0",
     "axios": "^1.1.2",
     "bootstrap": "^5.2.2",
+    "fuzzy-search": "^3.2.1",
     "jquery": "^3.6.1",
+    "ng2-pdf-viewer": "^9.1.4",
     "ngx-cookie-service": "^14.0.1",
     "ngx-pagination": "^6.0.3",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
+    "validator": "^13.9.0",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {

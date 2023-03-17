@@ -1,0 +1,77 @@
+<div fxLayout="column" fxLayoutGap="10px" class="general-body-margin">
+  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="15px">
+    <div fxLayout="row" fxFlex="75" fxLayoutGap="10px">
+      <mat-form-field appearance="outline" class="w-100" fxFlex="25">
+        <mat-label>Search by</mat-label>
+        <mat-select [(value)]="selectedSearch" (selectionChange)="onSearchChange()">
+          <mat-option *ngFor="let search of searchBy" [value]="search.value">
+            {{search.label}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="w-100" fxFlex="75">
+        <input matInput placeholder="Search class" [(ngModel)]="searchFilter" (keyup)="onSearchChange()">
+      </mat-form-field>
+    </div>
+    <div fxFlex="25">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Language</mat-label>
+        <mat-select [(value)]="selectedLanguage" (selectionChange)="onLanguageChange()">
+          <mat-option *ngFor="let lan of searchLanguage" [value]="lan.code">
+            {{lan.language}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="left top" fxLayoutGap="15px">
+    <div fxFlex="75">
+      <ng-content></ng-content>
+    </div>
+
+    <div fxFlex="25">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Tag filter</mat-label>
+        <mat-chip-list #chipList aria-label="Tag selection">
+          <mat-chip
+            *ngFor="let tag of tagSelected"
+            (removed)="remove(tag)">
+            {{tag}}
+            <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip>
+          <input
+            placeholder="New tag..."
+            #tagInput
+            [formControl]="tagCtrl"
+            [matAutocomplete]="auto"
+            [matChipInputFor]="chipList"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            (matChipInputTokenEnd)="add($event)">
+        </mat-chip-list>
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+          <mat-option *ngFor="let tag of filteredTags | async" [value]="tag.name">
+            {{tag.name}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <div fxLayoutGap="5px" >
+        <div fxLayout="row" class="mb-2">
+          <div fxFlex="50" fxLayoutAlign="start center">
+            <p class="blockquote-footer m-0" >Relevant tags:</p>
+          </div>
+          <div fxLayout="row" fxFlex="50" fxLayoutAlign="end">
+            <button mat-stroked-button disabled="{{tagSelected.size == 0}}" (click)="onClearClick()">Clear</button>
+          </div>
+        </div>
+        <mat-chip class="mt-2 {{tag.selected ? 'tag-selected' : ''}}" *ngFor="let tag of exampleTagsList" (click)="onTagClick(tag)">
+          {{tag.tag.name}}
+        </mat-chip>
+      </div>
+    </div>
+  </div>
+</div>
+
+
