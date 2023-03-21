@@ -65,7 +65,13 @@
   <p>Author: {{episode?.author?.name}}</p>
   <p>{{episode?.description}}</p>
   <div fxLayout="row" fxLayoutAlign="space-around center" class="w-100">
-    <app-comment class="w-100"></app-comment>
+    <mat-divider class="w-100"></mat-divider>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="space-around center" class="w-100">
+    <app-comment
+      [masterRecord]="episode?.id"
+      class="w-100"
+    ></app-comment>
   </div>
 
 </div>

@@ -6,3 +6,19 @@
   color: #505050;
   font-style: italic;
 }
+
+.in-reply-to {
+  color: grey;
+}
+.timestamp {
+  color: grey;
+}
+.note-card {
+  height: 200px;
+}
+.note-body {
+  height: 125px;
+  overflow: hidden;
+  border: 1px solid black;
+  margin-top: 65px;
+}

@@ -21,6 +21,9 @@ export const environment = {
     },
     episodes: {
       stream: '/api/stream/{:id}'
+    },
+    comments: {
+      index: '/api/comments/{:id}'
     }
   }
 };

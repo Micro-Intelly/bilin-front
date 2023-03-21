@@ -8,6 +8,8 @@ export interface Comment {
   author?:User;
   comments?:Comment[];
   type:string;
+  root_comm_id?:string;
+  in_reply_to_id?:string;
   created_at:string;
   updated_at:string;
 }

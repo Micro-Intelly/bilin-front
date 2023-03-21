@@ -2,7 +2,6 @@
 import validator from 'validator';
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
-import {Location} from "@angular/common";
 import {environment} from "@environments/environment";
 import axios from "axios";
 import {Serie} from "@app/models/serie.model";
@@ -81,7 +80,7 @@ export class ClassSerieComponent implements OnInit {
     });
   }
 
-  getSeries(){
+  private getSeries(){
     let endpoint: string = environment.domain + environment.apiEndpoints.series.show.replace('{:id}', this.seriesId);
     axios.get(endpoint).then((res) => {
       this.seriesRecord = res.data as Serie;
