@@ -36,4 +36,8 @@ export class Utils {
 
     return result;
   }
+
+  public static getFormatDate(date:string){
+    return (new Date(date)).toLocaleString();
+  }
 }

@@ -10,6 +10,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {User} from "@app/models/user.model";
 import {MatDialog} from "@angular/material/dialog";
 import {PreviewNoteDialogComponent} from "@app/components/shared/preview-note-dialog/preview-note-dialog.component";
+import {Utils} from "@app/utils/utils";
 
 interface PageSetting {
   gridSize: number,
@@ -91,7 +92,7 @@ export class CommentComponent implements OnInit {
   }
 
   getFormatDate(date:string){
-    return (new Date(date)).toLocaleString();
+    return Utils.getFormatDate(date);
   }
 
   ngOnInit(): void {

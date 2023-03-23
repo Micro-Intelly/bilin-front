@@ -15,14 +15,14 @@
                     currentPage: page,
                     totalItems: count
                   };let i = index">
-            <mat-card class="mat-elevation-z4 card" routerLink="/forum/detail/d1">
+            <mat-card class="mat-elevation-z4 card" routerLink="/forum/detail/{{post.id}}">
               <!--              <img mat-card-image src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Example_image.svg/600px-Example_image.svg.png" alt="alt">-->
               <mat-card-content>
                 <mat-card-title class="text-oneline" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{post.title}}">{{post.title}}</mat-card-title>
-                <mat-card-subtitle>Author: {{post.author.name}} </mat-card-subtitle>
-                <p class="text-multilines">
-                  {{post.body}}
-                </p>
+                <mat-card-subtitle>
+                  Author: {{post.author.name}} on {{getFormatDate(post.created_at)}}
+                </mat-card-subtitle>
+                <div [innerHTML]="post.body" class="w-100 note-body p-3"></div>
               </mat-card-content>
   <!--            <mat-card-actions>-->
   <!--              <button mat-raised-button color="primary">Like</button>-->

@@ -37,6 +37,10 @@ export class ForumAllComponent implements OnInit {
     this.getPosts();
   }
 
+  getFormatDate(date:string){
+    return Utils.getFormatDate(date);
+  }
+
   onChangePageV(event: any) {
     this.page = event;
     this.keepFilters();
