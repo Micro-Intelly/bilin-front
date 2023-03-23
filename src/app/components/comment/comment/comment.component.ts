@@ -95,6 +95,10 @@ export class CommentComponent implements OnInit {
     return Utils.getFormatDate(date);
   }
 
+  absoluteIndex(page: PageSetting, indexOnPage: number): number {
+    return page.gridSize * (page.currentPage - 1) + indexOnPage;
+  }
+
   ngOnInit(): void {
     this.submitComment = this.formBuilder.group({
       comment: ['', [Validators.required, Validators.maxLength(500)]],

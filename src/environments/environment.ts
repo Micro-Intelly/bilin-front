@@ -15,7 +15,8 @@ export const environment = {
       show: '/api/posts/{:id}'
     },
     tests: {
-      index: '/api/tests'
+      index: '/api/tests',
+      show: '/api/tests/{:id}'
     },
     files: {
       show: '/api/files/{:id}'

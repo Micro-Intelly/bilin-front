@@ -84,9 +84,9 @@
                     <div *ngFor="let subComm of comm.comments! | paginate
                   : {
                       id: 'subCommPagination',
-                      itemsPerPage: pageHandler.subComment.get(i)!.gridSize,
-                      currentPage: pageHandler.subComment.get(i)!.currentPage,
-                      totalItems: pageHandler.subComment.get(i)!.totalItems
+                      itemsPerPage: pageHandler.subComment.get(absoluteIndex(pageHandler.comm,i))!.gridSize,
+                      currentPage: pageHandler.subComment.get(absoluteIndex(pageHandler.comm,i))!.currentPage,
+                      totalItems: pageHandler.subComment.get(absoluteIndex(pageHandler.comm,i))!.totalItems
                     };">
                       <mat-list-item>
                         <p>{{subComm.author!.name}}
@@ -110,7 +110,7 @@
                         previousLabel="Prev"
                         nextLabel="Next"
                         [responsive]="true"
-                        (pageChange)="onChangePage($event, 'subCommPagination',i)"
+                        (pageChange)="onChangePage($event, 'subCommPagination',absoluteIndex(pageHandler.comm,i))"
                       >
                       </pagination-controls>
                     </div>

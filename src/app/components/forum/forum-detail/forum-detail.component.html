@@ -8,7 +8,7 @@
     <!--              <img mat-card-image src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Example_image.svg/600px-Example_image.svg.png" alt="alt">-->
     <mat-card-content>
       <mat-card-title>{{postRecord!.title}}</mat-card-title>
-      <mat-card-subtitle>Author: {{postRecord!.author!.name}} on {{postRecord!.created_at}} </mat-card-subtitle>
+      <mat-card-subtitle>Author: {{postRecord!.author!.name}} on {{getFormatDate(postRecord!.updated_at)}} </mat-card-subtitle>
       <div [innerHTML]="postRecord!.body" class="w-100"></div>
     </mat-card-content>
     <mat-card-actions align="end">

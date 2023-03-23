@@ -3,9 +3,8 @@ import {ActivatedRoute} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {environment} from "@environments/environment";
 import axios from "axios";
-import {Episode} from "@app/models/episode.model";
 import {Post} from "@app/models/post.model";
-import {Serie} from "@app/models/serie.model";
+import {Utils} from "@app/utils/utils";
 
 @Component({
   selector: 'app-forum-detail',
@@ -25,11 +24,15 @@ export class ForumDetailComponent implements OnInit {
     if(this.postId) {
       this.getPosts();
     } else {
-      this.snackBar.open('Incorrect URI','X', {
+      this.snackBar.open('Invalid URI','X', {
         duration: 5000,
         verticalPosition: 'top',
       });
     }
+  }
+
+  getFormatDate(date:string){
+    return Utils.getFormatDate(date);
   }
 
   private getPosts(){

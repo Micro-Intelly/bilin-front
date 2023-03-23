@@ -1,20 +1,33 @@
-<div fxLayout="column" fxLayoutGap="10px" class="general-body-margin">
-  <mat-card class="mat-elevation-z4">
+<div fxLayout="column" fxLayoutGap="10px" class="general-body-margin" *ngIf="!testRecord">
+  <div fxLayout="row" fxLayoutAlign="center center" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+  </div>
+</div>
+<div fxLayout="column" fxLayoutGap="10px" class="general-body-margin" *ngIf="testRecord">
+  <mat-card class="mat-elevation-z4 p-4">
     <!--              <img mat-card-image src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Example_image.svg/600px-Example_image.svg.png" alt="alt">-->
     <mat-card-content>
-      <mat-card-title>Test </mat-card-title>
-      <mat-card-subtitle>Author: ssss </mat-card-subtitle>
+      <mat-card-title>{{testRecord!.title}}</mat-card-title>
+      <mat-card-subtitle>Author: {{testRecord!.author!.name}} on {{getFormatDate(testRecord!.updated_at)}} </mat-card-subtitle>
       <p>
-        Description
-        The Himalayas is a mountain range in Asia. The Himalayas is a mountain range in Asia.The Himalayas is a mountain range in Asia.The Himalayas is a mountain range in Asia.The Himalayas is a mountain range in Asia.The Himalayas is a mountain range in Asia.The Himalayas is a mountain range in Asia.The Himalayas is a mountain range in Asia.The Himalayas is a mountain range in Asia.The Himalayas is a mountain range in Asia.
+        {{testRecord!.description}}
       </p>
     </mat-card-content>
-    <mat-card-actions>
-      <button mat-raised-button color="primary" (click)="startTest()">Start Test</button>
-      <button mat-raised-button color="accent">My results</button>
-      <button mat-raised-button color="warn">General report</button>
+    <mat-card-actions align="end">
+      <button
+        mat-raised-button
+        color="primary"
+        class="me-5"
+        (click)="startTest()"
+      >Start Test</button>
+      <button mat-raised-button color="primary">Edit</button>
+      <button mat-raised-button color="warn">Delete</button>
     </mat-card-actions>
   </mat-card>
+  <app-comment
+    [commentOnly]="true"
+    [masterRecord]="testId"
+  ></app-comment>
 <!--  <div *ngIf="_startTest">-->
 <!--    <mat-card class="mat-elevation-z4">-->
 <!--      &lt;!&ndash;              <img mat-card-image src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Example_image.svg/600px-Example_image.svg.png" alt="alt">&ndash;&gt;-->
