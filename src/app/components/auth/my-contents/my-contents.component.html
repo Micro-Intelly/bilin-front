@@ -1,0 +1,61 @@
+<div
+  fxLayout="column"
+  fxLayoutGap="10px"
+  class="general-body-margin"
+  *ngIf="!isLoggedIn"
+>
+  <mat-card class="mat-elevation-z3" >
+    <mat-card-content fxLayoutAlign="center center" class="login-not">
+      <mat-card-title>Please login your account </mat-card-title>
+    </mat-card-content>
+  </mat-card>
+</div>
+<div
+  fxLayout="column"
+  fxLayoutGap="10px"
+  class="general-body-margin"
+  *ngIf="isLoggedIn"
+>
+  <mat-expansion-panel [expanded]="false" class="mt-1">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        My Series
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-series-grid
+      [userId]="currentUser.id"
+    ></app-series-grid>
+  </mat-expansion-panel>
+  <mat-expansion-panel [expanded]="false" class="mt-1">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        My Posts
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-tests-posts-list
+      [userId]="currentUser.id"
+      [type]="'posts'"
+    ></app-tests-posts-list>
+  </mat-expansion-panel>
+  <mat-expansion-panel [expanded]="false" class="mt-1">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        My Tests
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-tests-posts-list
+      [userId]="currentUser.id"
+      [type]="'tests'"
+    ></app-tests-posts-list>
+  </mat-expansion-panel>
+  <mat-expansion-panel [expanded]="false" class="mt-1">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        My Comments
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-comments-notes-list
+      [userId]="currentUser.id"
+    ></app-comments-notes-list>
+  </mat-expansion-panel>
+</div>

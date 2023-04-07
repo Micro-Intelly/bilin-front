@@ -1,32 +1,28 @@
 import { Component, OnInit } from '@angular/core';
+import {User} from "@app/models/user.model";
 import {UserService} from "@app/services/user.service";
 import {Subscription} from "rxjs";
-import {environment} from "@environments/environment";
-import {User} from "@app/models/user.model";
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css']
+  selector: 'app-my-contents',
+  templateUrl: './my-contents.component.html',
+  styleUrls: ['./my-contents.component.css']
 })
-export class ProfileComponent implements OnInit {
+export class MyContentsComponent implements OnInit {
   subscriptionUser: Subscription | undefined;
   isLoggedIn: boolean = false;
   currentUser: User = null as any;
-  currentUserThumbnail: string = '';
 
   constructor(private userService: UserService) { }
 
   ngOnInit(): void {
     this.subscriptionUser = this.userService.user.subscribe((value) => {
-      this.isLoggedIn = Boolean(value); // this.username will hold your value and modify it every time it changes
+      this.isLoggedIn = Boolean(value);
       if(this.isLoggedIn){
         this.currentUser = value;
-        this.currentUserThumbnail = environment.domain + '/'+ value.thumbnail;
       }
     });
   }
-
   /**
    * Unsubscribe the user refresh event when component is destroyed
    */

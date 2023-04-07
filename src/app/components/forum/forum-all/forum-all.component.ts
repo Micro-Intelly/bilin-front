@@ -41,7 +41,7 @@ export class ForumAllComponent implements OnInit {
     return Utils.getFormatDate(date);
   }
 
-  onChangePageV(event: any) {
+  onChangePage(event: any) {
     this.page = event;
     this.keepFilters();
   }

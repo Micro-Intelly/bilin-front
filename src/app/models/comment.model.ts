@@ -5,6 +5,9 @@ export interface Comment {
   title?:string;
   description?:string;
   body:string;
+  commentable_id: string;
+  commentable_type: string;
+  serie_id?: string;
   author?:User;
   comments?:Comment[];
   type:string;

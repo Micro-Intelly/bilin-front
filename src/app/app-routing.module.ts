@@ -6,13 +6,14 @@ import { HomeComponent } from '@app/components/home/home.component';
 import {ClassAllComponent} from "@app/components/class/class-all/class-all.component";
 import {Title} from "@angular/platform-browser";
 import {ClassSerieComponent} from "@app/components/class/class-serie/class-serie.component";
-import {ClassEpisodeComponent} from "@app/components/class/class-episode/class-episode.component";
 import {ForumAllComponent} from "@app/components/forum/forum-all/forum-all.component";
 import {TestAllComponent} from "@app/components/test/test-all/test-all.component";
 import {ForumDetailComponent} from "@app/components/forum/forum-detail/forum-detail.component";
 import {TestDetailComponent} from "@app/components/test/test-detail/test-detail.component";
-import {ClassStreamComponent} from "@app/components/class/class-stream/class-stream.component";
 import {ProfileComponent} from "@app/components/auth/profile/profile.component";
+import {HistoryComponent} from "@app/components/auth/history/history.component";
+import {MyContentsComponent} from "@app/components/auth/my-contents/my-contents.component";
+import {PageNotFoundComponent} from "@app/components/common/page-not-found/page-not-found.component";
 
 const routes: Routes = [
   { path: '', title: 'Home', component: HomeComponent },
@@ -30,10 +31,12 @@ const routes: Routes = [
   { path: 'test/detail/:test-id', title: 'Test detail', component: TestDetailComponent },
   { path: 'test/:language', title: 'Test', component: TestAllComponent },
   { path: 'profile', title: 'Profile', component: ProfileComponent },
+  { path: 'mycontents', title: 'My Contents', component: MyContentsComponent },
+  { path: 'history', title: 'History', component: HistoryComponent },
   { path: 'class', redirectTo: "/class/all" },
   { path: 'forum', redirectTo: "/forum/all" },
   { path: 'test', redirectTo: "/test/all" },
-  // { path: '**', component: PageNotFoundComponent },
+  { path: '**', title: 'Not Found', component: PageNotFoundComponent },
 ];
 
 @Injectable({providedIn: 'root'})

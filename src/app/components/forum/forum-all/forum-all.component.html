@@ -10,7 +10,7 @@
         <div fxLayout="column" fxLayoutGap="16px grid" class="w-100">
           <div *ngFor="let post of postsFiltered | paginate
                 : {
-                    id: 'videoPagination',
+                    id: 'postPagination',
                     itemsPerPage: gridSize,
                     currentPage: page,
                     totalItems: count
@@ -35,11 +35,11 @@
       </div>
       <div fxLayout="row" fxLayoutAlign="center center">
       <pagination-controls
-        id="videoPagination"
+        id="postPagination"
         previousLabel="Prev"
         nextLabel="Next"
         [responsive]="true"
-        (pageChange)="onChangePageV($event)"
+        (pageChange)="onChangePage($event)"
       >
       </pagination-controls>
     </div>

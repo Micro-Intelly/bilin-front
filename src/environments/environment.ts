@@ -16,7 +16,11 @@ export const environment = {
     },
     tests: {
       index: '/api/tests',
-      show: '/api/tests/{:id}'
+      show: '/api/tests/{:id}',
+      showResultAverage: '/api/tests/{:id}/results'
+    },
+    questions: {
+      index: '/api/tests/{:id}/questions'
     },
     files: {
       show: '/api/files/{:id}'
@@ -26,7 +30,19 @@ export const environment = {
     },
     comments: {
       index: '/api/comments/{:id}'
-    }
+    },
+    user: {
+      seriesIndex: '/api/user/{:id}/series',
+      postsIndex: '/api/user/{:id}/posts',
+      testsIndex: '/api/user/{:id}/tests',
+      commentsIndex: '/api/user/{:id}/comments',
+      history: {
+        episodesIndex: '/api/user/{:id}/histories/episodes',
+        postsIndex: '/api/user/{:id}/histories/posts',
+        testsIndex: '/api/user/{:id}/histories/tests'
+      }
+    },
+
   }
 };
 

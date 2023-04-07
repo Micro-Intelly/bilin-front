@@ -7,6 +7,9 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {environment} from "@environments/environment";
 import axios from "axios";
 import {Utils} from "@app/utils/utils";
+import {Subscription} from "rxjs";
+import {UserService} from "@app/services/user.service";
+import {TestResultDialogComponent} from "@app/components/test/test-result-dialog/test-result-dialog.component";
 
 @Component({
   selector: 'app-test-detail',
@@ -15,14 +18,19 @@ import {Utils} from "@app/utils/utils";
 })
 export class TestDetailComponent implements OnInit {
   loading: boolean = true;
+  isLoggedIn: boolean = false;
   testId: string | undefined;
   testRecord: Test | undefined;
 
+  subscriptionUser: Subscription | undefined;
+
   animal:string = '';
+
 
   constructor(public dialog: MatDialog,
               private route: ActivatedRoute,
-              private snackBar: MatSnackBar) {
+              private snackBar: MatSnackBar,
+              private userService: UserService) {
 
   }
 
@@ -30,6 +38,9 @@ export class TestDetailComponent implements OnInit {
     this.testId = this.route.snapshot.paramMap.get('test-id') ?? undefined;
     if(this.testId) {
       this.getTests();
+      this.subscriptionUser = this.userService.user.subscribe((value) => {
+        this.isLoggedIn = Boolean(value);
+      });
     } else {
       this.snackBar.open('Invalid URI','X', {
         duration: 5000,
@@ -39,18 +50,28 @@ export class TestDetailComponent implements OnInit {
   }
 
   startTest(){
-    const dialogRef = this.dialog.open(TestDialogComponent, {
-      data: {name: 'example', animal: 'example2'},disableClose: true
+    this.dialog.open(TestDialogComponent, {
+      data: this.testId,
+      disableClose: true,
+      width: "60%",
+      height: "80%"
     });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      this.animal = result;
+  }
+  viewResult(){
+    this.dialog.open(TestResultDialogComponent, {
+      data: this.testId
     });
   }
 
   getFormatDate(date:string){
     return Utils.getFormatDate(date);
+  }
+
+  /**
+   * Unsubscribe the user refresh event when component is destroyed
+   */
+  ngOnDestroy() {
+    this.subscriptionUser?.unsubscribe();
   }
 
   private getTests(){

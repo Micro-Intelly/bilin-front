@@ -1,0 +1,52 @@
+<div
+  fxLayout="column"
+  fxLayoutGap="10px"
+  class="general-body-margin"
+  *ngIf="!isLoggedIn"
+>
+  <mat-card class="mat-elevation-z3" >
+    <mat-card-content fxLayoutAlign="center center" class="login-not">
+      <mat-card-title>Please login your account </mat-card-title>
+    </mat-card-content>
+  </mat-card>
+</div>
+<div
+  fxLayout="column"
+  fxLayoutGap="10px"
+  class="general-body-margin"
+  *ngIf="isLoggedIn"
+>
+  <mat-expansion-panel [expanded]="false" class="mt-1">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Episodes log
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-histories-list
+      [userId]="currentUser.id"
+      [type]="'episodes'"
+    ></app-histories-list>
+  </mat-expansion-panel>
+  <mat-expansion-panel [expanded]="false" class="mt-1">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Posts log
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-histories-list
+      [userId]="currentUser.id"
+      [type]="'posts'"
+    ></app-histories-list>
+  </mat-expansion-panel>
+  <mat-expansion-panel [expanded]="false" class="mt-1">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Tests log
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-histories-list
+      [userId]="currentUser.id"
+      [type]="'tests'"
+    ></app-histories-list>
+  </mat-expansion-panel>
+</div>
