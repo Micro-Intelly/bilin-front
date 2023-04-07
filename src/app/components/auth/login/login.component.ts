@@ -54,7 +54,7 @@ export class LoginComponent implements OnInit {
       axios.get('/sanctum/csrf-cookie' ).then(() => {
         axios.post('/api/login', body).then(res => {
           this.loading = false;
-          this.userService.userIdChange(res.data.id);
+          this.userService.userChange(res.data);
           this.router.navigate(['/']);
         }).catch(err => {
           this.loading = false;

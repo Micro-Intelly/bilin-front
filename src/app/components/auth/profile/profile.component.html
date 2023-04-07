@@ -1,0 +1,64 @@
+<div
+  fxLayout="column"
+  fxLayoutGap="10px"
+  class="general-body-margin"
+  *ngIf="!isLoggedIn"
+>
+  <mat-card class="mat-elevation-z3" >
+    <mat-card-content fxLayoutAlign="center center" class="login-not">
+      <mat-card-title>Please login your account </mat-card-title>
+    </mat-card-content>
+  </mat-card>
+</div>
+<div
+  fxLayout="column"
+  fxLayoutGap="10px"
+  class="general-body-margin"
+  *ngIf="isLoggedIn"
+>
+  <mat-card class="mat-elevation-z3">
+    <div fxLayout="row" fxLayoutGap="20px" fxFlexAlign="center center">
+      <img mat-card-image
+           fxFlex="20%"
+           class="w-100 m-1 img-thumbnail"
+           style="object-fit: contain;"
+           src="{{currentUserThumbnail}}"
+           alt="profile thumbnail">
+      <div fxLayout="column" fxFlex="80%" class="h-100 p-3" fxLayoutGap="10px">
+        <div fxLayout="row">
+          <mat-card-content>
+            <mat-card-title>{{currentUser.name}}</mat-card-title>
+          </mat-card-content>
+        </div>
+        <div fxLayout="row wrap" fxLayoutAlign="start center">
+          <p fxFlex="50"><b>Email: </b>{{currentUser.email}}</p>
+        </div>
+        <mat-card-actions align="end">
+          <button mat-stroked-button color="primary">Edit</button>
+        </mat-card-actions>
+      </div>
+    </div>
+  </mat-card>
+
+  <mat-expansion-panel [expanded]="true" class="mt-1">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Security
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-list>
+      <mat-list-item class="mt-1">
+        <h4 matLine> Reset password </h4>
+        <button mat-stroked-button color="primary">Reset</button>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item class="mt-1">
+        <h4 matLine> Delete your account </h4>
+        <p mat-line class="text-secondary">
+          <span> Delete your account and all related data, notice that this action is irreversible </span>
+        </p>
+        <button mat-flat-button color="warn">Delete</button>
+      </mat-list-item>
+    </mat-list>
+  </mat-expansion-panel>
+</div>

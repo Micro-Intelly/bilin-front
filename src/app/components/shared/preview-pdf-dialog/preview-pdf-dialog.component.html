@@ -1,0 +1,11 @@
+<button mat-icon-button class="close-button" [mat-dialog-close]="true">
+  <mat-icon class="close-icon">close</mat-icon>
+</button>
+<h2 mat-dialog-title align="center">{{data.name}}</h2>
+<pdf-viewer [src]="pdfSrc"
+            [render-text]="true"
+            [original-size]="false"
+            class="w-100"
+            style="height: 90%"
+            (error)="onError($event)"
+></pdf-viewer>

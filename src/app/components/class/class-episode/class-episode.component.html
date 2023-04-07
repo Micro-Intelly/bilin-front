@@ -1,12 +1,39 @@
 <div fxLayout="column" fxLayoutGap="10px" class="general-body-margin">
-  <div fxLayout="row" fxLayoutAlign="left center">
+  <div fxLayout="row" fxLayoutAlign="left top" fxLayoutGap="10px">
+    <button mat-stroked-button routerLink="/class/series/{{series?.id}}"><< Go To Series Detail</button>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="left top" fxLayoutGap="10px">
     <div fxLayout="column" fxFlex="20">
-      <p>class-episode works!</p>
+      <mat-card-title>Episodes</mat-card-title>
+      <mat-card-content>
+        <div class="mt-3">
+          <mat-expansion-panel
+            [expanded]="true"
+            class="mt-1"
+            *ngFor="let section of series?.sections">
+            <mat-expansion-panel-header>
+              <mat-panel-title class="text-oneline" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{section.name}}">
+                {{section.name}}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-list>
+              <mat-list-item
+                class="card mt-1 {{isActiveEpisode(episode.id)}}"
+                (click)="goToDetailPage(episode)"
+                *ngFor="let episode of section.episodes"
+              >
+                <h4 matLine> {{episode.title}} </h4>
+              </mat-list-item>
+            </mat-list>
+          </mat-expansion-panel>
+        </div>
+      </mat-card-content>
     </div>
     <div fxLayout="column" fxFlex="80">
-      <router-outlet></router-outlet>
+      <app-class-stream
+        [episode]="currentEpisode"
+        [streamUrl]="streamUrl"
+        [episodeList]="getEpisodes()"
+      ></app-class-stream>
     </div>
 </div>
-
-
-

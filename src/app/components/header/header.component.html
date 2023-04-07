@@ -9,14 +9,15 @@
           <mat-icon>home</mat-icon>
           <span>Home</span>
         </button>
-        <button mat-menu-item [matMenuTriggerFor]="vertebrates" >
+<!--        <button mat-menu-item [matMenuTriggerFor]="vertebrates" >-->
+        <button mat-menu-item>
           <mat-icon>class</mat-icon>
           <span>Class</span>
         </button>
-        <mat-menu #vertebrates="matMenu">
-          <button mat-menu-item routerLink="/class/all" >All classes</button>
-          <button mat-menu-item>Mammals</button>
-        </mat-menu>
+<!--        <mat-menu #vertebrates="matMenu">-->
+<!--          <button mat-menu-item routerLink="/class/all" >All classes</button>-->
+<!--          <button mat-menu-item>Mammals</button>-->
+<!--        </mat-menu>-->
         <button mat-menu-item>
           <mat-icon>forum</mat-icon>
           <span>Forum</span>
@@ -40,18 +41,19 @@
     <div fxShow="true" fxHide.lt-md="true" fxFlex="60" class="w-100">
       <!-- The following menu items will be hidden on both SM and XS screen sizes -->
       <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="30">
-        <a class="nav-link active" aria-current="page" routerLink="/">Home</a>
-        <div fxLayout="row" fxLayoutGap="5">
-        <a class="nav-link" aria-current="page" routerLink="/class/all">Class</a>
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-        </a>
-        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <li><a class="dropdown-item" href="#">Action</a></li>
-          <li><a class="dropdown-item" href="#">Another action</a></li>
-          <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="#">Something else here</a></li>
-        </ul>
-        </div>
+        <a class="nav-link" aria-current="page" routerLink="/">Home</a>
+<!--        <div fxLayout="row" fxLayoutGap="5">-->
+<!--        <a class="nav-link" aria-current="page" routerLink="/class/all">Class</a>-->
+<!--        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--        </a>-->
+<!--        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">-->
+<!--          <li><a class="dropdown-item" href="#">Action</a></li>-->
+<!--          <li><a class="dropdown-item" href="#">Another action</a></li>-->
+<!--          <li><hr class="dropdown-divider"></li>-->
+<!--          <li><a class="dropdown-item" href="#">Something else here</a></li>-->
+<!--        </ul>-->
+<!--        </div>-->
+        <a class="nav-link" routerLink="/class/all">Class</a>
         <a class="nav-link" routerLink="/forum/all">Forum</a>
         <a class="nav-link" routerLink="/test/all">Test</a>
       </div>
@@ -67,15 +69,49 @@
           </button>
         </div>
       </mat-menu>
-      <button mat-icon-button [matMenuTriggerFor]="accMenu">
+      <button mat-icon-button [matMenuTriggerFor]="accMenu1" *ngIf="!isLoggedIn">
         <mat-icon>account_circle</mat-icon>
       </button>
-      <mat-menu #accMenu="matMenu">
-        <button mat-menu-item>
+      <button mat-button class="profile-button" [matMenuTriggerFor]="accMenu2" *ngIf="isLoggedIn">
+        <img
+          class="thumbnail"
+          width="28px"
+          src="{{currentUserThumbnail}}"
+        />
+        {{currentUser.name}}
+      </button>
+
+      <mat-menu #accMenu1="matMenu">
+        <button mat-menu-item routerLink="/login">
+          <mat-icon>login</mat-icon>
           <span>Login</span>
         </button>
-        <button mat-menu-item>
+        <button mat-menu-item routerLink="/register">
+          <mat-icon>person_add</mat-icon>
           <span>Register</span>
+        </button>
+      </mat-menu>
+      <mat-menu #accMenu2="matMenu">
+        <button mat-menu-item routerLink="/profile">
+          <mat-icon>manage_accounts</mat-icon>
+          <span>Profile</span>
+        </button>
+        <button mat-menu-item routerLink="/mycontents">
+          <mat-icon>dashboard</mat-icon>
+          <span>My Content</span>
+        </button>
+<!--        <button mat-menu-item routerLink="/profile/favorite">-->
+<!--          <mat-icon>star</mat-icon>-->
+<!--          <span>Favorite</span>-->
+<!--        </button>-->
+        <button mat-menu-item routerLink="/history">
+          <mat-icon>history</mat-icon>
+          <span>History</span>
+        </button>
+        <mat-divider class="mx-2"></mat-divider>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span class="text-danger">Logout</span>
         </button>
       </mat-menu>
     </div>

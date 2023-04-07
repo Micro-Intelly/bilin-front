@@ -1,63 +1,80 @@
-<div fxLayout="row" fxLayoutAlign="space-around center">
-  <h3>Basic Video Player</h3>
-</div>
-<div fxLayout="row" fxLayoutAlign="space-around center">
-  <vg-player fxFlex="100">
-    <vg-overlay-play></vg-overlay-play>
-    <vg-buffering></vg-buffering>
-    <vg-scrub-bar>
-      <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
-      <vg-scrub-bar-buffering-time></vg-scrub-bar-buffering-time>
-    </vg-scrub-bar>
-    <vg-controls [vgAutohide]="true" [vgAutohideTime]="1.5">
-      <vg-play-pause></vg-play-pause>
-      <vg-playback-button></vg-playback-button>
-      <vg-scrub-bar style="pointer-events: none;"></vg-scrub-bar>
-      <vg-time-display vgProperty="current" vgFormat="mm:ss"></vg-time-display>
-      <vg-time-display vgProperty="total" vgFormat="mm:ss"></vg-time-display>
-      <vg-track-selector></vg-track-selector>
-      <vg-mute></vg-mute>
-      <vg-volume></vg-volume>
-      <vg-fullscreen></vg-fullscreen>
-    </vg-controls>
-    <!--    <video [vgMedia]="$any(media)" #media id="singleVideo" preload="auto" crossorigin>-->
-    <video [vgMedia]="$any(media)" #media id="singleVideo" preload="auto">
-      <source src="http://localhost:8000/api/video" type="video/mp4">
-      <!--      <track kind="subtitles" label="English" src="http://static.videogular.com/assets/subs/pale-blue-dot.vtt" srclang="en" default>-->
-      <!--      <track kind="subtitles" label="Español" src="http://static.videogular.com/assets/subs/pale-blue-dot-es.vtt" srclang="es">-->
-    </video>
-  </vg-player>
-</div>
-<div fxLayout="row" fxLayoutAlign="space-around center">
-  <h3>Basic Audio Player</h3>
-</div>
-<div fxLayout="row" fxLayoutAlign="space-around center">
-  <div fxFlex="50">
-    <vg-player style="height: 50px;">
-      <vg-controls>
+<div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
+  <mat-card-title> {{episode?.title}}</mat-card-title>
+
+  <div fxLayout="row" fxLayoutAlign="space-around center" *ngIf="isVideo(); then videoBlock else audioBlock">
+  </div>
+  <ng-template #videoBlock>
+    <vg-player fxFlex="100">
+      <vg-overlay-play></vg-overlay-play>
+      <vg-buffering></vg-buffering>
+      <vg-scrub-bar>
+        <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
+        <vg-scrub-bar-buffering-time></vg-scrub-bar-buffering-time>
+      </vg-scrub-bar>
+      <vg-controls [vgAutohide]="true" [vgAutohideTime]="1.5">
         <vg-play-pause></vg-play-pause>
         <vg-playback-button></vg-playback-button>
-
+        <vg-scrub-bar style="pointer-events: none;"></vg-scrub-bar>
         <vg-time-display vgProperty="current" vgFormat="mm:ss"></vg-time-display>
-
-        <vg-scrub-bar>
-          <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
-          <vg-scrub-bar-buffering-time></vg-scrub-bar-buffering-time>
-        </vg-scrub-bar>
-
         <vg-time-display vgProperty="total" vgFormat="mm:ss"></vg-time-display>
-
+        <vg-track-selector></vg-track-selector>
         <vg-mute></vg-mute>
-        <vg-volume class="me-3"></vg-volume>
+        <vg-volume></vg-volume>
+        <vg-fullscreen></vg-fullscreen>
       </vg-controls>
-
-      <audio #media1 [vgMedia]="$any(media1)" id="myAudio" preload="auto">
-        <source src="http://localhost:8000/api/podcast" type="audio/mp3">
-      </audio>
+      <video
+        [vgMedia]="$any(media)"
+        #media
+        id="myVideo"
+        preload="auto"
+        [src]=streamUrl
+      ></video>
     </vg-player>
+  </ng-template>
+  <ng-template #audioBlock>
+    <div fxFlex="100" class="w-100">
+      <vg-player style="height: 50px;">
+        <vg-controls>
+          <vg-play-pause></vg-play-pause>
+          <vg-playback-button></vg-playback-button>
+
+          <vg-time-display vgProperty="current" vgFormat="mm:ss"></vg-time-display>
+
+          <vg-scrub-bar>
+            <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
+            <vg-scrub-bar-buffering-time></vg-scrub-bar-buffering-time>
+          </vg-scrub-bar>
+
+          <vg-time-display vgProperty="total" vgFormat="mm:ss"></vg-time-display>
+
+          <vg-mute></vg-mute>
+          <vg-volume class="me-3"></vg-volume>
+        </vg-controls>
+
+        <audio
+          #media1
+          [vgMedia]="$any(media1)"
+          id="myAudio"
+          preload="auto"
+          [src]=streamUrl
+        ></audio>
+      </vg-player>
+    </div>
+  </ng-template>
+
+  <p>Author: {{episode?.author?.name}}</p>
+  <p>{{episode?.description}}</p>
+  <div fxLayout="row" fxLayoutAlign="space-around center" class="w-100">
+    <mat-divider class="w-100"></mat-divider>
   </div>
+  <div fxLayout="row" fxLayoutAlign="space-around center" class="w-100">
+    <app-comment
+      [masterRecord]="episode?.id"
+      class="w-100"
+    ></app-comment>
+  </div>
+
 </div>
-<div fxLayout="row" fxLayoutAlign="space-around center">
-  <app-comment></app-comment>
-</div>
+
+
 

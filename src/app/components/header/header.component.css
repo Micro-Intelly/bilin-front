@@ -1,5 +1,15 @@
 mat-toolbar {
   position: sticky;
   top: 0px;
-  z-index:100;
+  z-index:500;
+}
+
+.thumbnail {
+  border-radius: 50%;
+}
+
+@media (max-width: 800px){
+  .profile-button {
+    font-size:5px;
+  }
 }

@@ -6,38 +6,37 @@ import { HomeComponent } from '@app/components/home/home.component';
 import {ClassAllComponent} from "@app/components/class/class-all/class-all.component";
 import {Title} from "@angular/platform-browser";
 import {ClassSerieComponent} from "@app/components/class/class-serie/class-serie.component";
-import {ClassEpisodeComponent} from "@app/components/class/class-episode/class-episode.component";
 import {ForumAllComponent} from "@app/components/forum/forum-all/forum-all.component";
 import {TestAllComponent} from "@app/components/test/test-all/test-all.component";
 import {ForumDetailComponent} from "@app/components/forum/forum-detail/forum-detail.component";
 import {TestDetailComponent} from "@app/components/test/test-detail/test-detail.component";
-import {ClassStreamComponent} from "@app/components/class/class-stream/class-stream.component";
+import {ProfileComponent} from "@app/components/auth/profile/profile.component";
+import {HistoryComponent} from "@app/components/auth/history/history.component";
+import {MyContentsComponent} from "@app/components/auth/my-contents/my-contents.component";
+import {PageNotFoundComponent} from "@app/components/common/page-not-found/page-not-found.component";
 
 const routes: Routes = [
   { path: '', title: 'Home', component: HomeComponent },
   { path: 'login', title: 'Login', component: LoginComponent },
   { path: 'register', title: 'Register', component: RegisterComponent },
   { path: 'class/series/:series-id', title: 'Series', component: ClassSerieComponent },
-  { path: 'class/series/:series-id/ep', component: ClassEpisodeComponent,
+  { path: 'class/series/:series-id/ep', title: 'Episode', component: ClassSerieComponent,
     children: [
-      { path: ':episode-id', component: ClassStreamComponent }
+      { path: ':episode-id', title: 'Episode', component: ClassSerieComponent }
     ]
   },
   { path: 'class/:language', title: 'Class', component: ClassAllComponent },
-  { path: 'forum/:language', title: 'Forum', component: ForumAllComponent,
-    children: [
-      { path: ':post-id', component: ForumDetailComponent }
-    ]
-  },
-  { path: 'test/:language', title: 'Test', component: TestAllComponent,
-    children: [
-      { path: ':test-id', component: TestDetailComponent }
-    ]
-  },
+  { path: 'forum/detail/:post-id', title: 'Forum detail', component: ForumDetailComponent },
+  { path: 'forum/:language', title: 'Forum', component: ForumAllComponent },
+  { path: 'test/detail/:test-id', title: 'Test detail', component: TestDetailComponent },
+  { path: 'test/:language', title: 'Test', component: TestAllComponent },
+  { path: 'profile', title: 'Profile', component: ProfileComponent },
+  { path: 'mycontents', title: 'My Contents', component: MyContentsComponent },
+  { path: 'history', title: 'History', component: HistoryComponent },
   { path: 'class', redirectTo: "/class/all" },
   { path: 'forum', redirectTo: "/forum/all" },
   { path: 'test', redirectTo: "/test/all" },
-  // { path: '**', component: PageNotFoundComponent },
+  { path: '**', title: 'Not Found', component: PageNotFoundComponent },
 ];
 
 @Injectable({providedIn: 'root'})
@@ -49,12 +48,12 @@ export class TemplatePageTitleStrategy extends TitleStrategy {
   override updateTitle(routerState: RouterStateSnapshot) {
     let suffixes: string[] = [];
 
-    if(routerState.url.includes('/class')){
-      const paramList = routerState.url.split('/');
-      switch (paramList.length) {
-        case 3: {suffixes.push(paramList[2]);break;}
-      }
-    }
+    // if(routerState.url.includes('/class')){
+    //   const paramList = routerState.url.split('/');
+    //   switch (paramList.length) {
+    //     case 3: {suffixes.push(paramList[2].split(';')[0]);break;}
+    //   }
+    // }
     const title = this.buildTitle(routerState);
     if (title !== undefined) {
       let newTitle = `Bilin | ${title}`;

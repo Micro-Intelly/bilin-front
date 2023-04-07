@@ -4,7 +4,46 @@
 
 export const environment = {
   production: false,
-  domain: 'http://localhost:8000'
+  domain: 'http://localhost:8000',
+  apiEndpoints: {
+    series: {
+      index: '/api/series',
+      show: '/api/series/{:id}'
+    },
+    posts: {
+      index: '/api/posts',
+      show: '/api/posts/{:id}'
+    },
+    tests: {
+      index: '/api/tests',
+      show: '/api/tests/{:id}',
+      showResultAverage: '/api/tests/{:id}/results'
+    },
+    questions: {
+      index: '/api/tests/{:id}/questions'
+    },
+    files: {
+      show: '/api/files/{:id}'
+    },
+    episodes: {
+      stream: '/api/stream/{:id}'
+    },
+    comments: {
+      index: '/api/comments/{:id}'
+    },
+    user: {
+      seriesIndex: '/api/user/{:id}/series',
+      postsIndex: '/api/user/{:id}/posts',
+      testsIndex: '/api/user/{:id}/tests',
+      commentsIndex: '/api/user/{:id}/comments',
+      history: {
+        episodesIndex: '/api/user/{:id}/histories/episodes',
+        postsIndex: '/api/user/{:id}/histories/posts',
+        testsIndex: '/api/user/{:id}/histories/tests'
+      }
+    },
+
+  }
 };
 
 /*

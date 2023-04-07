@@ -1,11 +1,10 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
-import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
-import {MatChipInputEvent} from '@angular/material/chips';
-import {FormControl} from "@angular/forms";
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {Observable} from "rxjs";
-import {map, startWith} from 'rxjs/operators';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from "@angular/router";
+import axios from "axios";
+import {environment} from "@environments/environment";
+import {Post} from "@app/models/post.model";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {Utils} from "@app/utils/utils";
 
 @Component({
   selector: 'app-forum-all',
@@ -13,70 +12,83 @@ import {map, startWith} from 'rxjs/operators';
   styleUrls: ['./forum-all.component.css']
 })
 export class ForumAllComponent implements OnInit {
-  filter: string = '';
-  searchBy = [
-    {value: 'Name', label: 'Name'},
-    {value: 'Author', label: 'Author'},
-  ];
-  tagList = [
-    't1','t2','t3'
-  ];
+  domain: string = environment.domain;
+  loading: boolean = true;
+
   tagSelected: Set<string> = new Set<string>();
-  filteredTags: Observable<string[]>;
-
+  searchFilter: string = '';
   selectedSearch: string = 'Name';
-  tagCtrl = new FormControl('');
-  separatorKeysCodes: number[] = [ENTER, COMMA];
-  @ViewChild('tagInput') tagInput: ElementRef<HTMLInputElement> | undefined;
+  selectedLanguage: string = 'all';
 
-  videos: Array<any> = [];
-  pageV: number = 1;
-  countV: number = 0; // puede indicar el total sin traer todo desde principio
-  gridSizeV: number = 4;
+  posts: Array<Post> = [];
+  postsFiltered: Array<Post> = [];
+  page: number = 1;
+  count: number = 0; // puede indicar el total sin traer todo desde principio
+  gridSize: number = 4;
 
-  constructor(private route: ActivatedRoute) {
-    this.filteredTags = this.tagCtrl.valueChanges.pipe(
-      startWith(null),
-      map((tag: string | null) => (tag ? this._filterNotNull(tag) : this._filterNull())),
-    );
+  constructor(private activatedRoute: ActivatedRoute,
+              private router: Router,
+              private snackBar: MatSnackBar) {
+
   }
 
   ngOnInit(): void {
-    this.filter = this.route.snapshot!.params['language'];
-    this.videos = Array(150).fill(0).map((x, i) => ({ id: (i + 1), name: `Item ${i + 1}`}));
+    this.page = ( this.activatedRoute.snapshot.params['page'] || 1 );
+    this.getPosts();
   }
 
-  add(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
-    if (value) {
-      this.tagSelected.add(value);
-    }
-    event.chipInput!.clear();
-
-    this.tagCtrl.setValue(null);
+  getFormatDate(date:string){
+    return Utils.getFormatDate(date);
   }
 
-  remove(tag: string): void {
-    this.tagSelected.delete(tag);
-    this.tagCtrl.setValue(null);
+  onChangePage(event: any) {
+    this.page = event;
+    this.keepFilters();
   }
 
-  selected(event: MatAutocompleteSelectedEvent): void {
-    this.tagSelected.add(event.option.viewValue);
-    // this.tagInput!.nativeElement.value = '';
-    this.tagCtrl.setValue(null);
+  onFilterChange(event: any) {
+    this.searchFilter = event.searchFilter;
+    this.tagSelected = event.tagSelected;
+    this.selectedLanguage = event.selectedLanguage;
+    this.selectedSearch = event.selectedSearch;
+    this.keepFilters();
+    this.filterPosts();
+  }
+  filterPosts(){
+    this.postsFiltered = Utils.getSearcher(this.posts,this.selectedSearch).search(this.searchFilter).filter((elem: Post) => {
+      return Utils.applyFilters(elem,this.selectedLanguage,this.tagSelected);
+    });
+    this.page = 1;
   }
 
-  onChangePageV(event: any) {
-    this.pageV = event;
+  private keepFilters(){
+    this.router.navigate(
+      [
+        '/forum/' + this.selectedLanguage,
+        {
+          tagSelected: Array.from(this.tagSelected).join('|'),
+          searchFilter: this.searchFilter,
+          page: this.page,
+          selectedSearch: this.selectedSearch
+        }
+      ],
+      {
+        relativeTo: this.activatedRoute,
+        replaceUrl: true
+      }
+    );
   }
-
-  private _filterNotNull(value: string): string[] {
-    const filterValue = value.toLowerCase();
-
-    return this.tagList.filter(tag => (tag.toLowerCase().includes(filterValue) && !this.tagSelected.has(tag)));
-  }
-  private _filterNull(): string[] {
-    return this.tagList.filter(tag => !this.tagSelected.has(tag));
+  private getPosts(){
+    let endpoint: string = environment.domain + environment.apiEndpoints.posts.index;
+    axios.get(endpoint).then((res) => {
+      this.posts = res.data as Post[];
+      this.loading = false;
+      this.postsFiltered = this.posts;
+    }).catch(err => {
+      this.snackBar.open(err,'X', {
+        duration: 5000,
+        verticalPosition: 'top',
+      });
+    });
   }
 }

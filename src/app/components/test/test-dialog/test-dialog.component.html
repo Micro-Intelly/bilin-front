@@ -1,0 +1,25 @@
+<button mat-icon-button class="close-button" (click)="onOkClick()">
+  <mat-icon class="close-icon" color="warn">close</mat-icon>
+</button>
+<div fxLayout="row" fxLayoutAlign="center center" class="h-100 m-0" *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</div>
+<div *ngIf="!loading">
+  <h1 mat-dialog-title>Answer this questions</h1>
+  <div mat-dialog-content class="w-100 h-90 mx-0">
+    <div *ngFor="let q of questions">
+      <p>{{q.question}}</p>
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label>Answer</mat-label>
+        <mat-select [(value)]="q.selectedAnswer">
+          <mat-option *ngFor="let answer of q.answersMap | keyvalue" [value]="answer.key">
+            {{answer.value}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  <div mat-dialog-actions fxLayout="column" fxFlexAlign="center">
+    <button mat-button (click)="onOkClick()">Finish</button>
+  </div>
+</div>

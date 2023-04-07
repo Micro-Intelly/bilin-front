@@ -19,19 +19,65 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   padding: 0px !important;
   margin: 0px !important;
 }
+.text-oneline {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
 
-/*.ngx-pagination .current,*/
-/*.btn-info {*/
-/*  background: #17a2b8 !important;*/
-/*  border: transparent !important;*/
-/*  border-radius: 20px !important;*/
-/*}*/
+.text-multilines {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.chip{
+  display: inline-flex;
+  flex-direction: row;
+  background-color: #e5e5e5;
+  border: none;
+  cursor: default;
+  height: 36px;
+  outline: none;
+  padding: 0;
+  white-space: nowrap;
+  align-items: center;
+  border-radius: 16px;
+  vertical-align: middle;
+  text-decoration: none;
+  justify-content: center;
+}
+.chip-content{
+  cursor: inherit;
+  display: flex;
+  align-items: center;
+  user-select: none;
+  white-space: nowrap;
+  padding-left: 12px;
+  padding-right: 12px;
 
-/*.ngx-pagination .current:hover {*/
-/*  background: #17a2b8 !important;*/
-/*  border-radius: 20px !important;*/
-/*  border: transparent !important;*/
-/*}*/
+}
+.chip:hover{
+  background-color: lightskyblue;
+}
+
+
+.close-button{
+  float: right;
+  top:-24px;
+  right:-24px;
+}
+
+::ng-deep .icon-outside .close-button{
+  float: right;
+  top:-52px;
+  right:-52px;
+}
+
+::ng-deep .icon-outside .mat-dialog-container {
+  overflow: unset
+}
+
 
 @media (min-width: 1200px) {
   .general-body-margin {

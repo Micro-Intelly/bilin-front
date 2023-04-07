@@ -1,1 +1,184 @@
-<p>comment works!</p>
+<div fxLayout="column" fxLayoutGap="10px">
+  <div fxLayout="row" class="mb-4" *ngIf="!withoutHeader">
+    <mat-card class="w-100">
+      <mat-card-content>
+        <mat-button-toggle-group
+          class="w-100"
+          appearance="legacy"
+          name="commentType"
+          aria-label="Comment Type"
+          [(ngModel)]="commentTypeSelected"
+          [disabled]="!isLoggedIn"
+
+        >
+          <mat-button-toggle value="comment" class="w-100" *ngIf="!noteOnly">Comment</mat-button-toggle>
+          <mat-button-toggle value="note" class="w-100" *ngIf="!commentOnly">Note</mat-button-toggle>
+        </mat-button-toggle-group>
+        <div *ngIf="!isLoggedIn">
+          <div fxLayoutAlign="center center" class="w-100 mt-2 req-login-div align-middle">
+            Please &nbsp;
+            <a routerLink="/login">login</a>&nbsp;
+            your account
+          </div>
+        </div>
+        <div *ngIf="commentTypeSelected == 'comment' && isLoggedIn">
+          <form [formGroup]="submitComment!" (ngSubmit)="onSubmit()">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Leave your comment</mat-label>
+              <textarea matInput
+                        cdkTextareaAutosize
+                        #autosize="cdkTextareaAutosize"
+                        cdkAutosizeMinRows="7"
+                        cdkAutosizeMaxRows="12"
+                        formControlName="comment"></textarea>
+            </mat-form-field>
+            <button mat-raised-button [disabled]="submitComment!.invalid">
+              Submit
+            </button>
+          </form>
+        </div>
+        <div *ngIf="commentTypeSelected == 'note' && isLoggedIn">
+          <form [formGroup]="submitNote!" (ngSubmit)="onSubmit()">
+            <div class="my-2">
+              <angular-editor formControlName="note" [config]="editorConfig"></angular-editor>
+            </div>
+            <button mat-raised-button [disabled]="submitComment!.invalid">
+              Submit
+            </button>
+          </form>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div fxLayout="row" fxFlexAlign="center" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+  </div>
+  <div fxLayout="row" *ngIf="!withoutBody && !loading">
+    <mat-tab-group dynamicHeight mat-stretch-tabs="true" class="w-100">
+      <mat-tab label="Comments" *ngIf="!noteOnly">
+        <mat-card class="w-100">
+          <mat-card-content>
+            <mat-list role="list">
+              <div *ngIf="!commentList.length">
+                <p class="text-center">No comment yet, leave your first comment.</p>
+              </div>
+              <div *ngIf="commentList.length">
+                <div *ngFor="let comm of commentList | paginate
+                  : {
+                      id: 'commPagination',
+                      itemsPerPage: pageHandler.comm.gridSize,
+                      currentPage: pageHandler.comm.currentPage,
+                      totalItems: pageHandler.comm.totalItems
+                    };let i = index">
+                  <mat-list-item role="listitem">
+                    <p>Author: {{comm.author?.name}}
+                      <span class="timestamp">
+                        on {{getFormatDate(comm.updated_at)}}
+                      </span>
+                    </p>
+                  </mat-list-item>
+                  <mat-list-item role="listitem">
+                    <p>{{comm.body}}</p>
+                  </mat-list-item>
+                  <mat-list style="margin-left:30px;" *ngIf="comm.comments?.length">
+                    <div *ngFor="let subComm of comm.comments! | paginate
+                  : {
+                      id: 'subCommPagination',
+                      itemsPerPage: pageHandler.subComment.get(absoluteIndex(pageHandler.comm,i))!.gridSize,
+                      currentPage: pageHandler.subComment.get(absoluteIndex(pageHandler.comm,i))!.currentPage,
+                      totalItems: pageHandler.subComment.get(absoluteIndex(pageHandler.comm,i))!.totalItems
+                    };">
+                      <mat-list-item>
+                        <p>{{subComm.author!.name}}
+                          <span class="timestamp">
+                            on {{getFormatDate(subComm.updated_at)}}
+                          </span>
+                        </p>
+                      </mat-list-item>
+                      <mat-list-item>
+                        <p>
+                          <span class="in-reply-to" *ngIf="subComm.in_reply_to_id">
+                            @{{userMap.get(subComm.in_reply_to_id)?.name}}
+                          </span>
+                          {{comm.body}}
+                        </p>
+                      </mat-list-item>
+                    </div>
+                    <div class="d-flex justify-content-center my-2">
+                      <pagination-controls
+                        id="subCommPagination"
+                        previousLabel="Prev"
+                        nextLabel="Next"
+                        [responsive]="true"
+                        (pageChange)="onChangePage($event, 'subCommPagination',absoluteIndex(pageHandler.comm,i))"
+                      >
+                      </pagination-controls>
+                    </div>
+                  </mat-list>
+                  <mat-divider></mat-divider>
+                </div>
+                <div class="d-flex justify-content-center my-2">
+                  <pagination-controls
+                    id="commPagination"
+                    previousLabel="Prev"
+                    nextLabel="Next"
+                    [responsive]="true"
+                    (pageChange)="onChangePage($event, 'commPagination',-1)"
+                  >
+                  </pagination-controls>
+                </div>
+              </div>
+            </mat-list>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
+      <mat-tab label="Notes" *ngIf="!commentOnly">
+        <mat-card class="w-100">
+          <mat-card-content>
+            <mat-list role="list">
+              <div *ngIf="!noteList.length">
+                <p class="text-center">No comment yet, leave your first comment.</p>
+              </div>
+              <div *ngIf="noteList.length">
+                <div *ngFor="let note of noteList | paginate
+                  : {
+                      id: 'notePagination',
+                      itemsPerPage: pageHandler.note.gridSize,
+                      currentPage: pageHandler.note.currentPage,
+                      totalItems: pageHandler.note.totalItems
+                    };let i = index">
+                  <mat-card
+                    class="w-100 mat-elevation-z4 card note-card"
+                    (click)="onNoteClick(note)"
+                  >
+                    <mat-list-item role="listitem">
+                      Author: {{note.author?.name}}
+                      <span class="timestamp">
+                        on {{getFormatDate(note.updated_at)}}
+                      </span>
+                    </mat-list-item>
+                    <mat-list-item role="listitem">
+                      <div [innerHTML]="note.body" class="w-100 note-body p-3"></div>
+                    </mat-list-item>
+                  </mat-card>
+                  <mat-divider></mat-divider>
+                </div>
+                <div class="d-flex justify-content-center my-2">
+                  <pagination-controls
+                    id="notePagination"
+                    previousLabel="Prev"
+                    nextLabel="Next"
+                    [responsive]="true"
+                    (pageChange)="onChangePage($event, 'notePagination',-1)"
+                  >
+                  </pagination-controls>
+                </div>
+              </div>
+            </mat-list>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
+    </mat-tab-group>
+
+  </div>
+</div>

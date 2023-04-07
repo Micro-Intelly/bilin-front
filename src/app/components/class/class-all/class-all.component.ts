@@ -1,11 +1,10 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
-import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
-import {MatChipInputEvent} from '@angular/material/chips';
-import {FormControl} from "@angular/forms";
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {Observable} from "rxjs";
-import {map, startWith} from 'rxjs/operators';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from "@angular/router";
+import axios from "axios";
+import {Serie} from "@app/models/serie.model";
+import {environment} from "@environments/environment";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {Utils} from "@app/utils/utils";
 
 @Component({
   selector: 'app-class-all',
@@ -13,77 +12,102 @@ import {map, startWith} from 'rxjs/operators';
   styleUrls: ['./class-all.component.css']
 })
 export class ClassAllComponent implements OnInit {
-  filter: string = '';
-  searchBy = [
-    {value: 'Name', label: 'Name'},
-    {value: 'Author', label: 'Author'},
-  ];
-  tagList = [
-    't1','t2','t3'
-  ];
+  domain: string = environment.domain;
+  loading: boolean = true;
+
   tagSelected: Set<string> = new Set<string>();
-  filteredTags: Observable<string[]>;
+  searchFilter: string = '';
+  tabIndex: number = 1;
+  selectedSearch: string = 'Title';
+  selectedLanguage: string = 'all';
 
-  selectedSearch: string = 'Name';
-  tagCtrl = new FormControl('');
-  separatorKeysCodes: number[] = [ENTER, COMMA];
-  @ViewChild('tagInput') tagInput: ElementRef<HTMLInputElement> | undefined;
-
-  videos: Array<any> = [];
+  videos: Array<Serie> = [];
+  videosFiltered: Array<Serie> = [];
   pageV: number = 1;
-  countV: number = 0; // puede indicar el total sin traer todo desde principio
+  countV: number = 0; // puede indicar el total sin traer todo desde principling
   gridSizeV: number = 4;
-  podcats: Array<any> = [];
+  podcasts: Array<Serie> = [];
+  podcastsFiltered: Array<Serie> = [];
   pageP: number = 1;
   countP: number = 0; // puede indicar el total sin traer todo desde principio
   gridSizeP: number = 4;
 
-  constructor(private route: ActivatedRoute) {
-    this.filteredTags = this.tagCtrl.valueChanges.pipe(
-      startWith(null),
-      map((tag: string | null) => (tag ? this._filterNotNull(tag) : this._filterNull())),
-    );
+  constructor(private activatedRoute: ActivatedRoute,
+              private router: Router,
+              private snackBar: MatSnackBar) {
   }
 
   ngOnInit(): void {
-    this.filter = this.route.snapshot!.params['language'];
-    this.videos = Array(150).fill(0).map((x, i) => ({ id: (i + 1), name: `Item ${i + 1}`}));
-  }
-
-  add(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
-    if (value) {
-      this.tagSelected.add(value);
-    }
-    event.chipInput!.clear();
-
-    this.tagCtrl.setValue(null);
-  }
-
-  remove(tag: string): void {
-    this.tagSelected.delete(tag);
-    this.tagCtrl.setValue(null);
-  }
-
-  selected(event: MatAutocompleteSelectedEvent): void {
-    this.tagSelected.add(event.option.viewValue);
-    // this.tagInput!.nativeElement.value = '';
-    this.tagCtrl.setValue(null);
+    this.pageV = ( this.activatedRoute.snapshot.params['pageV'] || 1 );
+    this.pageP = ( this.activatedRoute.snapshot.params['pageP'] || 1 );
+    this.tabIndex = ( this.activatedRoute.snapshot.params['tabIndex'] || 0 );
+    this.getSeries();
   }
 
   onChangePageV(event: any) {
     this.pageV = event;
+    this.keepFilters();
   }
   onChangePageP(event: any) {
     this.pageP = event;
+    this.keepFilters();
+  }
+  onFilterChange(event: any) {
+    this.searchFilter = event.searchFilter;
+    this.tagSelected = event.tagSelected;
+    this.selectedLanguage = event.selectedLanguage;
+    this.selectedSearch = event.selectedSearch;
+    this.keepFilters();
+    this.filterSeries();
   }
 
-  private _filterNotNull(value: string): string[] {
-    const filterValue = value.toLowerCase();
-
-    return this.tagList.filter(tag => (tag.toLowerCase().includes(filterValue) && !this.tagSelected.has(tag)));
+  keepFilters(){
+    this.router.navigate(
+      [
+        '/class/' + this.selectedLanguage,
+        {
+          tagSelected: Array.from(this.tagSelected).join('|'),
+          selectedSearch: this.selectedSearch,
+          searchFilter: this.searchFilter,
+          pageV: this.pageV,
+          pageP: this.pageP,
+          tabIndex: this.tabIndex
+        }
+      ],
+      {
+        relativeTo: this.activatedRoute,
+        replaceUrl: true
+      }
+    );
   }
-  private _filterNull(): string[] {
-    return this.tagList.filter(tag => !this.tagSelected.has(tag));
+
+  filterSeries(){
+    this.videosFiltered = Utils.getSearcher(this.videos,this.selectedSearch).search(this.searchFilter).filter((elem: Serie) => {
+      return Utils.applyFilters(elem,this.selectedLanguage,this.tagSelected);
+    });
+    this.podcastsFiltered = Utils.getSearcher(this.podcasts,this.selectedSearch).search(this.searchFilter).filter((elem: Serie) => {
+      return Utils.applyFilters(elem,this.selectedLanguage,this.tagSelected);
+    });
+    this.pageP = 1; this.pageV = 1;
+  }
+
+  private getSeries(){
+    let endpoint: string = environment.domain + environment.apiEndpoints.series.index;
+    axios.get(endpoint).then((res) => {
+      let result = res.data as Serie[];
+      result.forEach(elem => {
+        let arr = elem.type == 'video' ? this.videos : this.podcasts;
+        arr.push(elem);
+        this.videosFiltered = this.videos;
+        this.podcastsFiltered = this.podcasts;
+        this.filterSeries();
+      })
+      this.loading = false;
+    }).catch(err => {
+      this.snackBar.open(err,'X', {
+        duration: 5000,
+        verticalPosition: 'top',
+      });
+    });
   }
 }

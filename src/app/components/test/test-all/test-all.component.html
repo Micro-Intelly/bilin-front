@@ -1,83 +1,44 @@
-<div fxLayout="column" fxLayoutGap="10px" class="general-body-margin">
-  <div fxLayout="row" fxLayoutAlign="left center" fxLayoutGap="15px">
-    <mat-form-field appearance="outline">
-      <mat-label>Search by</mat-label>
-      <mat-select [(value)]="selectedSearch">
-        <mat-option *ngFor="let search of searchBy" [value]="search.value">
-          {{search.label}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field appearance="outline" fxFlex="55">
-      <input matInput placeholder="Search class" value="">
-    </mat-form-field>
-  </div>
-
-  <div fxLayout="row" fxLayoutAlign="left top" fxLayoutGap="25px">
-    <div fxLayout="column" fxFlex="75">
+<app-filters-template
+  (filterChanged)="onFilterChange($event)"
+>
+  <div fxLayout="column">
+    <div fxLayout="row" fxLayoutAlign="center top" class="mt-2 mb-5" *ngIf="loading">
+      <mat-spinner></mat-spinner>
+    </div>
+    <div *ngIf="!loading">
       <div fxLayout="row" class="mt-2 mb-5">
         <div fxLayout="column" fxLayoutGap="16px grid" class="w-100">
-          <div *ngFor="let num of [1,2,3,4,5,6,7] | paginate
-            : {
-                id: 'videoPagination',
-                itemsPerPage: gridSizeV,
-                currentPage: pageV,
-                totalItems: countV
-              };let i = index">
-            <mat-card class="mat-elevation-z4 card" routerLink="/test/all">
+          <div *ngFor="let test of testsFiltered | paginate
+                : {
+                    id: 'videoPagination',
+                    itemsPerPage: gridSize,
+                    currentPage: page,
+                    totalItems: count
+                  };let i = index">
+            <mat-card class="mat-elevation-z4 card" routerLink="/test/detail/{{test.id}}">
               <!--              <img mat-card-image src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Example_image.svg/600px-Example_image.svg.png" alt="alt">-->
               <mat-card-content>
-                <mat-card-title>Test {{num}}</mat-card-title>
-                <mat-card-subtitle>Author: ssss </mat-card-subtitle>
-                <p>
-                  The Himalayas is a mountain range in Asia. The Himalayas is a mountain range in Asia.The Himalayas is a mountain range in Asia.The Himalayas is a mountain range in Asia.The Himalayas is a mountain range in Asia.The Himalayas is a mountain range in Asia.The Himalayas is a mountain range in Asia.The Himalayas is a mountain range in Asia.The Himalayas is a mountain range in Asia.The Himalayas is a mountain range in Asia.
+                <mat-card-title class="text-oneline" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{test.title}}">{{test.title}}</mat-card-title>
+                <mat-card-subtitle>Author: {{test.author!.name}} </mat-card-subtitle>
+                <p class="text-multilines">
+                  {{test.description}}
                 </p>
+                <mat-card-subtitle>Questions: {{test.questions_count}}</mat-card-subtitle>
               </mat-card-content>
             </mat-card>
           </div>
         </div>
       </div>
       <div fxLayout="row" fxLayoutAlign="center center">
-        <pagination-controls
-          id="videoPagination"
-          previousLabel="Prev"
-          nextLabel="Next"
-          [responsive]="true"
-          (pageChange)="onChangePageV($event)"
-        >
-        </pagination-controls>
-      </div>
+      <pagination-controls
+        id="videoPagination"
+        previousLabel="Prev"
+        nextLabel="Next"
+        [responsive]="true"
+        (pageChange)="onChangePageV($event)"
+      >
+      </pagination-controls>
     </div>
-
-    <div fxFlex="25">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Tag filter</mat-label>
-        <mat-chip-list #chipList aria-label="Tag selection">
-          <mat-chip
-            *ngFor="let tag of tagSelected"
-            (removed)="remove(tag)">
-            {{tag}}
-            <button matChipRemove>
-              <mat-icon>cancel</mat-icon>
-            </button>
-          </mat-chip>
-          <input
-            placeholder="New tag..."
-            #tagInput
-            [formControl]="tagCtrl"
-            [matAutocomplete]="auto"
-            [matChipInputFor]="chipList"
-            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-            (matChipInputTokenEnd)="add($event)">
-        </mat-chip-list>
-        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-          <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
-            {{tag}}
-          </mat-option>
-        </mat-autocomplete>
-      </mat-form-field>
     </div>
   </div>
-</div>
-
-
+</app-filters-template>
