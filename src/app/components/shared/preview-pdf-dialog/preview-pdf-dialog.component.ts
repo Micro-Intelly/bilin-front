@@ -3,7 +3,6 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {File} from "@app/models/file.model";
 import {environment} from "@environments/environment";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import axios from "axios";
 
 @Component({
   selector: 'app-preview-pdf-dialog',

@@ -1,6 +1,6 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA  } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -53,6 +53,17 @@ import { SeriesGridComponent } from './components/shared/series-grid/series-grid
 import { TestsPostsListComponent } from './components/shared/tests-posts-list/tests-posts-list.component';
 import { CommentsNotesListComponent } from './components/shared/comments-notes-list/comments-notes-list.component';
 import { HistoriesListComponent } from './components/shared/histories-list/histories-list.component';
+import { SeiresFormDialogComponent } from './components/class/seires-form-dialog/seires-form-dialog.component';
+import { SectionFormDialogComponent } from './components/class/section-form-dialog/section-form-dialog.component';
+import { EpisodeFormDialogComponent } from './components/class/episode-form-dialog/episode-form-dialog.component';
+import { PostFormDialogComponent } from './components/forum/post-form-dialog/post-form-dialog.component';
+import { TestFormDialogComponent } from './components/Test/test-form-dialog/test-form-dialog.component';
+import { QuestionFormDialogComponent } from './components/test/question-form-dialog/question-form-dialog.component';
+import { PrivacyPolicyDialogComponent } from './components/shared/privacy-policy-dialog/privacy-policy-dialog.component';
+import { TermsOfServiceDialogComponent } from './components/shared/terms-of-service-dialog/terms-of-service-dialog.component';
+import { SafeDataDirectiveDirective } from './shared/safe-data-directive.directive';
+import { SafeHtmlPipe } from './safe-html.pipe';
+import { CommentEditDialogComponent } from './components/comment/comment-edit-dialog/comment-edit-dialog.component';
 
 
 
@@ -87,6 +98,17 @@ import { HistoriesListComponent } from './components/shared/histories-list/histo
     TestsPostsListComponent,
     CommentsNotesListComponent,
     HistoriesListComponent,
+    SeiresFormDialogComponent,
+    SectionFormDialogComponent,
+    EpisodeFormDialogComponent,
+    PostFormDialogComponent,
+    TestFormDialogComponent,
+    QuestionFormDialogComponent,
+    PrivacyPolicyDialogComponent,
+    TermsOfServiceDialogComponent,
+    SafeDataDirectiveDirective,
+    SafeHtmlPipe,
+    CommentEditDialogComponent,
 
   ],
   imports: [

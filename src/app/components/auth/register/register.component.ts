@@ -9,6 +9,14 @@ import {
 } from "@angular/forms";
 import { Router } from "@angular/router";
 import {FormService} from "@app/services/form.service";
+import {MatDialog} from "@angular/material/dialog";
+import {PreviewPdfDialogComponent} from "@app/components/shared/preview-pdf-dialog/preview-pdf-dialog.component";
+import {
+  PrivacyPolicyDialogComponent
+} from "@app/components/shared/privacy-policy-dialog/privacy-policy-dialog.component";
+import {
+  TermsOfServiceDialogComponent
+} from "@app/components/shared/terms-of-service-dialog/terms-of-service-dialog.component";
 
 interface Role {
   id: string;
@@ -36,10 +44,12 @@ export class RegisterComponent implements OnInit {
    * @param router  - Router service to redirect page
    * @param formBuilder - Form Builder service to create form group
    * @param formService - Form service to check form errors
+   * @param dialog - Dialog
    */
   constructor(private router: Router,
               private formBuilder: FormBuilder,
-              public formService: FormService) {
+              public formService: FormService,
+              private dialog: MatDialog) {
     this.userRegisterFormGroup = this.formBuilder.group({
       username: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
       email: ['', [Validators.required, Validators.maxLength(50),Validators.email]],
@@ -127,5 +137,18 @@ export class RegisterComponent implements OnInit {
         console.log(err);
       })
     }
+  }
+
+  showPrivacyPolicy(){
+    this.dialog.open(PrivacyPolicyDialogComponent, {
+      height: '90%',
+      width: '50%'
+    });
+  }
+  showTermService(){
+    this.dialog.open(TermsOfServiceDialogComponent, {
+      height: '90%',
+      width: '50%'
+    });
   }
 }

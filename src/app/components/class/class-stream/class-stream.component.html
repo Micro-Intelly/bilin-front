@@ -70,6 +70,9 @@
   <div fxLayout="row" fxLayoutAlign="space-around center" class="w-100">
     <app-comment
       [masterRecord]="episode?.id"
+      [serieId]="episode?.serie_id"
+      [parentType]="'episode'"
+      [mode]="'create'"
       class="w-100"
     ></app-comment>
   </div>

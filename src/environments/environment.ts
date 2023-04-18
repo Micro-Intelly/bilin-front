@@ -29,7 +29,12 @@ export const environment = {
       stream: '/api/stream/{:id}'
     },
     comments: {
-      index: '/api/comments/{:id}'
+      index: '/api/comments/{:id}',
+      delete: '/api/comments/{:id}',
+      update: '/api/comments/{:id}',
+      fileUpload: '/api/comment/image/upload',
+      postComment: '/api/comments/comment',
+      postNote: '/api/comments/note',
     },
     user: {
       seriesIndex: '/api/user/{:id}/series',

@@ -2,27 +2,34 @@
   <div fxLayout="row" class="mb-4" *ngIf="!withoutHeader">
     <mat-card class="w-100">
       <mat-card-content>
+<!--        <mat-button-toggle-group-->
+<!--          class="w-100"-->
+<!--          appearance="legacy"-->
+<!--          name="commentType"-->
+<!--          aria-label="Comment Type"-->
+<!--          [(ngModel)]="commentTypeSelected"-->
+<!--          [disabled]="!isLoggedIn"-->
+<!--        >-->
         <mat-button-toggle-group
           class="w-100"
           appearance="legacy"
           name="commentType"
           aria-label="Comment Type"
           [(ngModel)]="commentTypeSelected"
-          [disabled]="!isLoggedIn"
-
         >
           <mat-button-toggle value="comment" class="w-100" *ngIf="!noteOnly">Comment</mat-button-toggle>
           <mat-button-toggle value="note" class="w-100" *ngIf="!commentOnly">Note</mat-button-toggle>
         </mat-button-toggle-group>
-        <div *ngIf="!isLoggedIn">
-          <div fxLayoutAlign="center center" class="w-100 mt-2 req-login-div align-middle">
-            Please &nbsp;
-            <a routerLink="/login">login</a>&nbsp;
-            your account
-          </div>
-        </div>
-        <div *ngIf="commentTypeSelected == 'comment' && isLoggedIn">
-          <form [formGroup]="submitComment!" (ngSubmit)="onSubmit()">
+<!--        <div *ngIf="!isLoggedIn">-->
+<!--          <div fxLayoutAlign="center center" class="w-100 mt-2 req-login-div align-middle">-->
+<!--            Please &nbsp;-->
+<!--            <a routerLink="/login">login</a>&nbsp;-->
+<!--            your account-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div *ngIf="commentTypeSelected == 'comment' && isLoggedIn">-->
+        <div *ngIf="commentTypeSelected == 'comment'">
+          <form [formGroup]="submitComment!" (ngSubmit)="onSubmitComment()">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Leave your comment</mat-label>
               <textarea matInput
@@ -30,19 +37,60 @@
                         #autosize="cdkTextareaAutosize"
                         cdkAutosizeMinRows="7"
                         cdkAutosizeMaxRows="12"
-                        formControlName="comment"></textarea>
+                        [maxLength]="500"
+                        formControlName="comment"
+                        [(ngModel)]="defaultCommBody"
+              ></textarea>
             </mat-form-field>
-            <button mat-raised-button [disabled]="submitComment!.invalid">
+            <mat-hint>Max length: 500</mat-hint><br/>
+            <mat-error *ngIf="formServiceC.checkHasErrors('comment')">
+              <mat-error *ngIf="formServiceC.checkRequired('comment')">{{'field-required' | translate}}</mat-error>
+              <mat-error *ngIf="formServiceC.checkMaxLength('comment')">This field require maximum length 500 character
+              </mat-error>
+            </mat-error>
+            <button mat-raised-button [disabled]="submitComment!.invalid || loading">
               Submit
             </button>
           </form>
         </div>
-        <div *ngIf="commentTypeSelected == 'note' && isLoggedIn">
-          <form [formGroup]="submitNote!" (ngSubmit)="onSubmit()">
+<!--        <div *ngIf="commentTypeSelected == 'note' && isLoggedIn">-->
+        <div *ngIf="commentTypeSelected == 'note'">
+          <form [formGroup]="submitNote!" (ngSubmit)="onSubmitNote()">
             <div class="my-2">
-              <angular-editor formControlName="note" [config]="editorConfig"></angular-editor>
+              <mat-form-field class="w-100">
+                <mat-label>Title</mat-label>
+                <input
+                  matInput
+                  [(ngModel)]="defaultNoteTitle"
+                  formControlName="title">
+              </mat-form-field>
             </div>
-            <button mat-raised-button [disabled]="submitComment!.invalid">
+            <div class="my-2">
+              <mat-form-field class="w-100">
+                <mat-label>Description</mat-label>
+                <input
+                  matInput
+                  [(ngModel)]="defaultNoteDescription"
+                  formControlName="description">
+              </mat-form-field>
+            </div>
+            <div class="my-2">
+              <angular-editor
+                formControlName="note"
+                [config]="editorConfig"
+                [(ngModel)]="defaultNoteBody"
+              ></angular-editor>
+            </div>
+            <mat-hint>Max title length (HTML count): 50</mat-hint><br/>
+            <mat-hint>Max description length (HTML count): 100</mat-hint><br/>
+            <mat-hint>Max body length (HTML count): 10000</mat-hint><br/>
+            <mat-hint>Max size per image: 2MB</mat-hint><br/>
+            <mat-error *ngIf="formServiceN.checkHasErrors('note')">
+              <mat-error *ngIf="formServiceN.checkRequired('note')">{{'field-required' | translate}}</mat-error>
+              <mat-error *ngIf="formServiceN.checkMaxLength('note')">This field require maximum length 10000 character (count on HTML code mode)
+              </mat-error>
+            </mat-error>
+            <button mat-raised-button [disabled]="submitNote!.invalid || loading">
               Submit
             </button>
           </form>
@@ -71,11 +119,50 @@
                       totalItems: pageHandler.comm.totalItems
                     };let i = index">
                   <mat-list-item role="listitem">
-                    <p>Author: {{comm.author?.name}}
-                      <span class="timestamp">
-                        on {{getFormatDate(comm.updated_at)}}
-                      </span>
-                    </p>
+                    <div fxLayout="row" class="w-100">
+                      <div fxFlexAlign="center" fxFlex="65%" class="h-100">
+                        <p class="m-0">
+                          Author: {{comm.author?.name}}
+                        </p>
+                      </div>
+                      <div fxFlexAlign="center" fxFlex="25%" class="h-100">
+                        <p class="m-0 text-right timestamp">
+                          {{getFormatDate(comm.updated_at)}}
+                        </p>
+                      </div>
+                      <button
+                        fxFlexAlign="center"
+                        mat-icon-button
+                        [matMenuTriggerFor]="menuC"
+                        aria-label="Comment menu"
+                        fxFlex="10%"
+                      >
+                        <mat-icon>more_vert</mat-icon>
+                      </button>
+                      <mat-menu #menuC="matMenu">
+                        <button
+                          mat-menu-item
+                          (click)="onEdit(comm)"
+                        >
+                          <mat-icon>edit</mat-icon>
+                          <span>Edit</span>
+                        </button>
+                        <button
+                          mat-menu-item
+                          (click)="onReply(comm)"
+                        >
+                          <mat-icon>reply</mat-icon>
+                          <span>Reply</span>
+                        </button>
+                        <button
+                          mat-menu-item
+                          (click)="onDelete(comm)"
+                        >
+                          <mat-icon>delete</mat-icon>
+                          <span>Delete</span>
+                        </button>
+                      </mat-menu>
+                    </div>
                   </mat-list-item>
                   <mat-list-item role="listitem">
                     <p>{{comm.body}}</p>
@@ -89,18 +176,57 @@
                       totalItems: pageHandler.subComment.get(absoluteIndex(pageHandler.comm,i))!.totalItems
                     };">
                       <mat-list-item>
-                        <p>{{subComm.author!.name}}
-                          <span class="timestamp">
-                            on {{getFormatDate(subComm.updated_at)}}
-                          </span>
-                        </p>
+                        <div fxLayout="row" class="w-100">
+                          <div fxFlexAlign="center" fxFlex="65%" class="h-100">
+                            <p class="m-0">
+                              Author: {{subComm.author!.name}}
+                            </p>
+                          </div>
+                          <div fxFlexAlign="center" fxFlex="25%" class="h-100">
+                            <p class="m-0 text-right timestamp">
+                              {{getFormatDate(subComm.updated_at)}}
+                            </p>
+                          </div>
+                          <button
+                            fxFlexAlign="center"
+                            mat-icon-button
+                            [matMenuTriggerFor]="menuC"
+                            aria-label="Comment menu"
+                            fxFlex="10%"
+                          >
+                            <mat-icon>more_vert</mat-icon>
+                          </button>
+                          <mat-menu #menuC="matMenu">
+                            <button
+                              mat-menu-item
+                              (click)="onEdit(subComm)"
+                            >
+                              <mat-icon>edit</mat-icon>
+                              <span>Edit</span>
+                            </button>
+                            <button
+                              mat-menu-item
+                              (click)="onReply(subComm)"
+                            >
+                              <mat-icon>reply</mat-icon>
+                              <span>Reply</span>
+                            </button>
+                            <button
+                              mat-menu-item
+                              (click)="onDelete(subComm)"
+                            >
+                              <mat-icon>delete</mat-icon>
+                              <span>Delete</span>
+                            </button>
+                          </mat-menu>
+                        </div>
                       </mat-list-item>
                       <mat-list-item>
                         <p>
                           <span class="in-reply-to" *ngIf="subComm.in_reply_to_id">
                             @{{userMap.get(subComm.in_reply_to_id)?.name}}
                           </span>
-                          {{comm.body}}
+                          {{subComm.body}}
                         </p>
                       </mat-list-item>
                     </div>
@@ -148,17 +274,64 @@
                       totalItems: pageHandler.note.totalItems
                     };let i = index">
                   <mat-card
-                    class="w-100 mat-elevation-z4 card note-card"
+                    class="w-100 mat-elevation-z4 card {{getNoteCardClass(note)}}"
                     (click)="onNoteClick(note)"
                   >
-                    <mat-list-item role="listitem">
-                      Author: {{note.author?.name}}
-                      <span class="timestamp">
-                        on {{getFormatDate(note.updated_at)}}
-                      </span>
+                    <mat-list-item role="listitem" *ngIf="note.title">
+                      <div fxLayout="row" fxLayoutAlign="center center" class="w-100">
+                        <h2>{{note.title}}</h2>
+                      </div>
+                    </mat-list-item>
+                    <mat-list-item role="listitem" *ngIf="note.description">
+                      <div fxLayout="row" class="w-100">
+                        {{note.description}}
+                      </div>
                     </mat-list-item>
                     <mat-list-item role="listitem">
-                      <div [innerHTML]="note.body" class="w-100 note-body p-3"></div>
+                      <div fxLayout="row" class="w-100">
+                        <div fxFlexAlign="center" fxFlex="65%" class="h-100">
+                          <p class="m-0 timestamp">
+                            Author: {{note.author!.name}}
+                          </p>
+                        </div>
+                        <div fxFlexAlign="center" fxFlex="25%" class="h-100">
+                          <p class="m-0 text-right timestamp">
+                            {{getFormatDate(note.updated_at)}}
+                          </p>
+                        </div>
+                        <button
+                          fxFlexAlign="center"
+                          mat-icon-button
+                          [matMenuTriggerFor]="menuC"
+                          aria-label="Comment menu"
+                          fxFlex="10%"
+                          (click) = "$event.stopPropagation()"
+                        >
+                          <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #menuC="matMenu">
+                          <button
+                            mat-menu-item
+                            (click)="onEdit(note)"
+                          >
+                            <mat-icon>edit</mat-icon>
+                            <span>Edit</span>
+                          </button>
+                          <button
+                            mat-menu-item
+                            (click)="onDelete(note)"
+                          >
+                            <mat-icon>delete</mat-icon>
+                            <span>Delete</span>
+                          </button>
+                        </mat-menu>
+                      </div>
+                    </mat-list-item>
+                    <mat-list-item role="listitem">
+                      <div [innerHTML]="note.body | safeHtml" class="w-100 note-body p-3"></div>
+<!--                      <ng-container *ngIf="note.body">-->
+<!--                        <div appSafeData [passedHtmlData]="note.body" class="w-100 note-body p-3"></div>-->
+<!--                      </ng-container>-->
                     </mat-list-item>
                   </mat-card>
                   <mat-divider></mat-divider>
