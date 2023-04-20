@@ -9,11 +9,29 @@
     <mat-card-content>
       <mat-card-title>{{postRecord!.title}}</mat-card-title>
       <mat-card-subtitle>Author: {{postRecord!.author!.name}} on {{getFormatDate(postRecord!.updated_at)}} </mat-card-subtitle>
-      <div [innerHTML]="postRecord!.body" class="w-100"></div>
+      <div fxLayout="column">
+        <div [innerHTML]="postRecord!.body | safeHtml" class="w-100"></div>
+        <div fxLayout="row" fxLayoutGap="5px" class="mt-3">
+          <div fxFlexAlign="center">
+            <p class="m-0 p-0 align-middle">Language: </p>
+          </div>
+          <div class="chip" fxFlexAlign="center">
+            <span class="chip-content">{{postRecord.language?.language}}</span>
+          </div>
+        </div>
+        <div fxLayout="row" fxLayoutGap="5px" class="mt-3">
+          <div fxFlexAlign="center">
+            <p class="m-0 p-0 align-middle">Tags: </p>
+          </div>
+          <div class="chip" fxFlexAlign="center" *ngFor="let tag of postRecord?.tags">
+            <span class="chip-content">{{tag.name}}</span>
+          </div>
+        </div>
+      </div>
     </mat-card-content>
     <mat-card-actions align="end">
-      <button mat-raised-button color="primary">Edit</button>
-      <button mat-raised-button color="warn">Delete</button>
+      <button mat-raised-button color="primary" (click)="onEdit(postRecord)">Edit</button>
+      <button mat-raised-button color="warn" (click)="onDelete(postRecord)">Delete</button>
     </mat-card-actions>
   </mat-card>
   <app-comment

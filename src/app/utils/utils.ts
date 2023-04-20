@@ -3,6 +3,8 @@ import FuzzySearch from "fuzzy-search";
 import {Post} from "@app/models/post.model";
 import {Serie} from "@app/models/serie.model";
 import {Test} from "@app/models/test.model";
+import {AxiosResponse} from "axios";
+import {CommonHttpResponse} from "@app/models/common-http-response.model";
 
 export class Utils {
   // @ts-ignore

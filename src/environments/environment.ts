@@ -12,7 +12,10 @@ export const environment = {
     },
     posts: {
       index: '/api/posts',
-      show: '/api/posts/{:id}'
+      show: '/api/posts/{:id}',
+      create: '/api/posts',
+      update: '/api/posts/{:id}',
+      delete: '/api/posts/{:id}'
     },
     tests: {
       index: '/api/tests',

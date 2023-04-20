@@ -1,11 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, SimpleChange} from '@angular/core';
 import {environment} from "@environments/environment";
 import {Post} from "@app/models/post.model";
 import {Test} from "@app/models/test.model";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import axios from "axios";
 import {Utils} from "@app/utils/utils";
-import {Comment} from "@app/models/comment.model";
 import {Router} from "@angular/router";
 
 @Component({
@@ -16,6 +15,18 @@ import {Router} from "@angular/router";
 export class TestsPostsListComponent implements OnInit {
   @Input() userId = '';
   @Input() type = '';
+  _reloadToggle: boolean = false;
+  @Input()
+  set reloadToggle(value:boolean) {
+    if(value != this._reloadToggle){
+      this._reloadToggle = value;
+      this.loading = true;
+      this.getRecords();
+    }
+  }
+  get reloadToggle() {
+    return this._reloadToggle;
+  }
 
   domain: string = environment.domain;
   loading: boolean = true;
@@ -32,6 +43,10 @@ export class TestsPostsListComponent implements OnInit {
     if(this.userId && this.type){
       this.getRecords();
     }
+  }
+  ngOnChanges(changes:SimpleChange){
+
+    console.log(changes);
   }
 
   onChangePage(event: any) {

@@ -25,7 +25,11 @@
     <app-series-grid
       [userId]="currentUser.id"
     ></app-series-grid>
-    <button mat-raised-button color="primary">Add New</button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="onNewSerie()"
+    >Add New</button>
   </mat-expansion-panel>
   <mat-expansion-panel [expanded]="false" class="mt-1">
     <mat-expansion-panel-header>
@@ -36,8 +40,13 @@
     <app-tests-posts-list
       [userId]="currentUser.id"
       [type]="'posts'"
+      [reloadToggle]="reloadPostToggle"
     ></app-tests-posts-list>
-    <button mat-raised-button color="primary">Add New</button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="onNewPost()"
+    >Add New</button>
   </mat-expansion-panel>
   <mat-expansion-panel [expanded]="false" class="mt-1">
     <mat-expansion-panel-header>
@@ -48,8 +57,13 @@
     <app-tests-posts-list
       [userId]="currentUser.id"
       [type]="'tests'"
+      [reloadToggle]="reloadTestToggle"
     ></app-tests-posts-list>
-    <button mat-raised-button color="primary">Add New</button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="onNewTest()"
+    >Add New</button>
   </mat-expansion-panel>
   <mat-expansion-panel [expanded]="false" class="mt-1">
     <mat-expansion-panel-header>

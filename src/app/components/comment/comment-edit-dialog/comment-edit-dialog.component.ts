@@ -94,7 +94,7 @@ export class CommentEditDialogComponent implements OnInit {
       .catch(err => this.axiosPostError(err))
   }
 
-  axiosPostResult(res:AxiosResponse<any>){
+  private axiosPostResult(res:AxiosResponse<any>){
       const response = res.data as CommonHttpResponse;
       this.snackBar.open(response.message, 'X', {
         duration: 5000,
@@ -106,7 +106,7 @@ export class CommentEditDialogComponent implements OnInit {
       this.loading = false;
   }
 
-  axiosPostError(err: any) {
+  private axiosPostError(err: any) {
     this.snackBar.open(err, 'X', {
       duration: 5000,
       verticalPosition: 'top',

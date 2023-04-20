@@ -45,9 +45,11 @@ export class CommentComponent implements OnInit {
   @Input() defaultCommBody: string = '';
   @Input() defaultNoteTitle: string = '';
   @Input() defaultNoteDescription: string = '';
+  @Input() withNoteDescription: boolean = true;
   @Input() defaultNoteBody: string = '';
   @Input() withoutBody: boolean = false;
   @Input() withoutHeader: boolean = false;
+  @Input() hideToggle: boolean = false;
   @Input() commentOnly: boolean = false;
   @Input() noteOnly: boolean = false;
   @Input() inReplyTo: string = '';
@@ -89,7 +91,7 @@ export class CommentComponent implements OnInit {
     spellcheck: true,
     height: 'auto',
     minHeight: '250px',
-    maxHeight: 'auto',
+    maxHeight: '250px',
     width: 'auto',
     minWidth: '0',
     translate: 'yes',
@@ -142,12 +144,12 @@ export class CommentComponent implements OnInit {
 
   ngOnInit(): void {
     this.submitComment = this.formBuilder.group({
-      comment: ['', [Validators.required, Validators.maxLength(500)]],
+      comment: [this.defaultCommBody, [Validators.required, Validators.maxLength(500)]],
     });
     this.submitNote = this.formBuilder.group({
-      note: ['', [Validators.required, Validators.maxLength(10000)]],
-      title: ['', [Validators.required, Validators.maxLength(50)]],
-      description: ['', [Validators.required, Validators.maxLength(100)]],
+      note: [this.defaultNoteBody, [Validators.required,Validators.maxLength(10000)]],
+      title: [this.defaultNoteTitle, [Validators.maxLength(50)]],
+      description: [this.defaultNoteDescription, [Validators.required, Validators.maxLength(100)]],
     });
 
     this.formServiceC.setFormGroup(this.submitComment);

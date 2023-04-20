@@ -1,6 +1,7 @@
 <div *ngIf="loading">
   <mat-spinner></mat-spinner>
 </div>
+<div style="overflow-y: auto">
 <app-comment *ngIf="!loading"
   [withoutBody]="true"
   [withoutHeader]="false"
@@ -18,3 +19,4 @@
   [defaultNoteBody]="defaultNoteBody"
   (commToSend)="sendData($event)"
 ></app-comment>
+</div>

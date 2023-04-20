@@ -15,6 +15,7 @@
           appearance="legacy"
           name="commentType"
           aria-label="Comment Type"
+          *ngIf="!hideToggle"
           [(ngModel)]="commentTypeSelected"
         >
           <mat-button-toggle value="comment" class="w-100" *ngIf="!noteOnly">Comment</mat-button-toggle>
@@ -39,7 +40,6 @@
                         cdkAutosizeMaxRows="12"
                         [maxLength]="500"
                         formControlName="comment"
-                        [(ngModel)]="defaultCommBody"
               ></textarea>
             </mat-form-field>
             <mat-hint>Max length: 500</mat-hint><br/>
@@ -61,16 +61,14 @@
                 <mat-label>Title</mat-label>
                 <input
                   matInput
-                  [(ngModel)]="defaultNoteTitle"
                   formControlName="title">
               </mat-form-field>
             </div>
-            <div class="my-2">
+            <div class="my-2" *ngIf="withNoteDescription">
               <mat-form-field class="w-100">
                 <mat-label>Description</mat-label>
                 <input
                   matInput
-                  [(ngModel)]="defaultNoteDescription"
                   formControlName="description">
               </mat-form-field>
             </div>
@@ -78,7 +76,6 @@
               <angular-editor
                 formControlName="note"
                 [config]="editorConfig"
-                [(ngModel)]="defaultNoteBody"
               ></angular-editor>
             </div>
             <mat-hint>Max title length (HTML count): 50</mat-hint><br/>
@@ -87,7 +84,11 @@
             <mat-hint>Max size per image: 2MB</mat-hint><br/>
             <mat-error *ngIf="formServiceN.checkHasErrors('note')">
               <mat-error *ngIf="formServiceN.checkRequired('note')">{{'field-required' | translate}}</mat-error>
-              <mat-error *ngIf="formServiceN.checkMaxLength('note')">This field require maximum length 10000 character (count on HTML code mode)
+              <mat-error *ngIf="formServiceN.checkMaxLength('note')">Body require maximum length 10000 character (count on HTML code mode)
+              </mat-error>
+              <mat-error *ngIf="formServiceN.checkMaxLength('title')">Title require maximum length 10000 character (count on HTML code mode)
+              </mat-error>
+              <mat-error *ngIf="formServiceN.checkMaxLength('description')">Description require maximum length 10000 character (count on HTML code mode)
               </mat-error>
             </mat-error>
             <button mat-raised-button [disabled]="submitNote!.invalid || loading">

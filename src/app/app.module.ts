@@ -57,13 +57,14 @@ import { SeiresFormDialogComponent } from './components/class/seires-form-dialog
 import { SectionFormDialogComponent } from './components/class/section-form-dialog/section-form-dialog.component';
 import { EpisodeFormDialogComponent } from './components/class/episode-form-dialog/episode-form-dialog.component';
 import { PostFormDialogComponent } from './components/forum/post-form-dialog/post-form-dialog.component';
-import { TestFormDialogComponent } from './components/Test/test-form-dialog/test-form-dialog.component';
+import { TestFormDialogComponent } from './components/test/test-form-dialog/test-form-dialog.component';
 import { QuestionFormDialogComponent } from './components/test/question-form-dialog/question-form-dialog.component';
 import { PrivacyPolicyDialogComponent } from './components/shared/privacy-policy-dialog/privacy-policy-dialog.component';
 import { TermsOfServiceDialogComponent } from './components/shared/terms-of-service-dialog/terms-of-service-dialog.component';
 import { SafeDataDirectiveDirective } from './shared/safe-data-directive.directive';
 import { SafeHtmlPipe } from './safe-html.pipe';
 import { CommentEditDialogComponent } from './components/comment/comment-edit-dialog/comment-edit-dialog.component';
+import { LanguageTagFormFieldComponent } from './components/shared/language-tag-form-field/language-tag-form-field.component';
 
 
 
@@ -109,6 +110,7 @@ import { CommentEditDialogComponent } from './components/comment/comment-edit-di
     SafeDataDirectiveDirective,
     SafeHtmlPipe,
     CommentEditDialogComponent,
+    LanguageTagFormFieldComponent,
 
   ],
   imports: [
