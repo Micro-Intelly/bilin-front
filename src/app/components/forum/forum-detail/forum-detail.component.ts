@@ -50,7 +50,8 @@ export class ForumDetailComponent implements OnInit {
     })
     dRes.afterClosed().subscribe(result => {
       if(result == 'OK'){
-        window.location.reload();
+        this.loading = true;
+        this.getPosts();
       }
     });
   }

@@ -5,6 +5,8 @@ import {Serie} from "@app/models/serie.model";
 import {Test} from "@app/models/test.model";
 import {AxiosResponse} from "axios";
 import {CommonHttpResponse} from "@app/models/common-http-response.model";
+import {MatDialogRef} from "@angular/material/dialog";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 export class Utils {
   // @ts-ignore
@@ -41,5 +43,34 @@ export class Utils {
 
   public static getFormatDate(date:string){
     return (new Date(date)).toLocaleString();
+  }
+
+  public static axiosPostResult(
+    res:AxiosResponse<any>,
+    dialogRef: MatDialogRef<any>,
+    snackBar: MatSnackBar,
+    loading: Boolean
+  ){
+    const response = res.data as CommonHttpResponse;
+    snackBar.open(response.message, 'X', {
+      duration: 5000,
+      verticalPosition: 'top',
+    })
+    if(response.status === 200){
+      dialogRef.close('OK');
+    }
+    loading = false;
+  }
+
+  public static axiosPostError(
+    err: any,
+    snackBar: MatSnackBar,
+    loading: Boolean
+  ) {
+    snackBar.open(err, 'X', {
+      duration: 5000,
+      verticalPosition: 'top',
+    });
+    loading = false;
   }
 }

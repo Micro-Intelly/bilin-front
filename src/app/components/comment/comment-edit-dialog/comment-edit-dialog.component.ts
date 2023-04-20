@@ -5,6 +5,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import axios, {AxiosResponse} from "axios";
 import {CommonHttpResponse} from "@app/models/common-http-response.model";
 import {environment} from "@environments/environment";
+import {Utils} from "@app/utils/utils";
 
 
 interface CommEditDialogData {
@@ -19,7 +20,7 @@ interface CommEditDialogData {
   styleUrls: ['./comment-edit-dialog.component.css']
 })
 export class CommentEditDialogComponent implements OnInit {
-  loading: boolean = false;
+  loading: Boolean = false;
   commentOnly: boolean = true;
   noteOnly: boolean = false;
   inReplyTo: string = '';
@@ -83,34 +84,14 @@ export class CommentEditDialogComponent implements OnInit {
   updateComm(body: any){
     const url = environment.domain + environment.apiEndpoints.comments.update.replace('{:id}', this.data.obj.id);
     axios.patch(url, body)
-      .then(res => this.axiosPostResult(res))
-      .catch(err => this.axiosPostError(err))
+      .then(res => Utils.axiosPostResult(res,this.dialogRef,this.snackBar,this.loading))
+      .catch(err => Utils.axiosPostError(err,this.snackBar,this.loading))
   }
 
   postReply(body: any){
     const url = environment.domain + environment.apiEndpoints.comments.postComment;
     axios.post(url, body)
-      .then(res => this.axiosPostResult(res))
-      .catch(err => this.axiosPostError(err))
-  }
-
-  private axiosPostResult(res:AxiosResponse<any>){
-      const response = res.data as CommonHttpResponse;
-      this.snackBar.open(response.message, 'X', {
-        duration: 5000,
-        verticalPosition: 'top',
-      })
-      if(response.status === 200){
-        this.dialogRef.close('OK');
-      }
-      this.loading = false;
-  }
-
-  private axiosPostError(err: any) {
-    this.snackBar.open(err, 'X', {
-      duration: 5000,
-      verticalPosition: 'top',
-    });
-    this.loading = false;
+      .then(res => Utils.axiosPostResult(res,this.dialogRef,this.snackBar,this.loading))
+      .catch(err => Utils.axiosPostError(err,this.snackBar,this.loading))
   }
 }

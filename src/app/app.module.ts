@@ -65,6 +65,9 @@ import { SafeDataDirectiveDirective } from './shared/safe-data-directive.directi
 import { SafeHtmlPipe } from './safe-html.pipe';
 import { CommentEditDialogComponent } from './components/comment/comment-edit-dialog/comment-edit-dialog.component';
 import { LanguageTagFormFieldComponent } from './components/shared/language-tag-form-field/language-tag-form-field.component';
+import { ProfileEditFormDialogComponent } from './components/auth/profile-edit-form-dialog/profile-edit-form-dialog.component';
+import { ThumbnailEditFormDialogComponent } from './components/auth/thumbnail-edit-form-dialog/thumbnail-edit-form-dialog.component';
+import {FileUploadModule} from "ng2-file-upload";
 
 
 
@@ -111,6 +114,8 @@ import { LanguageTagFormFieldComponent } from './components/shared/language-tag-
     SafeHtmlPipe,
     CommentEditDialogComponent,
     LanguageTagFormFieldComponent,
+    ProfileEditFormDialogComponent,
+    ThumbnailEditFormDialogComponent,
 
   ],
   imports: [
@@ -140,6 +145,7 @@ import { LanguageTagFormFieldComponent } from './components/shared/language-tag-
         deps: [HttpClient]
       }
     }),
+    FileUploadModule,
 
   ],
   providers: [CookieService,AuthGuard],

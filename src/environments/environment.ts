@@ -40,6 +40,9 @@ export const environment = {
       postNote: '/api/comments/note',
     },
     user: {
+      update: '/api/user/{:id}',
+      updateThumbnail: '/api/user/{:id}/thumbnail',
+      delete: '/api/user/{:id}',
       seriesIndex: '/api/user/{:id}/series',
       postsIndex: '/api/user/{:id}/posts',
       testsIndex: '/api/user/{:id}/tests',

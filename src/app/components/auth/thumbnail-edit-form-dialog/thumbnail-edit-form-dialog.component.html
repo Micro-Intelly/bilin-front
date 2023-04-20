@@ -1,0 +1,9 @@
+<p>Maximun allowed file size is 1MB</p>
+<img mat-card-image
+     class="m-1 img-thumbnail "
+     style="object-fit: contain; width: 200px; max-width: 80%"
+     [src]="thumb"
+     alt="profile thumbnail"
+     *ngIf="ready">
+<input type="file" ng2FileSelect [uploader]="uploader">
+<button (click)="onUpload()">Upload </button>

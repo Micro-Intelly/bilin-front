@@ -23,7 +23,8 @@
            class="w-100 m-1 img-thumbnail"
            style="object-fit: contain;"
            src="{{currentUserThumbnail}}"
-           alt="profile thumbnail">
+           alt="profile thumbnail"
+           (click)="onEditThumbnail()">
       <div fxLayout="column" fxFlex="80%" class="h-100 p-3" fxLayoutGap="10px">
         <div fxLayout="row">
           <mat-card-content>
@@ -34,7 +35,11 @@
           <p fxFlex="50"><b>Email: </b>{{currentUser.email}}</p>
         </div>
         <mat-card-actions align="end">
-          <button mat-stroked-button color="primary">Edit</button>
+          <button
+            mat-stroked-button
+            color="primary"
+            (click)="onEditUser()"
+          >Edit</button>
         </mat-card-actions>
       </div>
     </div>
@@ -57,7 +62,11 @@
         <p mat-line class="text-secondary">
           <span> Delete your account and all related data, notice that this action is irreversible </span>
         </p>
-        <button mat-flat-button color="warn">Delete</button>
+        <button
+          mat-flat-button
+          color="warn"
+          (click)="onDeleteUser()"
+        >Delete</button>
       </mat-list-item>
     </mat-list>
   </mat-expansion-panel>

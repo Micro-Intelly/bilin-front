@@ -24,6 +24,8 @@
       <mat-error *ngIf="formService.checkRequired('body')">{{'field-required' | translate}}</mat-error>
       <mat-error *ngIf="formService.checkMaxLength('body')">Body require maximum length 10000 character (count on HTML code mode)
       </mat-error>
+    </mat-error>
+    <mat-error *ngIf="formService.checkHasErrors('title')">
       <mat-error *ngIf="formService.checkRequired('title')">{{'field-required' | translate}}</mat-error>
       <mat-error *ngIf="formService.checkMaxLength('title')">Title require maximum length 100 character
       </mat-error>

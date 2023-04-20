@@ -1,0 +1,38 @@
+<div *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</div>
+<div *ngIf="!loading">
+  <form [formGroup]="submitUser!" (ngSubmit)="onSubmit()">
+    <div class="my-2">
+      <mat-form-field class="w-100">
+        <mat-label>Title</mat-label>
+        <input
+          matInput
+          formControlName="name">
+      </mat-form-field>
+    </div>
+    <mat-error *ngIf="formService.checkHasErrors('name')">
+      <mat-error *ngIf="formService.checkRequired('name')">{{'field-required' | translate}}</mat-error>
+      <mat-error *ngIf="formService.checkMaxLength('name')">Name maximum length 20 character
+      </mat-error>
+    </mat-error>
+    <div class="my-2">
+      <mat-form-field class="w-100">
+        <mat-label>Email</mat-label>
+        <input
+          matInput
+          formControlName="email">
+      </mat-form-field>
+    </div>
+    <mat-error *ngIf="formService.checkHasErrors('email')">
+      <mat-error *ngIf="formService.checkRequired('email')">{{'field-required' | translate}}</mat-error>
+      <mat-error *ngIf="formService.checkMaxLength('email')">Email maximum length 100 character
+      </mat-error>
+      <mat-error *ngIf="formService.checkEmail('email')">Email incorrect format
+      </mat-error>
+    </mat-error>
+    <button mat-raised-button [disabled]="submitUser!.invalid || loading">
+      Submit
+    </button>
+  </form>
+</div>
