@@ -53,7 +53,7 @@ export class MyContentsComponent implements OnInit {
 
   private openCreateDialog(component: ComponentType<any>, toggle: string){
     const dRes = this.dialog.open(component, {
-      data: {obj:null, mode:'create'},
+      data: {obj:null, mode:'create', user: this.currentUser},
       disableClose: false,
       width: '60',
       height: '60'

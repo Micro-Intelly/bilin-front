@@ -41,10 +41,12 @@ export class ProfileEditFormDialogComponent implements OnInit {
       const url = environment.domain + environment.apiEndpoints.user.update.replace('{:id}', this.data.obj.id);
       axios.patch(url, body)
         .then(res => {
-          Utils.axiosPostResult(res,this.dialogRef,this.snackBar,this.loading);
+          Utils.axiosPostResult(res, this.dialogRef, this.snackBar);
+          this.loading = false;
         })
         .catch(err => {
-          Utils.axiosPostError(err,this.snackBar,this.loading)
+          Utils.axiosPostError(err, this.snackBar);
+          this.loading = false;
         })
     }
   }

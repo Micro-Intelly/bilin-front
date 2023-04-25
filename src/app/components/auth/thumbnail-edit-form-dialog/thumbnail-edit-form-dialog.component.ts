@@ -52,10 +52,12 @@ export class ThumbnailEditFormDialogComponent implements OnInit {
   onUpload(){
     let formData = new FormData();
     formData.append('thumbnail', this.file);
-    axios.post(this.url,formData).then(res =>
-      Utils.axiosPostResult(res,this.dialogRef,this.snackBar,this.loading)
-    ).catch(err =>
-      Utils.axiosPostError(err,this.snackBar,this.loading)
-    )
+    axios.post(this.url,formData).then(res => {
+      Utils.axiosPostResult(res, this.dialogRef, this.snackBar);
+      this.loading = false;
+    }).catch(err => {
+      Utils.axiosPostError(err, this.snackBar);
+      this.loading = false;
+    })
   }
 }

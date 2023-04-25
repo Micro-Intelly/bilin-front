@@ -1,6 +1,5 @@
-import { Component, OnInit, forwardRef } from '@angular/core';
-import {LanTag} from "@app/components/forum/post-form-dialog/post-form-dialog.component";
-import {LAN_ALL_FILTER, Language} from "@app/models/language.model";
+import {Component, OnInit, forwardRef, Input} from '@angular/core';
+import {Language} from "@app/models/language.model";
 import {Observable, Subscription} from "rxjs";
 import {LanguageService} from "@app/services/language.service";
 import {TagService} from "@app/services/tag.service";
@@ -11,6 +10,14 @@ import {MatChipInputEvent} from "@angular/material/chips";
 import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
 import {COMMA, ENTER} from "@angular/cdk/keycodes";
 import {MatSnackBar} from "@angular/material/snack-bar";
+
+export interface LanTag {
+  language: string | undefined;
+  tags: Set<string> | undefined;
+  languageId: string;
+  tagsId: Set<string> | undefined;
+  newTags: Set<string>;
+}
 
 @Component({
   selector: 'app-language-tag-form-field',
@@ -25,12 +32,13 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 export class LanguageTagFormFieldComponent implements OnInit,ControlValueAccessor {
   readonly MAX_TAG_NUM: number = 10;
 
+  @Input() disableLanguage: boolean = false;
+
   lanTags: LanTag = {} as LanTag
   onChange = (value: LanTag) => {};
 
   searchLanguage: Language[] = [];
   tagList: Tag[] = [];
-  selectedLanguage: string = 'en-us'
   tagSelected: Set<string> = new Set<string>();
 
   subscriptionLanguage: Subscription | undefined;
@@ -51,7 +59,6 @@ export class LanguageTagFormFieldComponent implements OnInit,ControlValueAccesso
 
   ngOnInit(): void {
     this.lanTags.tags = this.tagSelected;
-    this.lanTags.language = this.selectedLanguage;
     this.formatLanTag();
 
     this.languageService.getLanguages();
@@ -101,7 +108,6 @@ export class LanguageTagFormFieldComponent implements OnInit,ControlValueAccesso
   }
 
   onLanguageChange(){
-    this.lanTags.language = this.selectedLanguage;
     this.formatLanTag();
     this.onChange(this.lanTags);
   }
@@ -113,7 +119,6 @@ export class LanguageTagFormFieldComponent implements OnInit,ControlValueAccesso
   writeValue(value: LanTag) {
     if (Object.keys(value).length) {
       this.lanTags = value;
-      this.selectedLanguage = value.language!;
       this.tagSelected = value.tags!;
       this.formatLanTag();
     }

@@ -1,6 +1,10 @@
 <mat-form-field appearance="outline" class="w-100">
   <mat-label>Language</mat-label>
-  <mat-select [(value)]="selectedLanguage" (selectionChange)="onLanguageChange()">
+  <mat-select
+    [(value)]="lanTags.language"
+    (selectionChange)="onLanguageChange()"
+    [disabled]="disableLanguage"
+  >
     <mat-option *ngFor="let lan of searchLanguage" [value]="lan.code">
       {{lan.language}}
     </mat-option>

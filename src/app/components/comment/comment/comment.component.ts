@@ -239,17 +239,14 @@ export class CommentComponent implements OnInit {
       }
     });
   }
-  onDelete(comm: Comment){
-    const reminder = this.dialog.open(CloseRemindDialogComponent, {
-      data: 'Are you sure delete this content? This action will be not reversible.',
-      disableClose: true,
-    });
-    reminder.afterClosed().subscribe(result => {
-      if(result){
-        const url = environment.domain + environment.apiEndpoints.comments.delete.replace('{:id}', comm.id);
-        this.deleteComm(url);
-      }
-    });
+  onDeleteComm(comm: Comment){
+    const url = environment.domain + environment.apiEndpoints.comments.delete.replace('{:id}', comm.id);
+    Utils.onDeleteDialog(url,this.dialog,this.snackBar)
+      .subscribe(responseStatus => {
+        if(responseStatus){
+          this.getComments();
+        }
+      });
   }
 
 
@@ -281,10 +278,9 @@ export class CommentComponent implements OnInit {
         let arr = [];
         if(elem.type == 'comment'){
           arr = this.commentList;
-          let pageSetAux: PageSetting = this.defaultPageSetting;
-          pageSetAux.totalItems = elem.comments ? elem.comments.length : 0;
-          if(pageSetAux.totalItems){
+          if(elem.comments && elem.comments.length){
             this.pageHandler.subComment.set(this.commentList.length, {...this.defaultPageSetting});
+            this.pageHandler.subComment.get(this.commentList.length)!.totalItems = elem.comments!.length
           }
         } else {arr = this.noteList;}
         arr.push(elem);
@@ -333,27 +329,6 @@ export class CommentComponent implements OnInit {
         this.getComments();
         this.submitComment?.reset();
         this.submitNote?.reset();
-      }
-      this.loading = false;
-    }).catch(err => {
-      this.snackBar.open(err, 'X', {
-        duration: 5000,
-        verticalPosition: 'top',
-      })
-      this.loading = false;
-    });
-  }
-
-  private deleteComm(url: string){
-    this.loading = true;
-    axios.delete(url).then((res) => {
-      const response = res.data as CommonHttpResponse;
-      this.snackBar.open(response.message, 'X', {
-        duration: 5000,
-        verticalPosition: 'top',
-      })
-      if(response.status === 200){
-        this.getComments();
       }
       this.loading = false;
     }).catch(err => {

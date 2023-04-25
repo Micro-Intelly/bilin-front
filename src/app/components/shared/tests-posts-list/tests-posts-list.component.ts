@@ -44,10 +44,6 @@ export class TestsPostsListComponent implements OnInit {
       this.getRecords();
     }
   }
-  ngOnChanges(changes:SimpleChange){
-
-    console.log(changes);
-  }
 
   onChangePage(event: any) {
     this.page = event;

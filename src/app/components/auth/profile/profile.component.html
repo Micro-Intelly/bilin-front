@@ -33,6 +33,16 @@
         </div>
         <div fxLayout="row wrap" fxLayoutAlign="start center">
           <p fxFlex="50"><b>Email: </b>{{currentUser.email}}</p>
+          <p fxFlex="50"><b>Role: </b>{{currentUser.role}}</p>
+          <p fxFlex="100"><b>Usage: </b>Episode({{currentUser.episode_used}}/{{currentlimits.episode_limit}}) Test({{currentUser.test_used}}/{{currentlimits.test_limit}})</p>
+          <p
+            fxFlex="100"
+            *ngIf="currentUser.organization"
+          ><b>Your are admin of organization: </b>{{currentUser.organization.name}}</p>
+          <p
+            fxFlex="100"
+            *ngIf="currentUser.org_count"
+          ><b>Belong to organizations: </b>{{currentUser.orgs}}</p>
         </div>
         <mat-card-actions align="end">
           <button

@@ -1,0 +1,28 @@
+<mat-form-field appearance="outline" class="w-100">
+  <mat-label>Access</mat-label>
+  <mat-select
+    [(value)]="accessLevel.selectedAccess"
+    (selectionChange)="onAccessChange()"
+    [disabled]="accessLevel.disableAccess"
+  >
+    <mat-option *ngFor="let acc of accessList" [value]="acc">
+      {{acc}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+<mat-form-field appearance="outline" class="w-100">
+  <mat-label>Related Organization</mat-label>
+  <mat-select [(value)]="accessLevel.selectedOrg"  [disabled]="accessLevel.disableOrg">
+    <mat-option *ngFor="let org of orgList" [value]="org.id">
+      {{org.name}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+<mat-form-field appearance="outline" class="w-100">
+  <mat-label>Level</mat-label>
+  <mat-select [(value)]="accessLevel.selectedLevel"  [disabled]="accessLevel.disableLevel">
+    <mat-option *ngFor="let lev of levelList" [value]="lev">
+      {{lev}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>

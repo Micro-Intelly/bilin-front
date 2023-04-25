@@ -9,6 +9,7 @@ import {CommonHttpResponse} from "@app/models/common-http-response.model";
 import {CloseRemindDialogComponent} from "@app/components/shared/close-remind-dialog/close-remind-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {PostFormDialogComponent} from "@app/components/forum/post-form-dialog/post-form-dialog.component";
+import * as Util from "util";
 
 @Component({
   selector: 'app-forum-detail',
@@ -16,7 +17,7 @@ import {PostFormDialogComponent} from "@app/components/forum/post-form-dialog/po
   styleUrls: ['./forum-detail.component.css']
 })
 export class ForumDetailComponent implements OnInit {
-  loading: boolean = true;
+  loading: Boolean = true;
   postId: string | undefined;
   postRecord: Post | undefined;
 
@@ -41,7 +42,7 @@ export class ForumDetailComponent implements OnInit {
     return Utils.getFormatDate(date);
   }
 
-  onEdit(postRecord: Post){
+  onEditPost(postRecord: Post){
     const dRes = this.dialog.open(PostFormDialogComponent, {
       data: {obj:postRecord, mode:'edit'},
       disableClose: false,
@@ -56,15 +57,16 @@ export class ForumDetailComponent implements OnInit {
     });
   }
 
-  onDelete(postRecord: Post){
-    const reminder = this.dialog.open(CloseRemindDialogComponent, {
-      data: 'Are you sure delete this content? This action will be not reversible.',
-      disableClose: true,
-    });
-    reminder.afterClosed().subscribe(result => {
-      if(result){
-        this.deletePost(postRecord);
-      }
+  onDeletePost(postRecord: Post){
+    const url = environment.domain + environment.apiEndpoints.posts.delete.replace('{:id}', postRecord.id);
+    const redirection = '/forum/all';
+    this.loading = true
+    Utils.onDeleteDialog(url,this.dialog,this.snackBar)
+      .subscribe(responseStatus => {
+        if(responseStatus){
+          this.router.navigate([redirection]);
+        }
+        this.loading = false
     });
   }
 
@@ -78,28 +80,6 @@ export class ForumDetailComponent implements OnInit {
         duration: 5000,
         verticalPosition: 'top',
       });
-    });
-  }
-
-  private deletePost(postRecord: Post){
-    this.loading = true;
-    const url = environment.domain + environment.apiEndpoints.posts.delete.replace('{:id}', postRecord.id);
-    axios.delete(url).then((res) => {
-      const response = res.data as CommonHttpResponse;
-      this.snackBar.open(response.message, 'X', {
-        duration: 5000,
-        verticalPosition: 'top',
-      })
-      if(response.status === 200){
-        this.router.navigate(['/forum/all']);
-      }
-      this.loading = false;
-    }).catch(err => {
-      this.snackBar.open(err, 'X', {
-        duration: 5000,
-        verticalPosition: 'top',
-      })
-      this.loading = false;
     });
   }
 }

@@ -1,1 +1,59 @@
-<p>test-form-dialog works!</p>
+<div *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</div>
+<div *ngIf="!loading">
+  <form [formGroup]="submitTest!" (ngSubmit)="onSubmit()">
+    <div class="my-2">
+      <mat-form-field class="w-100">
+        <mat-label>Title</mat-label>
+        <input
+          matInput
+          formControlName="title">
+      </mat-form-field>
+    </div>
+    <div class="my-2">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Leave your comment</mat-label>
+        <textarea matInput
+                  cdkTextareaAutosize
+                  #autosize="cdkTextareaAutosize"
+                  cdkAutosizeMinRows="7"
+                  cdkAutosizeMaxRows="12"
+                  [maxLength]="500"
+                  formControlName="description"
+        ></textarea>
+      </mat-form-field>
+    </div>
+    <mat-hint>Max title length (HTML count): 100</mat-hint><br/>
+    <mat-hint>Max body length (HTML count): 10000</mat-hint><br/>
+    <mat-hint>Max size per image: 2MB</mat-hint><br/>
+    <mat-error *ngIf="formService.checkHasErrors('title')">
+      <mat-error *ngIf="formService.checkRequired('title')">{{'field-required' | translate}}</mat-error>
+      <mat-error *ngIf="formService.checkMaxLength('title')">Title require maximum length 100 characters
+      </mat-error>
+    </mat-error>
+    <mat-error *ngIf="formService.checkHasErrors('description')">
+      <mat-error *ngIf="formService.checkMaxLength('description')">Description require maximum length 500 characters
+      </mat-error>
+    </mat-error>
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Related Serie</mat-label>
+      <mat-select [(value)]="selectedSerie" (selectionChange)="onChangeSerie()">
+        <mat-option *ngFor="let serie of seriesList" [value]="serie.id">
+          {{serie.title}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <app-access-level-selectors
+      [userId]="this.data.user.id"
+      formControlName="accesslevel"
+    ></app-access-level-selectors>
+    <app-language-tag-form-field
+      formControlName="lantag"
+      [disableLanguage]="disableLanguage"
+    ></app-language-tag-form-field>
+    <button mat-raised-button [disabled]="submitTest!.invalid || loading">
+      Submit
+    </button>
+  </form>
+</div>

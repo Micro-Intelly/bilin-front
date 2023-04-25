@@ -15,6 +15,7 @@ export interface Serie {
   access?:string;
   level?:string;
   author?:User;
+  language_id:string;
   language?:Language;
   organization?:Organization;
   tags?:Tag[];

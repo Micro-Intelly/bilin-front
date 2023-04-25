@@ -8,6 +8,11 @@ export interface User {
   name:string;
   email:string;
   thumbnail:string;
+  role:string;
+  orgs:string;
+  episode_used:number;
+  test_used:number;
+  org_count:number;
   series?:Serie[];
   posts?:Post[];
   tests?:Test[];

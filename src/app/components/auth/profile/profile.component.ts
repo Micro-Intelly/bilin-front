@@ -18,6 +18,14 @@ import {Utils} from "@app/utils/utils";
 import {Router} from "@angular/router";
 import {CloseRemindDialogComponent} from "@app/components/shared/close-remind-dialog/close-remind-dialog.component";
 
+interface Limits {
+  episode_limit: number;
+  test_limit: number;
+  episode_limit_org: number;
+  test_limit_org: number;
+  question_per_test: number;
+}
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -29,6 +37,12 @@ export class ProfileComponent implements OnInit {
   isLoggedIn: boolean = false;
   currentUser: User = null as any;
   currentUserThumbnail: string = '';
+  currentlimits: Limits = {
+    episode_limit: -1,
+    test_limit: -1,
+    episode_limit_org: -1,
+    test_limit_org: -1
+  } as Limits;
 
   constructor(private userService: UserService,
               private dialog: MatDialog,
@@ -41,6 +55,7 @@ export class ProfileComponent implements OnInit {
       if(this.isLoggedIn){
         this.currentUser = value;
         this.currentUserThumbnail = environment.domain + '/'+ value.thumbnail;
+        this.getLimits();
       }
     });
   }
@@ -54,15 +69,16 @@ export class ProfileComponent implements OnInit {
   }
 
   onDeleteUser(){
-    const reminder = this.dialog.open(CloseRemindDialogComponent, {
-      data: 'Are you sure delete this content? This action will be not reversible.',
-      disableClose: true,
-    });
-    reminder.afterClosed().subscribe(result => {
-      if(result){
-        this.deleteUser();
-      }
-    });
+    const url = environment.domain + environment.apiEndpoints.user.delete.replace('{:id}', this.currentUser.id);
+    const redirection = '/';
+    Utils.onDeleteDialog(url,this.dialog,this.snackBar)
+      .subscribe(responseStatus => {
+        if(responseStatus){
+          this.userService.userChange(null as any);
+          this.router.navigate([redirection]);
+        }
+        this.loading = false;
+      });
   }
 
   /**
@@ -86,20 +102,16 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  private deleteUser(){
-    const url = environment.domain + environment.apiEndpoints.user.delete.replace('{:id}', this.currentUser.id)
-    axios.delete(url).then(res => {
-      const response = res.data as CommonHttpResponse;
-      this.snackBar.open(response.message, 'X', {
-        duration: 5000,
-        verticalPosition: 'top',
-      })
-      if(response.status == 200){
-        this.userService.userChange(null as any);
-        this.router.navigate(['/']);
+  private getLimits() {
+    const url = environment.domain + environment.apiEndpoints.user.getLimits;
+    axios.get(url).then((res) => {
+      const limits = res.data as Limits;
+      this.currentlimits.episode_limit = limits.episode_limit;
+      this.currentlimits.test_limit = limits.test_limit;
+      if(this.currentUser.org_count){
+        this.currentlimits.episode_limit = limits.episode_limit_org;
+        this.currentlimits.test_limit = limits.test_limit_org;
       }
-    }).catch(err => {
-      Utils.axiosPostError(err,this.snackBar,this.loading)
-    })
+    }).catch(err => {console.error(err)});
   }
 }

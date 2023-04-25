@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {MatDialog} from "@angular/material/dialog";
 import {TestDialogComponent} from "@app/components/test/test-dialog/test-dialog.component";
 import {Test} from "@app/models/test.model";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {environment} from "@environments/environment";
 import axios from "axios";
@@ -10,11 +10,16 @@ import {Utils} from "@app/utils/utils";
 import {Subscription} from "rxjs";
 import {UserService} from "@app/services/user.service";
 import {TestResultDialogComponent} from "@app/components/test/test-result-dialog/test-result-dialog.component";
+import {TestFormDialogComponent} from "@app/components/test/test-form-dialog/test-form-dialog.component";
+import {QuestionFormDialogComponent} from "@app/components/test/question-form-dialog/question-form-dialog.component";
+import {QuestionUtils} from "@app/components/test/question-utils";
+import {User} from "@app/models/user.model";
 
 @Component({
   selector: 'app-test-detail',
   templateUrl: './test-detail.component.html',
-  styleUrls: ['./test-detail.component.css']
+  styleUrls: ['./test-detail.component.css'],
+  providers: [QuestionUtils]
 })
 export class TestDetailComponent implements OnInit {
   loading: boolean = true;
@@ -23,6 +28,7 @@ export class TestDetailComponent implements OnInit {
   testRecord: Test | undefined;
 
   subscriptionUser: Subscription | undefined;
+  currentUser: User = null as any;
 
   animal:string = '';
 
@@ -30,7 +36,8 @@ export class TestDetailComponent implements OnInit {
   constructor(public dialog: MatDialog,
               private route: ActivatedRoute,
               private snackBar: MatSnackBar,
-              private userService: UserService) {
+              private userService: UserService,
+              private router: Router) {
 
   }
 
@@ -40,6 +47,9 @@ export class TestDetailComponent implements OnInit {
       this.getTests();
       this.subscriptionUser = this.userService.user.subscribe((value) => {
         this.isLoggedIn = Boolean(value);
+        if(this.isLoggedIn){
+          this.currentUser = value;
+        }
       });
     } else {
       this.snackBar.open('Invalid URI','X', {
@@ -61,6 +71,48 @@ export class TestDetailComponent implements OnInit {
     this.dialog.open(TestResultDialogComponent, {
       data: this.testId
     });
+  }
+
+  onEditTest(testRecord: Test){
+    const dRes = this.dialog.open(TestFormDialogComponent, {
+      data: {obj:testRecord, mode:'edit', user: this.currentUser},
+      disableClose: false,
+      width: '60',
+      height: '60'
+    })
+    dRes.afterClosed().subscribe(result => {
+      if(result == 'OK'){
+        this.loading = true;
+        this.getTests();
+      }
+    });
+  }
+  onEditQuestions(testRecord: Test){
+    const dRes = this.dialog.open(QuestionFormDialogComponent, {
+      data: {obj:testRecord, mode:'edit'},
+      disableClose: false,
+      width: '60',
+      height: '60'
+    })
+    dRes.afterClosed().subscribe(result => {
+      if(result == 'OK'){
+        this.loading = true;
+        this.getTests();
+      }
+    });
+  }
+
+  onDeleteTest(testRecord: Test){
+    const url = environment.domain + environment.apiEndpoints.tests.delete.replace('{:id}', testRecord.id);
+    const redirection = '/test/all';
+    this.loading = true;
+    Utils.onDeleteDialog(url,this.dialog,this.snackBar)
+      .subscribe(responseStatus => {
+        if(responseStatus){
+          this.router.navigate([redirection]);
+        }
+        this.loading = false
+      });
   }
 
   getFormatDate(date:string){

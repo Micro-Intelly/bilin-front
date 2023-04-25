@@ -5,6 +5,7 @@ import axios from "axios";
 import {Question} from "@app/models/question.model";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {CloseRemindDialogComponent} from "@app/components/shared/close-remind-dialog/close-remind-dialog.component";
+import {QuestionUtils} from "@app/components/test/question-utils";
 
 @Component({
   selector: 'app-test-dialog',
@@ -12,18 +13,22 @@ import {CloseRemindDialogComponent} from "@app/components/shared/close-remind-di
   styleUrls: ['./test-dialog.component.css']
 })
 export class TestDialogComponent implements OnInit {
-  loading:boolean = true;
+  loading:Boolean = true;
   questions: Question[] = [];
 
   constructor(
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<TestDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: string,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private questionUtils: QuestionUtils
   ) {}
 
   ngOnInit() {
-    this.getQuestions();
+    this.questionUtils.getQuestions(this.data).subscribe(res => {
+      this.questions = res;
+      this.loading = false;
+    });
   }
 
   onOkClick(): void {

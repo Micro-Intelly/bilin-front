@@ -68,6 +68,8 @@ import { LanguageTagFormFieldComponent } from './components/shared/language-tag-
 import { ProfileEditFormDialogComponent } from './components/auth/profile-edit-form-dialog/profile-edit-form-dialog.component';
 import { ThumbnailEditFormDialogComponent } from './components/auth/thumbnail-edit-form-dialog/thumbnail-edit-form-dialog.component';
 import {FileUploadModule} from "ng2-file-upload";
+import {QuestionUtils} from "@app/components/test/question-utils";
+import { AccessLevelSelectorsComponent } from './components/shared/access-level-selectors/access-level-selectors.component';
 
 
 
@@ -116,6 +118,7 @@ import {FileUploadModule} from "ng2-file-upload";
     LanguageTagFormFieldComponent,
     ProfileEditFormDialogComponent,
     ThumbnailEditFormDialogComponent,
+    AccessLevelSelectorsComponent,
 
   ],
   imports: [
@@ -148,7 +151,7 @@ import {FileUploadModule} from "ng2-file-upload";
     FileUploadModule,
 
   ],
-  providers: [CookieService,AuthGuard],
+  providers: [CookieService,AuthGuard,QuestionUtils],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

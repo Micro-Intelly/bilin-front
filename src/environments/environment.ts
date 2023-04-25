@@ -20,6 +20,9 @@ export const environment = {
     tests: {
       index: '/api/tests',
       show: '/api/tests/{:id}',
+      create: '/api/tests',
+      update: '/api/tests/{:id}',
+      delete: '/api/tests/{:id}',
       showResultAverage: '/api/tests/{:id}/results'
     },
     questions: {
@@ -44,9 +47,11 @@ export const environment = {
       updateThumbnail: '/api/user/{:id}/thumbnail',
       delete: '/api/user/{:id}',
       seriesIndex: '/api/user/{:id}/series',
+      orgIndex: '/api/user/{:id}/organizations',
       postsIndex: '/api/user/{:id}/posts',
       testsIndex: '/api/user/{:id}/tests',
       commentsIndex: '/api/user/{:id}/comments',
+      getLimits: '/api/user/limits',
       history: {
         episodesIndex: '/api/user/{:id}/histories/episodes',
         postsIndex: '/api/user/{:id}/histories/posts',

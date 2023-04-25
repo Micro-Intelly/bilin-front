@@ -84,14 +84,26 @@ export class CommentEditDialogComponent implements OnInit {
   updateComm(body: any){
     const url = environment.domain + environment.apiEndpoints.comments.update.replace('{:id}', this.data.obj.id);
     axios.patch(url, body)
-      .then(res => Utils.axiosPostResult(res,this.dialogRef,this.snackBar,this.loading))
-      .catch(err => Utils.axiosPostError(err,this.snackBar,this.loading))
+      .then(res => {
+        Utils.axiosPostResult(res, this.dialogRef, this.snackBar);
+        this.loading = false;
+      })
+      .catch(err => {
+        Utils.axiosPostError(err, this.snackBar);
+        this.loading = false;
+      })
   }
 
   postReply(body: any){
     const url = environment.domain + environment.apiEndpoints.comments.postComment;
     axios.post(url, body)
-      .then(res => Utils.axiosPostResult(res,this.dialogRef,this.snackBar,this.loading))
-      .catch(err => Utils.axiosPostError(err,this.snackBar,this.loading))
+      .then(res => {
+        Utils.axiosPostResult(res, this.dialogRef, this.snackBar);
+        this.loading = false;
+      })
+      .catch(err => {
+        Utils.axiosPostError(err, this.snackBar);
+        this.loading = false;
+      })
   }
 }
