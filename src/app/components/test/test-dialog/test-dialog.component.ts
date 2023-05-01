@@ -6,6 +6,14 @@ import {Question} from "@app/models/question.model";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {CloseRemindDialogComponent} from "@app/components/shared/close-remind-dialog/close-remind-dialog.component";
 import {QuestionUtils} from "@app/components/test/question-utils";
+import {Utils} from "@app/utils/utils";
+import {CommonHttpResponse} from "@app/models/common-http-response.model";
+
+interface ResultHttpResponse {
+  status: number;
+  message: string;
+  score: number;
+}
 
 @Component({
   selector: 'app-test-dialog',
@@ -15,6 +23,7 @@ import {QuestionUtils} from "@app/components/test/question-utils";
 export class TestDialogComponent implements OnInit {
   loading:Boolean = true;
   questions: Question[] = [];
+  result: number = -1;
 
   constructor(
     public dialog: MatDialog,
@@ -41,32 +50,46 @@ export class TestDialogComponent implements OnInit {
       });
       reminder.afterClosed().subscribe(result => {
         if(result){
-          // send post
           this.loading = true;
-          this.dialogRef.close();
+          this.postAnswers();
         }
       });
     }
   }
 
-  private getQuestions() {
-    let endpoint: string = environment.domain + environment.apiEndpoints.questions.index.replace('{:id}', this.data);
-    axios.get(endpoint).then((res) => {
-      this.questions = res.data as Question[];
-      this.questions.forEach(question => {
-        question.answersMap = new Map(Object.entries(JSON.parse(question.answers)));
-      });
-
-      this.loading = false;
-    }).catch(err => {
-      this.snackBar.open(err,'X', {
-        duration: 5000,
-        verticalPosition: 'top',
+  private postAnswers(){
+    const body: any = {answers: []};
+    this.questions.forEach(elem => {
+      body.answers.push({
+        qid: elem.id, selectedAnswer: elem.selectedAnswer ?? -1
       });
     });
-  }
 
-  private postAnswers(){
+    const url = environment.domain + environment.apiEndpoints.tests.postAnswer.replace('{:id}', this.data);
+    this.loading = true;
+    axios.post(url, body)
+      .then(res => {
+        const response = res.data as ResultHttpResponse;
+        this.snackBar.open(response.message, 'X', {
+          duration: 5000,
+          verticalPosition: 'top',
+        })
+        if(response.status === 200){
+          this.result = response.score;
+          const reminder = this.dialog.open(CloseRemindDialogComponent, {
+            data: 'Your score is: ' + this.result,
+          });
+          reminder.afterClosed().subscribe(result => {
+            this.dialogRef.close();
+          });
+        }
+        this.loading = false;
+      })
+      .catch(err => {
+        Utils.axiosPostError(err, this.snackBar);
+        this.loading = false;
+      })
 
+    console.log(body);
   }
 }

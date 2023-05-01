@@ -44,7 +44,7 @@ export class TestDetailComponent implements OnInit {
   ngOnInit(): void {
     this.testId = this.route.snapshot.paramMap.get('test-id') ?? undefined;
     if(this.testId) {
-      this.getTests();
+      this.getTest();
       this.subscriptionUser = this.userService.user.subscribe((value) => {
         this.isLoggedIn = Boolean(value);
         if(this.isLoggedIn){
@@ -60,12 +60,22 @@ export class TestDetailComponent implements OnInit {
   }
 
   startTest(){
-    this.dialog.open(TestDialogComponent, {
-      data: this.testId,
-      disableClose: true,
-      width: "60%",
-      height: "80%"
-    });
+    if(this.testRecord?.questions_count){
+      const dialog = this.dialog.open(TestDialogComponent, {
+        data: this.testId,
+        disableClose: true,
+        width: "60%",
+        height: "80%"
+      });
+      dialog.afterClosed().subscribe(result => {
+        this.getTest();
+      });
+    } else {
+      this.snackBar.open('No questions is here','X', {
+        duration: 5000,
+        verticalPosition: 'top',
+      });
+    }
   }
   viewResult(){
     this.dialog.open(TestResultDialogComponent, {
@@ -83,21 +93,21 @@ export class TestDetailComponent implements OnInit {
     dRes.afterClosed().subscribe(result => {
       if(result == 'OK'){
         this.loading = true;
-        this.getTests();
+        this.getTest();
       }
     });
   }
   onEditQuestions(testRecord: Test){
     const dRes = this.dialog.open(QuestionFormDialogComponent, {
-      data: {obj:testRecord, mode:'edit'},
+      data: testRecord.id,
       disableClose: false,
-      width: '60',
-      height: '60'
+      width: "60%",
+      height: "80%"
     })
     dRes.afterClosed().subscribe(result => {
       if(result == 'OK'){
         this.loading = true;
-        this.getTests();
+        this.getTest();
       }
     });
   }
@@ -126,7 +136,7 @@ export class TestDetailComponent implements OnInit {
     this.subscriptionUser?.unsubscribe();
   }
 
-  private getTests(){
+  private getTest(){
     let endpoint: string = environment.domain + environment.apiEndpoints.tests.show.replace('{:id}', this.testId!);
     axios.get(endpoint).then((res) => {
       this.testRecord = res.data as Test;

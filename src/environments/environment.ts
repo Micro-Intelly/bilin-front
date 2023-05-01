@@ -22,6 +22,8 @@ export const environment = {
       show: '/api/tests/{:id}',
       create: '/api/tests',
       update: '/api/tests/{:id}',
+      updateQuestions: '/api/tests/{:id}/questions',
+      postAnswer: '/api/tests/{:id}/answers',
       delete: '/api/tests/{:id}',
       showResultAverage: '/api/tests/{:id}/results'
     },
