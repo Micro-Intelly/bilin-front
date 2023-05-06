@@ -8,7 +8,31 @@ export const environment = {
   apiEndpoints: {
     series: {
       index: '/api/series',
-      show: '/api/series/{:id}'
+      show: '/api/series/{:id}',
+      create: '/api/series',
+      update: '/api/series/{:id}',
+      delete: '/api/series/{:id}',
+      updateThumbnail: '/api/series/{:id}/thumbnail',
+      file: {
+        create: '/api/series/{:idSerie}/files',
+        delete: '/api/series/{:idSerie}/files/{:idFile}',
+      },
+      note: {
+        create: '/api/series/{:idSerie}/notes',
+        update: '/api/series/{:idSerie}/notes/{:idNote}',
+        delete: '/api/series/{:idSerie}/notes/{:idNote}',
+      },
+      sections: {
+        create: '/api/series/{:idSerie}/sections',
+        update: '/api/series/{:idSerie}/sections/{:idSection}',
+        delete: '/api/series/{:idSerie}/sections/{:idSection}',
+
+        episodes: {
+          create: '/api/series/{:idSerie}/sections/{:idSection}/episodes',
+          update: '/api/series/{:idSerie}/sections/{:idSection}/episodes/{:idEpisode}',
+          delete: '/api/series/{:idSerie}/sections/{:idSection}/episodes/{:idEpisode}',
+        }
+      }
     },
     posts: {
       index: '/api/posts',

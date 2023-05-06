@@ -192,7 +192,8 @@ export class CommentComponent implements OnInit {
       const body = this.submitComment.getRawValue();
       this.formatBody(body,'comment');
 
-      if(this.mode == 'edit' || this.mode == 'reply'){
+      if(this.mode == 'edit' || this.mode == 'reply' ||
+        (this.mode == 'create' && this.parentType == 'serie')){
         this.commToSend.emit(body);
       } else {
         this.postCommNote(this.commentPostEndpoint, body);
@@ -204,7 +205,8 @@ export class CommentComponent implements OnInit {
       const body = this.submitNote.getRawValue();
       this.formatBody(body,'note');
 
-      if(this.mode == 'edit' || this.mode == 'reply'){
+      if(this.mode == 'edit' || this.mode == 'reply' ||
+        (this.mode == 'create' && this.parentType == 'serie')){
         this.commToSend.emit(body);
       } else {
         this.postCommNote(this.notePostEndpoint, body);

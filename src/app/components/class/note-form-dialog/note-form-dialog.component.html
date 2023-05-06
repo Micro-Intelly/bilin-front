@@ -1,0 +1,22 @@
+<div *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</div>
+<div *ngIf="!loading">
+  <app-comment
+   [withoutBody]="true"
+   [withoutHeader]="false"
+   [commentOnly]="false"
+   [noteOnly]="true"
+   [inReplyTo]="''"
+   [rootCommId]="''"
+   [parentType]="'serie'"
+   [serieId]="serieId"
+   [masterRecord]="masterRecord"
+   [mode]="mode"
+   [defaultCommBody]="''"
+   [defaultNoteTitle]="defaultNoteTitle"
+   [defaultNoteDescription]="defaultNoteDescription"
+   [defaultNoteBody]="defaultNoteBody"
+   (commToSend)="sendData($event)"
+  ></app-comment>
+</div>

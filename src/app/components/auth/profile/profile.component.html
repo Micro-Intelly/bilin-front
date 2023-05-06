@@ -64,7 +64,10 @@
     <mat-list>
       <mat-list-item class="mt-1">
         <h4 matLine> Reset password </h4>
-        <button mat-stroked-button color="primary">Reset</button>
+        <button
+          mat-stroked-button color="primary"
+          (click)="resetPassword()"
+        >Reset</button>
       </mat-list-item>
       <mat-divider></mat-divider>
       <mat-list-item class="mt-1">

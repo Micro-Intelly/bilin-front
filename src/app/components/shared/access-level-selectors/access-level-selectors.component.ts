@@ -61,6 +61,7 @@ export class AccessLevelSelectorsComponent implements OnInit {
   registerOnChange(fn: (value: AccessLevel) => void): void {
     this.onChange = fn;
     this.onChange(this.accessLevel);
+    this.onAccessChange();
   }
   writeValue(value: AccessLevel) {
     if (Object.keys(value).length) {

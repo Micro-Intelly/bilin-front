@@ -8,14 +8,13 @@ import {
   ProfileEditFormDialogComponent
 } from "@app/components/auth/profile-edit-form-dialog/profile-edit-form-dialog.component";
 import {ComponentType} from "@angular/cdk/overlay";
-import {
-  ThumbnailEditFormDialogComponent
-} from "@app/components/auth/thumbnail-edit-form-dialog/thumbnail-edit-form-dialog.component";
 import axios from "axios";
-import {CommonHttpResponse} from "@app/models/common-http-response.model";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Utils} from "@app/utils/utils";
 import {Router} from "@angular/router";
+import {
+  ThumbnailEditFormDialogComponent
+} from "@app/components/shared/thumbnail-edit-form-dialog/thumbnail-edit-form-dialog.component";
 import {CloseRemindDialogComponent} from "@app/components/shared/close-remind-dialog/close-remind-dialog.component";
 
 interface Limits {
@@ -61,11 +60,12 @@ export class ProfileComponent implements OnInit {
   }
 
   onEditUser(){
-    this.openDialog(ProfileEditFormDialogComponent)
+    this.openDialog(ProfileEditFormDialogComponent, {obj:this.currentUser})
   }
 
   onEditThumbnail(){
-    this.openDialog(ThumbnailEditFormDialogComponent);
+    const url = environment.domain + environment.apiEndpoints.user.updateThumbnail.replace('{:id}', this.currentUser.id);
+    this.openDialog(ThumbnailEditFormDialogComponent, url);
   }
 
   onDeleteUser(){
@@ -81,6 +81,15 @@ export class ProfileComponent implements OnInit {
       });
   }
 
+  resetPassword(){
+    this.dialog.open(CloseRemindDialogComponent, {
+      data: 'This function is not supported for now',
+      disableClose: false,
+      width: '60',
+      height: '60'
+    })
+  }
+
   /**
    * Unsubscribe the user refresh event when component is destroyed
    */
@@ -88,9 +97,9 @@ export class ProfileComponent implements OnInit {
     this.subscriptionUser?.unsubscribe();
   }
 
-  private openDialog(component: ComponentType<any>){
+  private openDialog(component: ComponentType<any>, dialogData: any){
     const dRes = this.dialog.open(component, {
-      data: {obj:this.currentUser},
+      data: dialogData,
       disableClose: false,
       width: '60',
       height: '60'

@@ -53,9 +53,6 @@ import { SeriesGridComponent } from './components/shared/series-grid/series-grid
 import { TestsPostsListComponent } from './components/shared/tests-posts-list/tests-posts-list.component';
 import { CommentsNotesListComponent } from './components/shared/comments-notes-list/comments-notes-list.component';
 import { HistoriesListComponent } from './components/shared/histories-list/histories-list.component';
-import { SeiresFormDialogComponent } from './components/class/seires-form-dialog/seires-form-dialog.component';
-import { SectionFormDialogComponent } from './components/class/section-form-dialog/section-form-dialog.component';
-import { EpisodeFormDialogComponent } from './components/class/episode-form-dialog/episode-form-dialog.component';
 import { PostFormDialogComponent } from './components/forum/post-form-dialog/post-form-dialog.component';
 import { TestFormDialogComponent } from './components/test/test-form-dialog/test-form-dialog.component';
 import { QuestionFormDialogComponent } from './components/test/question-form-dialog/question-form-dialog.component';
@@ -66,10 +63,18 @@ import { SafeHtmlPipe } from './safe-html.pipe';
 import { CommentEditDialogComponent } from './components/comment/comment-edit-dialog/comment-edit-dialog.component';
 import { LanguageTagFormFieldComponent } from './components/shared/language-tag-form-field/language-tag-form-field.component';
 import { ProfileEditFormDialogComponent } from './components/auth/profile-edit-form-dialog/profile-edit-form-dialog.component';
-import { ThumbnailEditFormDialogComponent } from './components/auth/thumbnail-edit-form-dialog/thumbnail-edit-form-dialog.component';
 import {FileUploadModule} from "ng2-file-upload";
 import {QuestionUtils} from "@app/components/test/question-utils";
 import { AccessLevelSelectorsComponent } from './components/shared/access-level-selectors/access-level-selectors.component';
+import { SeriesFormDialogComponent } from './components/class/series-form-dialog/series-form-dialog.component';
+import { ManageOrgUsersComponent } from './components/auth/manage-org-users/manage-org-users.component';
+import { ManageAllUsersComponent } from './components/auth/manage-all-users/manage-all-users.component';
+import { NoteFormDialogComponent } from './components/class/note-form-dialog/note-form-dialog.component';
+import {
+  ThumbnailEditFormDialogComponent
+} from "@app/components/shared/thumbnail-edit-form-dialog/thumbnail-edit-form-dialog.component";
+import { CommonEditFormDialogComponent } from './components/class/common-edit-form-dialog/common-edit-form-dialog.component';
+import { UserGridComponent } from './components/shared/user-grid/user-grid.component';
 
 
 
@@ -104,9 +109,6 @@ import { AccessLevelSelectorsComponent } from './components/shared/access-level-
     TestsPostsListComponent,
     CommentsNotesListComponent,
     HistoriesListComponent,
-    SeiresFormDialogComponent,
-    SectionFormDialogComponent,
-    EpisodeFormDialogComponent,
     PostFormDialogComponent,
     TestFormDialogComponent,
     QuestionFormDialogComponent,
@@ -117,8 +119,14 @@ import { AccessLevelSelectorsComponent } from './components/shared/access-level-
     CommentEditDialogComponent,
     LanguageTagFormFieldComponent,
     ProfileEditFormDialogComponent,
-    ThumbnailEditFormDialogComponent,
     AccessLevelSelectorsComponent,
+    SeriesFormDialogComponent,
+    ManageOrgUsersComponent,
+    ManageAllUsersComponent,
+    NoteFormDialogComponent,
+    ThumbnailEditFormDialogComponent,
+    CommonEditFormDialogComponent,
+    UserGridComponent
 
   ],
   imports: [

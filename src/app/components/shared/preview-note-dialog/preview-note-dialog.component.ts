@@ -10,10 +10,10 @@ import {Comment} from "@app/models/comment.model";
 export class PreviewNoteDialogComponent implements OnInit {
   constructor(private dialogRef: MatDialogRef<PreviewNoteDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: Comment) {
-    console.log(this.data.body);
+    // console.log(this.data.body);
   }
 
   ngOnInit(): void {
-    console.log(this.data.body);
+    // console.log(this.data.body);
   }
 }

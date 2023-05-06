@@ -1,10 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import { FileUploader } from 'ng2-file-upload';
-import {environment} from "@environments/environment";
+import {FileUploader} from "ng2-file-upload";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {ProfileEditData} from "@app/components/auth/profile-edit-form-dialog/profile-edit-form-dialog.component";
-import {CommonHttpResponse} from "@app/models/common-http-response.model";
 import axios from "axios";
 import {Utils} from "@app/utils/utils";
 
@@ -15,7 +12,7 @@ import {Utils} from "@app/utils/utils";
 })
 export class ThumbnailEditFormDialogComponent implements OnInit {
   loading: Boolean = false;
-  url: string = environment.domain + environment.apiEndpoints.user.updateThumbnail.replace('{:id}', this.data.obj.id);
+  url: string = '';
   ready: boolean = false;
   file: File = {} as File;
   thumb: string = "";
@@ -25,11 +22,12 @@ export class ThumbnailEditFormDialogComponent implements OnInit {
   });
 
   constructor(private dialogRef: MatDialogRef<ThumbnailEditFormDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: ProfileEditData,
+              @Inject(MAT_DIALOG_DATA) public data: string,
               private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
+    this.url = this.data;
     this.uploader.onAfterAddingFile = (file) => {
       this.file = file._file;
       const image_file = file._file;

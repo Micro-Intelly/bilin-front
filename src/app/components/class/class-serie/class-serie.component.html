@@ -11,7 +11,9 @@
                class="w-100 m-1 img-thumbnail"
                style="object-fit: contain;"
                src="{{domain+'/'+seriesRecord?.image}}"
-               alt="series thumbnail">
+               alt="series thumbnail"
+               (click)="onEditImage()"
+          >
           <div fxLayout="column" fxFlex="80%" class="h-100 m-1" fxLayoutGap="10px">
             <div fxLayout="row" fxFlex="60%">
               <mat-card-content>
@@ -40,6 +42,18 @@
             </div>
           </div>
         </div>
+        <mat-card-actions align="end">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="onEditSerie(seriesRecord!)"
+          >Edit</button>
+          <button
+            mat-raised-button
+            color="warn"
+            (click)="onDeleteSerie(seriesRecord!)"
+          >Delete</button>
+        </mat-card-actions>
       </mat-card>
     </div>
     <div fxLayout="row" fxLayoutAlign="center center">
@@ -58,62 +72,166 @@
               (click)="openDialog('pdf',file)"
               *ngFor="let file of seriesRecord?.files"
             >
-<!--              <button mat-icon-button (click)="showInfo('a')" matListItemMeta>-->
-<!--                <mat-icon>info</mat-icon>-->
-<!--              </button>-->
+              <button mat-icon-button (click)="onDeleteFile($event, file)">
+                <mat-icon>delete</mat-icon>
+              </button>
               <mat-icon matListIcon> insert_drive_file </mat-icon>
               <h4 matLine> {{file.name}} </h4>
               <p matLine> {{file.description}} </p>
+
             </mat-list-item>
             <mat-list-item
               class="card mt-1"
               (click)="openDialog('note', note)"
               *ngFor="let note of seriesRecord?.comments"
             >
-<!--              <button mat-icon-button (click)="showInfo('a')" matListItemMeta>-->
-<!--                <mat-icon>info</mat-icon>-->
-<!--              </button>-->
+              <button
+                mat-icon-button
+                [matMenuTriggerFor]="menuN"
+                aria-label="Note menu"
+                (click) = "$event.stopPropagation()"
+              >
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menuN="matMenu">
+                <button
+                  mat-menu-item
+                  (click)="onEditNote(note)"
+                >
+                  <mat-icon>edit</mat-icon>
+                  <span>Edit</span>
+                </button>
+                <button
+                  mat-menu-item
+                  (click)="onDeleteNote(note)"
+                >
+                  <mat-icon>delete</mat-icon>
+                  <span>Delete</span>
+                </button>
+              </mat-menu>
               <mat-icon matListIcon> format_align_justify </mat-icon>
               <h4 matLine> {{note.title}} </h4>
               <p matLine> {{note.description}} </p>
             </mat-list-item>
           </mat-list>
         </mat-card-content>
+        <mat-card-actions align="end">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="onAddNote()"
+          >Add Note</button>
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="onAddFile()"
+          >Add File</button>
+        </mat-card-actions>
       </mat-card>
     </div>
-    <div fxLayout="row" fxLayoutAlign="center center">
-    <mat-card class="mat-elevation-z4 w-100">
-      <mat-card-content>
-        <mat-card-title>Episodes</mat-card-title>
-        <div class="mt-3">
-          <mat-expansion-panel
-            [expanded]="true"
-            class="mt-1"
-            *ngFor="let section of seriesRecord?.sections">
-            <mat-expansion-panel-header>
-              <mat-panel-title class="text-oneline" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{section.name}}">
-                {{section.name}}
-              </mat-panel-title>
-              <mat-panel-description class="pe-2 text-oneline" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{section.description}}">
-                {{section.description}}
-              </mat-panel-description>
-            </mat-expansion-panel-header>
+    <div
+      fxLayout="row"
+      fxLayoutAlign="center center"
+      *ngIf="seriesRecord!.tests?.length"
+    >
+      <mat-card class="mat-elevation-z4 w-100">
+        <mat-card-content>
+          <mat-card-title>Tests</mat-card-title>
+          <div class="mt-3">
             <mat-list>
               <mat-list-item
                 class="card mt-1"
-                routerLink="ep/{{episode.id}}"
-                *ngFor="let episode of section.episodes"
+                routerLink="/test/detail/{{test.id}}"
+                *ngFor="let test of seriesRecord!.tests"
               >
-                <mat-icon matListIcon> {{getIcon(episode)}} </mat-icon>
-                <h4 matLine> {{episode.title}} </h4>
-                <p matLine> {{episode.description}} </p>
+                <h4 matLine> {{test.title}} </h4>
               </mat-list-item>
             </mat-list>
-          </mat-expansion-panel>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="center center">
+      <mat-card class="mat-elevation-z4 w-100">
+        <mat-card-content>
+          <mat-card-title>Episodes</mat-card-title>
+          <div class="mt-3">
+            <mat-expansion-panel
+              [expanded]="true"
+              class="mt-1"
+              *ngFor="let section of seriesRecord?.sections">
+              <mat-expansion-panel-header>
+                <mat-panel-title class="text-oneline" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{section.name}}">
+                  {{section.name}}
+                </mat-panel-title>
+                <mat-panel-description class="pe-2 text-oneline" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{section.description}}">
+                  {{section.description}}
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <mat-list>
+                <mat-list-item
+                  class="card mt-1"
+                  routerLink="ep/{{episode.id}}"
+                  *ngFor="let episode of section.episodes"
+                >
+                  <button
+                    mat-icon-button
+                    [matMenuTriggerFor]="menuE"
+                    aria-label="Note menu"
+                    (click) = "$event.stopPropagation()"
+                  >
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #menuE="matMenu">
+                    <button
+                      mat-menu-item
+                      (click)="onEditEpisode(section,episode)"
+                    >
+                      <mat-icon>edit</mat-icon>
+                      <span>Edit</span>
+                    </button>
+                    <button
+                      mat-menu-item
+                      (click)="onDeleteEpisode(section,episode)"
+                    >
+                      <mat-icon>delete</mat-icon>
+                      <span>Delete</span>
+                    </button>
+                  </mat-menu>
+                  <mat-icon matListIcon> {{getIcon(episode)}} </mat-icon>
+                  <h4 matLine> {{episode.title}} </h4>
+                  <p matLine> {{episode.description}} </p>
+                </mat-list-item>
+              </mat-list>
+              <mat-card-actions align="end">
+                <button
+                  mat-raised-button
+                  color="primary"
+                  (click)="onAddEpisode(section)"
+                >Add Episode</button>
+                <button
+                  mat-raised-button
+                  color="primary"
+                  (click)="onEditSection(section)"
+                >Edit Section</button>
+                <button
+                  mat-raised-button
+                  color="warn"
+                  (click)="onDeleteSection(section)"
+                >Delete Section</button>
+              </mat-card-actions>
+            </mat-expansion-panel>
+          </div>
+        </mat-card-content>
+        <mat-card-actions align="end">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="onAddSection()"
+          >Add Section</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
   </div>
 </div>
 <app-class-episode

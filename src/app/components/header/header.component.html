@@ -78,7 +78,7 @@
           width="28px"
           src="{{currentUserThumbnail}}"
         />
-        {{currentUser.name}}
+        <span fxHide.lt-md="true" class="ms-2">{{currentUser.name}}</span>
       </button>
 
       <mat-menu #accMenu1="matMenu">
@@ -104,6 +104,22 @@
 <!--          <mat-icon>star</mat-icon>-->
 <!--          <span>Favorite</span>-->
 <!--        </button>-->
+        <button
+          mat-menu-item
+          routerLink="/manage-org-user"
+        >
+<!--          *ngIf="currentUser.role == 'Organization'"-->
+          <mat-icon>settings</mat-icon>
+          <span>Manage Org Users</span>
+        </button>
+        <button
+          mat-menu-item
+          routerLink="/manage-all-user"
+        >
+<!--          *ngIf="currentUser.role == 'Admin'"-->
+          <mat-icon>settings</mat-icon>
+          <span>Manage Users</span>
+        </button>
         <button mat-menu-item routerLink="/history">
           <mat-icon>history</mat-icon>
           <span>History</span>

@@ -5,6 +5,7 @@ import {Tag} from "@app/models/tag.model";
 import {Section} from "@app/models/section.model";
 import {File} from "@app/models/file.model";
 import {Comment} from "@app/models/comment.model";
+import {Test} from "@app/models/test.model";
 
 export interface Serie {
   id:string;
@@ -17,8 +18,10 @@ export interface Serie {
   author?:User;
   language_id:string;
   language?:Language;
+  organization_id: string;
   organization?:Organization;
   tags?:Tag[];
+  tests?:Test[];
   comments?:Comment[];
   sections?:Section[];
   files?:File[];

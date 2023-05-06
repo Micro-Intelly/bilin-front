@@ -5,8 +5,8 @@ import {Subscription} from "rxjs";
 import {MatDialog} from "@angular/material/dialog";
 import {PostFormDialogComponent} from "@app/components/forum/post-form-dialog/post-form-dialog.component";
 import {ComponentType} from "@angular/cdk/overlay";
-import {SeiresFormDialogComponent} from "@app/components/class/seires-form-dialog/seires-form-dialog.component";
 import {TestFormDialogComponent} from "@app/components/test/test-form-dialog/test-form-dialog.component";
+import {SeriesFormDialogComponent} from "@app/components/class/series-form-dialog/series-form-dialog.component";
 
 @Component({
   selector: 'app-my-contents',
@@ -40,7 +40,7 @@ export class MyContentsComponent implements OnInit {
   }
 
   onNewSerie(){
-    this.openCreateDialog(SeiresFormDialogComponent, 'serie');
+    this.openCreateDialog(SeriesFormDialogComponent, 'serie');
   }
 
   onNewPost(){
