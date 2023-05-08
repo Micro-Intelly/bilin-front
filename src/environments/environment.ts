@@ -69,6 +69,7 @@ export const environment = {
       postNote: '/api/comments/note',
     },
     user: {
+      index: '/api/user',
       update: '/api/user/{:id}',
       updateThumbnail: '/api/user/{:id}/thumbnail',
       delete: '/api/user/{:id}',
@@ -84,7 +85,13 @@ export const environment = {
         testsIndex: '/api/user/{:id}/histories/tests'
       }
     },
-
+    organization: {
+      user: {
+        index: '/api/organization/{:id}/users',
+        create: '/api/organization/{:id}/users',
+        delete: '/api/organization/{:id}/users/{:idU}'
+      }
+    }
   }
 };
 

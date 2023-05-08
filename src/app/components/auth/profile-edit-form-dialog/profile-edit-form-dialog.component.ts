@@ -30,8 +30,10 @@ export class ProfileEditFormDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.submitUser = this.formBuilder.group({
-      name: [this.data.obj.name, [Validators.required,Validators.maxLength(20)]],
+      name: [this.data.obj.name, [Validators.required,Validators.maxLength(50)]],
       email: [this.data.obj.email, [Validators.required,Validators.maxLength(100), Validators.email]],
+      orgName: [this.data.obj.organization?.name, []],
+      orgDescription: [this.data.obj.organization?.description, []],
     });
   }
 

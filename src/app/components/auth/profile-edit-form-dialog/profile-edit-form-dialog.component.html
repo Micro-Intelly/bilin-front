@@ -5,7 +5,7 @@
   <form [formGroup]="submitUser!" (ngSubmit)="onSubmit()">
     <div class="my-2">
       <mat-form-field class="w-100">
-        <mat-label>Title</mat-label>
+        <mat-label>Name</mat-label>
         <input
           matInput
           formControlName="name">
@@ -13,7 +13,7 @@
     </div>
     <mat-error *ngIf="formService.checkHasErrors('name')">
       <mat-error *ngIf="formService.checkRequired('name')">{{'field-required' | translate}}</mat-error>
-      <mat-error *ngIf="formService.checkMaxLength('name')">Name maximum length 20 character
+      <mat-error *ngIf="formService.checkMaxLength('name')">Name maximum length 50 character
       </mat-error>
     </mat-error>
     <div class="my-2">
@@ -31,6 +31,22 @@
       <mat-error *ngIf="formService.checkEmail('email')">Email incorrect format
       </mat-error>
     </mat-error>
+    <div class="my-2" *ngIf="this.data.obj.organization?.name">
+      <mat-form-field class="w-100">
+        <mat-label>Organization Name</mat-label>
+        <input
+          matInput
+          formControlName="orgName">
+      </mat-form-field>
+    </div>
+    <div class="my-2" *ngIf="this.data.obj.organization?.name">
+      <mat-form-field class="w-100">
+        <mat-label>Organization Description</mat-label>
+        <input
+          matInput
+          formControlName="orgDescription">
+      </mat-form-field>
+    </div>
     <button mat-raised-button [disabled]="submitUser!.invalid || loading">
       Submit
     </button>

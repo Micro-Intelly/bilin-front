@@ -1,1 +1,21 @@
-<p>manage-org-users works!</p>
+<app-user-grid
+  [userList] = "userList"
+  [mode]="'org'"
+  (onActionClicked)="actionHandler($event)"
+></app-user-grid>
+
+<div fxLayout="row" fxLayoutAlign="center center" class="mt-3">
+  <form [formGroup]="submitAddUser!" (ngSubmit)="onSubmit()">
+    <mat-form-field class="w-100 me-3" appearance="outline">
+      <mat-label>User Email</mat-label>
+      <input
+        matInput
+        formControlName="email">
+    </mat-form-field>
+    <button
+      mat-raised-button
+      color="primary"
+      [disabled]="submitAddUser?.invalid"
+    >Link New Org User</button>
+  </form>
+</div>

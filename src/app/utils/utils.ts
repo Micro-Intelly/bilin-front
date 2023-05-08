@@ -22,6 +22,8 @@ export class Utils {
     switch (selectedSearch) {
       case 'Title': {searchField = 'title';break;}
       case 'Author': {searchField = 'author.name';break;}
+      case 'Name': {searchField = 'name';break;}
+      case 'Email': {searchField = 'email';break;}
     }
     return new FuzzySearch<T>(list,[searchField], {
       sort: true

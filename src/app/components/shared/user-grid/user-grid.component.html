@@ -1,1 +1,78 @@
-<p>user-grid works!</p>
+<div fxLayout="column" fxLayoutGap="10px" class="general-body-margin">
+  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="15px">
+    <div fxLayout="row" fxFlex="100" fxLayoutGap="10px">
+      <mat-form-field appearance="outline" class="w-100" fxFlex="25">
+        <mat-label>Search by</mat-label>
+        <mat-select [(value)]="selectedSearch">
+          <mat-option *ngFor="let search of searchBy" [value]="search.value">
+            {{search.label}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="w-100" fxFlex="75">
+        <input matInput placeholder="Search class" [(ngModel)]="searchFilter" (keyup)="onSearchChange()">
+      </mat-form-field>
+    </div>
+  </div>
+  <div fxLayout="row wrap" fxFlex="100%" fxLayoutGap="16px grid" class="ps-3">
+    <div
+      fxFlex="25%"
+      fxFlex.xs="100%"
+      fxFlex.sm="33%"
+      *ngFor="let user of filteredUserList | paginate
+        : {
+            id: 'userGrid',
+            itemsPerPage: gridSize,
+            currentPage: page,
+            totalItems: filteredUserList.length
+          };let i = index"
+    >
+      <mat-card class="mat-elevation-z4 card">
+        <img mat-card-image src="{{domain+'/'+user.thumbnail}}" alt="alt">
+        <mat-card-content>
+          <mat-card-title class="text-oneline" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{user.name}}">{{user.name}}</mat-card-title>
+          <mat-card-subtitle class="text-oneline" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{user.email}}">
+            Email: {{user.email}}
+          </mat-card-subtitle>
+        </mat-card-content>
+        <mat-card-actions align="end">
+          <button
+            mat-icon-button
+            [matMenuTriggerFor]="menu"
+            aria-label="Note menu"
+            (click) = "$event.stopPropagation()"
+          >
+            <mat-icon>more_horiz</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button
+              mat-menu-item
+              (click)="onEditUser(user)"
+              *ngIf="mode == 'admin'"
+            >
+              <mat-icon>edit</mat-icon>
+              <span>Edit</span>
+            </button>
+            <button
+              mat-menu-item
+              (click)="onDeleteUser(user)"
+            >
+              <mat-icon color="warn">delete</mat-icon>
+              <span style="color:red;">Delete</span>
+            </button>
+          </mat-menu>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="center center" class="d-flex justify-content-center mt-3">
+    <pagination-controls
+      id="userGrid"
+      previousLabel="Prev"
+      nextLabel="Next"
+      [responsive]="true"
+      (pageChange)="onChangePage($event)"
+    >
+    </pagination-controls>
+  </div>
+</div>

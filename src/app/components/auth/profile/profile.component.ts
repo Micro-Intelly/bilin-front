@@ -85,8 +85,6 @@ export class ProfileComponent implements OnInit {
     this.dialog.open(CloseRemindDialogComponent, {
       data: 'This function is not supported for now',
       disableClose: false,
-      width: '60',
-      height: '60'
     })
   }
 
@@ -101,8 +99,6 @@ export class ProfileComponent implements OnInit {
     const dRes = this.dialog.open(component, {
       data: dialogData,
       disableClose: false,
-      width: '60',
-      height: '60'
     })
     dRes.afterClosed().subscribe(result => {
       if(result == 'OK'){
