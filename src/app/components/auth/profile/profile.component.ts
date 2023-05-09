@@ -49,12 +49,15 @@ export class ProfileComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit(): void {
+    this.userService.getCurrentUserData();
     this.subscriptionUser = this.userService.user.subscribe((value) => {
       this.isLoggedIn = Boolean(value); // this.username will hold your value and modify it every time it changes
       if(this.isLoggedIn){
         this.currentUser = value;
         this.currentUserThumbnail = environment.domain + '/'+ value.thumbnail;
-        this.getLimits();
+        if(this.currentlimits.episode_limit < 0 || this.currentlimits.test_limit < 0){
+          this.getLimits();
+        }
       }
     });
   }
