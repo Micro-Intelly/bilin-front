@@ -91,6 +91,9 @@ export const environment = {
         create: '/api/organization/{:id}/users',
         delete: '/api/organization/{:id}/users/{:idU}'
       }
+    },
+    history: {
+      create: '/api/histories'
     }
   }
 };

@@ -4,7 +4,7 @@
   <div fxLayout="row" fxLayoutAlign="space-around center" *ngIf="isVideo(); then videoBlock else audioBlock">
   </div>
   <ng-template #videoBlock>
-    <vg-player fxFlex="100">
+    <vg-player fxFlex="100" (onPlayerReady)="onPlayerReady($event)">
       <vg-overlay-play></vg-overlay-play>
       <vg-buffering></vg-buffering>
       <vg-scrub-bar>
@@ -33,7 +33,7 @@
   </ng-template>
   <ng-template #audioBlock>
     <div fxFlex="100" class="w-100">
-      <vg-player style="height: 50px;">
+      <vg-player style="height: 50px;" (onPlayerReady)="onPlayerReady($event)">
         <vg-controls>
           <vg-play-pause></vg-play-pause>
           <vg-playback-button></vg-playback-button>

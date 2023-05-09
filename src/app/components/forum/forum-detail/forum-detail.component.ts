@@ -5,11 +5,10 @@ import {environment} from "@environments/environment";
 import axios from "axios";
 import {Post} from "@app/models/post.model";
 import {Utils} from "@app/utils/utils";
-import {CommonHttpResponse} from "@app/models/common-http-response.model";
-import {CloseRemindDialogComponent} from "@app/components/shared/close-remind-dialog/close-remind-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {PostFormDialogComponent} from "@app/components/forum/post-form-dialog/post-form-dialog.component";
-import * as Util from "util";
+import {HistoryService} from "@app/services/history.service";
+import {UserService} from "@app/services/user.service";
 
 @Component({
   selector: 'app-forum-detail',
@@ -24,12 +23,17 @@ export class ForumDetailComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private snackBar: MatSnackBar,
               private router: Router,
-              private dialog: MatDialog) { }
+              private dialog: MatDialog,
+              private historyService: HistoryService,
+              private userService: UserService) { }
 
   ngOnInit(): void {
     this.postId = this.route.snapshot.paramMap.get('post-id') ?? undefined;
     if(this.postId) {
       this.getPosts();
+      if(this.userService.isLoggedIn()){
+        this.historyService.postHistory('post',this.postId, null);
+      }
     } else {
       this.snackBar.open('Invalid URI','X', {
         duration: 5000,

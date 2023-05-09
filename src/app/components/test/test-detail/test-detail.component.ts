@@ -14,6 +14,7 @@ import {TestFormDialogComponent} from "@app/components/test/test-form-dialog/tes
 import {QuestionFormDialogComponent} from "@app/components/test/question-form-dialog/question-form-dialog.component";
 import {QuestionUtils} from "@app/components/test/question-utils";
 import {User} from "@app/models/user.model";
+import {HistoryService} from "@app/services/history.service";
 
 @Component({
   selector: 'app-test-detail',
@@ -37,7 +38,8 @@ export class TestDetailComponent implements OnInit {
               private route: ActivatedRoute,
               private snackBar: MatSnackBar,
               private userService: UserService,
-              private router: Router) {
+              private router: Router,
+              private historyService: HistoryService) {
 
   }
 
@@ -61,6 +63,10 @@ export class TestDetailComponent implements OnInit {
 
   startTest(){
     if(this.testRecord?.questions_count){
+      if(this.isLoggedIn && this.testId){
+        this.historyService.postHistory('test',this.testId, null);
+      }
+
       const dialog = this.dialog.open(TestDialogComponent, {
         data: this.testId,
         disableClose: true,

@@ -1,7 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ActivatedRoute, Params, Router} from "@angular/router";
 import {Episode} from "@app/models/episode.model";
 import {environment} from "@environments/environment";
+import {VgApiService} from '@videogular/ngx-videogular/core';
+import {HistoryService} from "@app/services/history.service";
+import {UserService} from "@app/services/user.service";
 
 @Component({
   selector: 'app-class-stream',
@@ -11,21 +13,28 @@ import {environment} from "@environments/environment";
 export class ClassStreamComponent implements OnInit {
   environment = environment;
   @Input() streamUrl: string = '';
-  // ngOnChanges(streamUrl: string) {
-  //   this.doSomething(model);
-  // }
   @Input() episode: Episode | undefined;
   @Input() episodeList: Episode[] | undefined;
-  streamUrlPrueba: string = 'http://localhost:8000/api/stream/98b46cde-5b9e-4498-a682-8a7036c548a3';
 
-  constructor() { }
+  api: VgApiService | undefined;
+  isFirstTime: boolean = true;
+
+  constructor(private historyService: HistoryService,
+              private userService: UserService) { }
 
   ngOnInit(): void {
-    // this.route.params.subscribe(
-    //   (params: Params) => {
-    //     this.streamId = params['episode-id'];
-    //   }
-    // );
+  }
+
+  onPlayerReady(api: VgApiService) {
+    this.api = api;
+    this.api.getDefaultMedia().subscriptions.playing.subscribe(
+      () => {
+        if(this.isFirstTime && this.userService.isLoggedIn()){
+          this.isFirstTime = false;
+          this.historyService.postHistory('episode',this.episode!.id, this.episode?.serie_id);
+        }
+      }
+    );
   }
 
   isVideo() {
@@ -33,13 +42,5 @@ export class ClassStreamComponent implements OnInit {
   }
   isPodcast() {
     return this.episode?.type == 'podcast';
-  }
-
-  changeSource(){
-    if(this.streamUrlPrueba == 'http://localhost:8000/api/stream/98b46cde-5b9e-4498-a682-8a7036c548a3'){
-      this.streamUrlPrueba = 'http://localhost:8000/api/stream/98b46cde-59b8-4f3b-b0ba-299a09e0e0fe';
-    } else {
-      this.streamUrlPrueba = 'http://localhost:8000/api/stream/98b46cde-5b9e-4498-a682-8a7036c548a3';
-    }
   }
 }
