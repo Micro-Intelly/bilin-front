@@ -2,14 +2,6 @@
   <div fxLayout="row" class="mb-4" *ngIf="!withoutHeader">
     <mat-card class="w-100">
       <mat-card-content>
-<!--        <mat-button-toggle-group-->
-<!--          class="w-100"-->
-<!--          appearance="legacy"-->
-<!--          name="commentType"-->
-<!--          aria-label="Comment Type"-->
-<!--          [(ngModel)]="commentTypeSelected"-->
-<!--          [disabled]="!isLoggedIn"-->
-<!--        >-->
         <mat-button-toggle-group
           class="w-100"
           appearance="legacy"
@@ -17,19 +9,19 @@
           aria-label="Comment Type"
           *ngIf="!hideToggle"
           [(ngModel)]="commentTypeSelected"
+          [disabled]="!isLoggedIn"
         >
           <mat-button-toggle value="comment" class="w-100" *ngIf="!noteOnly">Comment</mat-button-toggle>
           <mat-button-toggle value="note" class="w-100" *ngIf="!commentOnly">Note</mat-button-toggle>
         </mat-button-toggle-group>
-<!--        <div *ngIf="!isLoggedIn">-->
-<!--          <div fxLayoutAlign="center center" class="w-100 mt-2 req-login-div align-middle">-->
-<!--            Please &nbsp;-->
-<!--            <a routerLink="/login">login</a>&nbsp;-->
-<!--            your account-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div *ngIf="commentTypeSelected == 'comment' && isLoggedIn">-->
-        <div *ngIf="commentTypeSelected == 'comment'">
+        <div *ngIf="!isLoggedIn">
+          <div fxLayoutAlign="center center" class="w-100 mt-2 req-login-div align-middle">
+            Please &nbsp;
+            <a routerLink="/login">login</a>&nbsp;
+            your account
+          </div>
+        </div>
+        <div *ngIf="commentTypeSelected == 'comment' && isLoggedIn">
           <form [formGroup]="submitComment!" (ngSubmit)="onSubmitComment()">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Leave your comment</mat-label>
@@ -53,8 +45,7 @@
             </button>
           </form>
         </div>
-<!--        <div *ngIf="commentTypeSelected == 'note' && isLoggedIn">-->
-        <div *ngIf="commentTypeSelected == 'note'">
+        <div *ngIf="commentTypeSelected == 'note' && isLoggedIn">
           <form [formGroup]="submitNote!" (ngSubmit)="onSubmitNote()">
             <div class="my-2">
               <mat-form-field class="w-100">
@@ -143,24 +134,11 @@
                       <mat-menu #menuC="matMenu">
                         <button
                           mat-menu-item
-                          (click)="onEdit(comm)"
+                          *ngFor="let act of getCommActions(comm) | keyvalue: menuOrder"
+                          (click)="onActionClick(act.value.action, comm)"
                         >
-                          <mat-icon>edit</mat-icon>
-                          <span>Edit</span>
-                        </button>
-                        <button
-                          mat-menu-item
-                          (click)="onReply(comm)"
-                        >
-                          <mat-icon>reply</mat-icon>
-                          <span>Reply</span>
-                        </button>
-                        <button
-                          mat-menu-item
-                          (click)="onDeleteComm(comm)"
-                        >
-                          <mat-icon>delete</mat-icon>
-                          <span>Delete</span>
+                          <mat-icon>{{act.value.icon}}</mat-icon>
+                          <span>{{act.value.name}}</span>
                         </button>
                       </mat-menu>
                     </div>
@@ -200,24 +178,11 @@
                           <mat-menu #menuC="matMenu">
                             <button
                               mat-menu-item
-                              (click)="onEdit(subComm)"
+                              *ngFor="let act of getCommActions(subComm) | keyvalue: menuOrder"
+                              (click)="onActionClick(act.value.action, subComm)"
                             >
-                              <mat-icon>edit</mat-icon>
-                              <span>Edit</span>
-                            </button>
-                            <button
-                              mat-menu-item
-                              (click)="onReply(subComm)"
-                            >
-                              <mat-icon>reply</mat-icon>
-                              <span>Reply</span>
-                            </button>
-                            <button
-                              mat-menu-item
-                              (click)="onDeleteComm(subComm)"
-                            >
-                              <mat-icon>delete</mat-icon>
-                              <span>Delete</span>
+                              <mat-icon>{{act.value.icon}}</mat-icon>
+                              <span>{{act.value.name}}</span>
                             </button>
                           </mat-menu>
                         </div>
@@ -306,6 +271,7 @@
                           [matMenuTriggerFor]="menuC"
                           aria-label="Comment menu"
                           fxFlex="10%"
+                          *ngIf="getUserHasPermission(note)"
                           (click) = "$event.stopPropagation()"
                         >
                           <mat-icon>more_vert</mat-icon>

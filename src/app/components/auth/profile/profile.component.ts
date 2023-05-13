@@ -116,7 +116,7 @@ export class ProfileComponent implements OnInit {
       const limits = res.data as Limits;
       this.currentlimits.episode_limit = limits.episode_limit;
       this.currentlimits.test_limit = limits.test_limit;
-      if(this.currentUser.org_count){
+      if(this.currentUser.org_count || this.currentUser.organization_id){
         this.currentlimits.episode_limit = limits.episode_limit_org;
         this.currentlimits.test_limit = limits.test_limit_org;
       }

@@ -7,6 +7,7 @@ import {PostFormDialogComponent} from "@app/components/forum/post-form-dialog/po
 import {ComponentType} from "@angular/cdk/overlay";
 import {TestFormDialogComponent} from "@app/components/test/test-form-dialog/test-form-dialog.component";
 import {SeriesFormDialogComponent} from "@app/components/class/series-form-dialog/series-form-dialog.component";
+import {environment} from "@environments/environment";
 
 @Component({
   selector: 'app-my-contents',
@@ -20,11 +21,13 @@ export class MyContentsComponent implements OnInit {
   reloadSerieToggle: boolean = false;
   reloadPostToggle: boolean = false;
   reloadTestToggle: boolean = false;
+  environment = environment;
 
   constructor(private userService: UserService,
               private dialog: MatDialog) { }
 
   ngOnInit(): void {
+    this.userService.isLoggedIn();
     this.subscriptionUser = this.userService.user.subscribe((value) => {
       this.isLoggedIn = Boolean(value);
       if(this.isLoggedIn){

@@ -6,6 +6,7 @@ import { Subscription } from "rxjs";
 import {TranslateService} from "@ngx-translate/core";
 import {User} from "@app/models/user.model";
 import {environment} from "@environments/environment";
+import {KeyValue} from "@angular/common";
 
 interface DropdownItem {
   name:string;
@@ -19,6 +20,14 @@ interface DropdownItem {
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
+  readonly DEFAULT_MENU = {
+    profile: {icon: 'manage_accounts', name: 'Profile', link:'/profile', order:0},
+    myContent: {icon: 'dashboard', name: 'My Content', link:'/mycontents', order:1},
+    manageOrgUser: {icon: 'settings', name: 'Manage Org Users', link:'/manage-org-user', order:2},
+    manageAllUser: {icon: 'settings', name: 'Manage Users', link:'/manage-all-user', order:3},
+    history: {icon: 'history', name: 'History', link:'/history', order:4}
+  };
+
   isLoggedIn: boolean = false;
   subscriptionUser: Subscription | undefined;
   dropdownLanguageItem:Map<string,DropdownItem> = new Map<string,DropdownItem>();
@@ -26,6 +35,10 @@ export class HeaderComponent implements OnInit {
   toolbarColor = '';
   currentUser: User = null as any;
   currentUserThumbnail: string = '';
+  profileMenu = {...this.DEFAULT_MENU};
+  menuOrder = (a: KeyValue<string,any>, b: KeyValue<string,any>): number => {
+    return a.value.order - b.value.order;
+  }
 
 
   @Input()
@@ -47,6 +60,15 @@ export class HeaderComponent implements OnInit {
       if(this.isLoggedIn){
         this.currentUser = value;
         this.currentUserThumbnail = environment.domain + '/'+ value.thumbnail;
+        this.profileMenu = {...this.DEFAULT_MENU};
+        if(! this.currentUser.role?.includes(environment.constants.role.organization)){
+          // @ts-ignore
+          delete this.profileMenu.manageOrgUser;
+        }
+        if(! this.currentUser.role?.includes(environment.constants.role.admin)){
+          // @ts-ignore
+          delete this.profileMenu.manageAllUser;
+        }
       }
     });
     this.dropdownLanguageItem.set('es', {name:'Español', code:'es', class:[]});

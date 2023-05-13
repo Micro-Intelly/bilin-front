@@ -15,6 +15,7 @@ import {QuestionFormDialogComponent} from "@app/components/test/question-form-di
 import {QuestionUtils} from "@app/components/test/question-utils";
 import {User} from "@app/models/user.model";
 import {HistoryService} from "@app/services/history.service";
+import {KeyValue} from "@angular/common";
 
 @Component({
   selector: 'app-test-detail',
@@ -23,6 +24,15 @@ import {HistoryService} from "@app/services/history.service";
   providers: [QuestionUtils]
 })
 export class TestDetailComponent implements OnInit {
+  readonly DEFAULT_TEST_ACTION = {
+    edit: {name: 'Edit', action:'editTest', color: 'primary', order:0},
+    reply: {name: 'Edit Questions', action:'editQuestions', color: 'primary', order:1},
+    delete: {name: 'Delete', action:'deleteTest', color: 'warn', order:2},
+  }
+  menuOrder = (a: KeyValue<string,any>, b: KeyValue<string,any>): number => {
+    return a.value.order - b.value.order;
+  }
+
   loading: boolean = true;
   isLoggedIn: boolean = false;
   testId: string | undefined;
@@ -61,6 +71,25 @@ export class TestDetailComponent implements OnInit {
     }
   }
 
+  /**
+   * Unsubscribe the user refresh event when component is destroyed
+   */
+  ngOnDestroy() {
+    this.subscriptionUser?.unsubscribe();
+  }
+
+  getUserHasPermission(): boolean {
+    return <boolean>(this.currentUser && this.testRecord && (this.currentUser.id === this.testRecord.author?.id || this.currentUser.role?.includes(environment.constants.role.manager) || this.currentUser.role?.includes(environment.constants.role.admin)));
+  }
+
+  get actions() {
+    let action = {};
+    if(this.getUserHasPermission()){
+      action = {...this.DEFAULT_TEST_ACTION}
+    }
+    return action;
+  }
+
   startTest(){
     if(this.testRecord?.questions_count){
       if(this.isLoggedIn && this.testId){
@@ -87,6 +116,23 @@ export class TestDetailComponent implements OnInit {
     this.dialog.open(TestResultDialogComponent, {
       data: this.testId
     });
+  }
+
+  onActionClick(action: string, test: Test){
+    switch (action) {
+      case 'editTest': {
+        this.onEditTest(test);
+        break;
+      }
+      case 'editQuestions': {
+        this.onEditQuestions(test);
+        break;
+      }
+      case 'deleteTest': {
+        this.onDeleteTest(test);
+        break;
+      }
+    }
   }
 
   onEditTest(testRecord: Test){
@@ -133,13 +179,6 @@ export class TestDetailComponent implements OnInit {
 
   getFormatDate(date:string){
     return Utils.getFormatDate(date);
-  }
-
-  /**
-   * Unsubscribe the user refresh event when component is destroyed
-   */
-  ngOnDestroy() {
-    this.subscriptionUser?.unsubscribe();
   }
 
   private getTest(){

@@ -29,7 +29,7 @@
         </div>
       </div>
     </mat-card-content>
-    <mat-card-actions align="end">
+    <mat-card-actions align="end" *ngIf="userHasPermission">
       <button mat-raised-button color="primary" (click)="onEditPost(postRecord)">Edit</button>
       <button mat-raised-button color="warn" (click)="onDeletePost(postRecord)">Delete</button>
     </mat-card-actions>

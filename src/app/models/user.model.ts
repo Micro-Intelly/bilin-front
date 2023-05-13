@@ -16,6 +16,7 @@ export interface User {
   series?:Serie[];
   posts?:Post[];
   tests?:Test[];
+  organization_id?:string;
   organization?:Organization;
   favorites?: (Serie | Post | Test)[];
   histories?: (Serie | Post | Test)[];

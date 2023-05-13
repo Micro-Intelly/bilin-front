@@ -17,6 +17,7 @@ import { UploadResponse } from '@kolkov/angular-editor';
 import {CommonHttpResponse} from "@app/models/common-http-response.model";
 import {CommentEditDialogComponent} from "@app/components/comment/comment-edit-dialog/comment-edit-dialog.component";
 import {CloseRemindDialogComponent} from "@app/components/shared/close-remind-dialog/close-remind-dialog.component";
+import {KeyValue} from "@angular/common";
 
 interface PageSetting {
   gridSize: number,
@@ -30,14 +31,23 @@ interface PageSetting {
   styleUrls: ['./comment.component.css']
 })
 export class CommentComponent implements OnInit {
-  defaultPageSetting: PageSetting = {
+  readonly DEFAULT_PAGE_SETTING: PageSetting = {
     gridSize: 5,
     currentPage: 1,
     totalItems: 0,
   }
+  readonly DEFAULT_COMM_ACTION = {
+    edit: {icon: 'edit', name: 'Edit', action:'edit', order:0},
+    reply: {icon: 'reply', name: 'Reply', action:'reply', order:1},
+    delete: {icon: 'delete', name: 'Delete', action:'delete', order:2},
+  }
+  menuOrder = (a: KeyValue<string,any>, b: KeyValue<string,any>): number => {
+    return a.value.order - b.value.order;
+  }
+
   pageHandler = {
-    comm: {...this.defaultPageSetting},
-    note: {...this.defaultPageSetting},
+    comm: {...this.DEFAULT_PAGE_SETTING},
+    note: {...this.DEFAULT_PAGE_SETTING},
     subComment: new Map<number, PageSetting>
   }
 
@@ -79,6 +89,7 @@ export class CommentComponent implements OnInit {
   commentTypeSelected: string = 'comment';
   isLoggedIn: boolean = false;
   subscriptionUser: Subscription | undefined;
+  currentUser: User = null as any;
   commentList: Comment[] = [];
   noteList: Comment[] = [];
   userMap: Map<string, User> = new Map<string, User>();
@@ -157,9 +168,34 @@ export class CommentComponent implements OnInit {
 
     this.subscriptionUser = this.userService.user.subscribe((value) => {
       this.isLoggedIn = Boolean(value);
+      if(this.isLoggedIn){
+        this.currentUser = value;
+      }
     });
 
     if(this.noteOnly){this.commentTypeSelected = 'note';}
+  }
+
+  /**
+   * Unsubscribe the user refresh event when component is destroyed
+   */
+  ngOnDestroy() {
+    this.subscriptionUser?.unsubscribe();
+  }
+
+  getUserHasPermission(comm: Comment): boolean {
+    return <boolean>(this.currentUser && comm && (this.currentUser.id === comm.author?.id || this.currentUser.role?.includes(environment.constants.role.manager) || this.currentUser.role?.includes(environment.constants.role.admin)));
+  }
+
+  getCommActions(comm: Comment) {
+    let action = {...this.DEFAULT_COMM_ACTION};
+    if(! this.getUserHasPermission(comm)){
+      // @ts-ignore
+      delete action.edit;
+      // @ts-ignore
+      delete action.delete;
+    }
+    return action
   }
 
   onChangePage(event: number, id: string, index: number){
@@ -213,6 +249,24 @@ export class CommentComponent implements OnInit {
       }
     }
   }
+
+  onActionClick(action: string, comm: Comment){
+    switch (action) {
+      case 'edit': {
+        this.onEdit(comm);
+        break;
+      }
+      case 'reply': {
+        this.onReply(comm);
+        break;
+      }
+      case 'delete': {
+        this.onDeleteComm(comm);
+        break;
+      }
+    }
+  }
+
   onEdit(comm: Comment){
     const dRes = this.dialog.open(CommentEditDialogComponent, {
       data: {obj:comm, mode:'edit', serieId: this.serieId},
@@ -262,13 +316,6 @@ export class CommentComponent implements OnInit {
     body['root_comm_id'] = this.rootCommId;
     body['serie_id'] = this.serieId;
   }
-  /**
-   * Unsubscribe the user refresh event when component is destroyed
-   */
-  ngOnDestroy() {
-    this.subscriptionUser?.unsubscribe();
-  }
-
 
   private getComments(){
     this.commentList = [];
@@ -281,7 +328,7 @@ export class CommentComponent implements OnInit {
         if(elem.type == 'comment'){
           arr = this.commentList;
           if(elem.comments && elem.comments.length){
-            this.pageHandler.subComment.set(this.commentList.length, {...this.defaultPageSetting});
+            this.pageHandler.subComment.set(this.commentList.length, {...this.DEFAULT_PAGE_SETTING});
             this.pageHandler.subComment.get(this.commentList.length)!.totalItems = elem.comments!.length
           }
         } else {arr = this.noteList;}

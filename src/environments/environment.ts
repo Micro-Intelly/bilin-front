@@ -95,6 +95,15 @@ export const environment = {
     history: {
       create: '/api/histories'
     }
+  },
+  constants: {
+    role: {
+      organization: 'Organization',
+      admin: 'Admin',
+      manager: 'Manager',
+      student: 'Student',
+      teacher: 'Teacher'
+    }
   }
 };
 

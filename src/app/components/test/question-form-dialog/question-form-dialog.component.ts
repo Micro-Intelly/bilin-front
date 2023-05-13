@@ -73,16 +73,23 @@ export class QuestionFormDialogComponent implements OnInit {
 
   addAnswer(qid: string){
     const answerMap = this.questions.find(elem=>elem.id==qid)!.answersMap;
-    const size = answerMap.size + 1;
+    if(answerMap.size < 8){
+      const size = answerMap.size + 1;
 
-    ((this.submitQuestion!.get(qid) as FormGroup)
-      .get("answers " + qid) as FormGroup)
-      .addControl(
-        'answer ' + size + ' ' + qid,
-        new FormControl('', [Validators.required, Validators.maxLength(100)])
-      );
+      ((this.submitQuestion!.get(qid) as FormGroup)
+        .get("answers " + qid) as FormGroup)
+        .addControl(
+          'answer ' + size + ' ' + qid,
+          new FormControl('', [Validators.required, Validators.maxLength(100)])
+        );
 
-    answerMap.set(String(size), '');
+      answerMap.set(String(size), '');
+    } else {
+      this.snackBar.open('Max 8 answers','X', {
+        duration: 5000,
+        verticalPosition: 'top',
+      });
+    }
   }
 
   deleteAnswer(qid: string, ansKey: string){
@@ -123,29 +130,37 @@ export class QuestionFormDialogComponent implements OnInit {
   }
 
   addQuestion(){
-    const emptyQuestion = {
-      id: 'newQ-' + this.newQuestions.length,
-      question: '',
-      answers: '',
-      answersMap: new Map<string, string>()
-    } as Question;
-    this.newQuestions.push(emptyQuestion);
-    this.questions.push(emptyQuestion);
+    if(this.questions.length < 30){
 
-    this.submitQuestion!.addControl(
-      emptyQuestion.id, this.formBuilder.group({})
-    );
-    (this.submitQuestion!.get(emptyQuestion.id) as FormGroup).addControl(
-      'question ' + emptyQuestion.id,
-      new FormControl(emptyQuestion.question,[Validators.required, Validators.maxLength(500)])
-    );
-    (this.submitQuestion!.get(emptyQuestion.id) as FormGroup).addControl(
-      'correctAnswer ' + emptyQuestion.id,
-      new FormControl('',[Validators.required])
-    );
-    (this.submitQuestion!.get(emptyQuestion.id) as FormGroup).addControl(
-      'answers ' + emptyQuestion.id, this.formBuilder.group({})
-    );
+      const emptyQuestion = {
+        id: 'newQ-' + this.newQuestions.length,
+        question: '',
+        answers: '',
+        answersMap: new Map<string, string>()
+      } as Question;
+      this.newQuestions.push(emptyQuestion);
+      this.questions.push(emptyQuestion);
+
+      this.submitQuestion!.addControl(
+        emptyQuestion.id, this.formBuilder.group({})
+      );
+      (this.submitQuestion!.get(emptyQuestion.id) as FormGroup).addControl(
+        'question ' + emptyQuestion.id,
+        new FormControl(emptyQuestion.question,[Validators.required, Validators.maxLength(500)])
+      );
+      (this.submitQuestion!.get(emptyQuestion.id) as FormGroup).addControl(
+        'correctAnswer ' + emptyQuestion.id,
+        new FormControl('',[Validators.required])
+      );
+      (this.submitQuestion!.get(emptyQuestion.id) as FormGroup).addControl(
+        'answers ' + emptyQuestion.id, this.formBuilder.group({})
+      );
+    } else {
+      this.snackBar.open('Max 30 questions','X', {
+        duration: 5000,
+        verticalPosition: 'top',
+      });
+    }
   }
 
   deleteQuestion(qid: string){

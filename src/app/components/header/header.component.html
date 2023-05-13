@@ -92,38 +92,40 @@
         </button>
       </mat-menu>
       <mat-menu #accMenu2="matMenu">
-        <button mat-menu-item routerLink="/profile">
-          <mat-icon>manage_accounts</mat-icon>
-          <span>Profile</span>
+        <button
+          mat-menu-item
+          routerLink="{{item.value.link}}"
+          *ngFor="let item of profileMenu | keyvalue: menuOrder"
+        >
+          <mat-icon>{{item.value.icon}}</mat-icon>
+          <span>{{item.value.name}}</span>
         </button>
-        <button mat-menu-item routerLink="/mycontents">
-          <mat-icon>dashboard</mat-icon>
-          <span>My Content</span>
-        </button>
+<!--        <button mat-menu-item routerLink="/mycontents">-->
+<!--          <mat-icon>dashboard</mat-icon>-->
+<!--          <span>My Content</span>-->
+<!--        </button>-->
 <!--        <button mat-menu-item routerLink="/profile/favorite">-->
 <!--          <mat-icon>star</mat-icon>-->
 <!--          <span>Favorite</span>-->
 <!--        </button>-->
-        <button
-          mat-menu-item
-          routerLink="/manage-org-user"
-        >
-<!--          *ngIf="currentUser.role == 'Organization'"-->
-          <mat-icon>settings</mat-icon>
-          <span>Manage Org Users</span>
-        </button>
-        <button
-          mat-menu-item
-          routerLink="/manage-all-user"
-        >
-<!--          *ngIf="currentUser.role == 'Admin'"-->
-          <mat-icon>settings</mat-icon>
-          <span>Manage Users</span>
-        </button>
-        <button mat-menu-item routerLink="/history">
-          <mat-icon>history</mat-icon>
-          <span>History</span>
-        </button>
+<!--        <button-->
+<!--          mat-menu-item-->
+<!--          routerLink="/manage-org-user"-->
+<!--        >-->
+<!--          <mat-icon>settings</mat-icon>-->
+<!--          <span>Manage Org Users</span>-->
+<!--        </button>-->
+<!--        <button-->
+<!--          mat-menu-item-->
+<!--          routerLink="/manage-all-user"-->
+<!--        >-->
+<!--          <mat-icon>settings</mat-icon>-->
+<!--          <span>Manage Users</span>-->
+<!--        </button>-->
+<!--        <button mat-menu-item routerLink="/history">-->
+<!--          <mat-icon>history</mat-icon>-->
+<!--          <span>History</span>-->
+<!--        </button>-->
         <mat-divider class="mx-2"></mat-divider>
         <button mat-menu-item (click)="logout()">
           <mat-icon>logout</mat-icon>

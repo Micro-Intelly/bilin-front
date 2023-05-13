@@ -17,9 +17,9 @@
           <div fxLayout="column" fxFlex="80%" class="h-100 m-1" fxLayoutGap="10px">
             <div fxLayout="row" fxFlex="60%">
               <mat-card-content>
-                <mat-card-title class="text-oneline" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{seriesRecord?.title}}">{{seriesRecord?.title}}</mat-card-title>
+                <mat-card-title class="text-oneline" style="width: 75%;" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{seriesRecord!.title}}">{{seriesRecord!.title}}</mat-card-title>
                 <mat-card-subtitle>Author: {{seriesRecord?.author?.name}} </mat-card-subtitle>
-                <p>
+                <p style="width: 90%;">
                   {{seriesRecord?.description}}
                 </p>
               </mat-card-content>
@@ -42,7 +42,7 @@
             </div>
           </div>
         </div>
-        <mat-card-actions align="end">
+        <mat-card-actions align="end" *ngIf="userHasPermission">
           <button
             mat-raised-button
             color="primary"
@@ -72,7 +72,11 @@
               (click)="openDialog('pdf',file)"
               *ngFor="let file of seriesRecord?.files"
             >
-              <button mat-icon-button (click)="onDeleteFile($event, file)">
+              <button
+                mat-icon-button
+                *ngIf="userHasPermission"
+                (click)="onDeleteFile($event, file)"
+              >
                 <mat-icon>delete</mat-icon>
               </button>
               <mat-icon matListIcon> insert_drive_file </mat-icon>
@@ -89,6 +93,7 @@
                 mat-icon-button
                 [matMenuTriggerFor]="menuN"
                 aria-label="Note menu"
+                *ngIf="userHasPermission"
                 (click) = "$event.stopPropagation()"
               >
                 <mat-icon>more_vert</mat-icon>
@@ -115,7 +120,7 @@
             </mat-list-item>
           </mat-list>
         </mat-card-content>
-        <mat-card-actions align="end">
+        <mat-card-actions align="end" *ngIf="userHasPermission">
           <button
             mat-raised-button
             color="primary"
@@ -179,6 +184,7 @@
                     [matMenuTriggerFor]="menuE"
                     aria-label="Note menu"
                     (click) = "$event.stopPropagation()"
+                    *ngIf="userHasPermission"
                   >
                     <mat-icon>more_vert</mat-icon>
                   </button>
@@ -203,7 +209,7 @@
                   <p matLine> {{episode.description}} </p>
                 </mat-list-item>
               </mat-list>
-              <mat-card-actions align="end">
+              <mat-card-actions align="end" *ngIf="userHasPermission">
                 <button
                   mat-raised-button
                   color="primary"
@@ -223,7 +229,7 @@
             </mat-expansion-panel>
           </div>
         </mat-card-content>
-        <mat-card-actions align="end">
+        <mat-card-actions align="end" *ngIf="userHasPermission">
           <button
             mat-raised-button
             color="primary"

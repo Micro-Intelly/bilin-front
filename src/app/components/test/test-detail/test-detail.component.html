@@ -84,19 +84,26 @@
       >View Results</button>
       <button
         mat-raised-button
-        color="primary"
-        (click)="onEditTest(testRecord)"
-      >Edit</button>
-      <button
-        mat-raised-button
-        color="primary"
-        (click)="onEditQuestions(testRecord)"
-      >Edit Questions</button>
-      <button
-        mat-raised-button
-        color="warn"
-        (click)="onDeleteTest(testRecord)"
-      >Delete</button>
+        color="{{act.value.color}}"
+        *ngFor="let act of actions | keyvalue:menuOrder"
+        (click)="onActionClick(act.value.action, testRecord)"
+      >{{act.value.name}}</button>
+
+<!--      <button-->
+<!--        mat-raised-button-->
+<!--        color="primary"-->
+<!--        (click)="onEditTest(testRecord)"-->
+<!--      >Edit</button>-->
+<!--      <button-->
+<!--        mat-raised-button-->
+<!--        color="primary"-->
+<!--        (click)="onEditQuestions(testRecord)"-->
+<!--      >Edit Questions</button>-->
+<!--      <button-->
+<!--        mat-raised-button-->
+<!--        color="warn"-->
+<!--        (click)="onDeleteTest(testRecord)"-->
+<!--      >Delete</button>-->
     </mat-card-actions>
   </mat-card>
   <app-comment

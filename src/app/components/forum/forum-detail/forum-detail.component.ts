@@ -9,6 +9,8 @@ import {MatDialog} from "@angular/material/dialog";
 import {PostFormDialogComponent} from "@app/components/forum/post-form-dialog/post-form-dialog.component";
 import {HistoryService} from "@app/services/history.service";
 import {UserService} from "@app/services/user.service";
+import {Subscription} from "rxjs";
+import {User} from "@app/models/user.model";
 
 @Component({
   selector: 'app-forum-detail',
@@ -19,6 +21,10 @@ export class ForumDetailComponent implements OnInit {
   loading: Boolean = true;
   postId: string | undefined;
   postRecord: Post | undefined;
+
+  isLoggedIn: boolean = false;
+  subscriptionUser: Subscription | undefined;
+  currentUser: User = null as any;
 
   constructor(private route: ActivatedRoute,
               private snackBar: MatSnackBar,
@@ -31,15 +37,30 @@ export class ForumDetailComponent implements OnInit {
     this.postId = this.route.snapshot.paramMap.get('post-id') ?? undefined;
     if(this.postId) {
       this.getPosts();
-      if(this.userService.isLoggedIn()){
-        this.historyService.postHistory('post',this.postId, null);
-      }
+      this.subscriptionUser = this.userService.user.subscribe((value) => {
+        this.isLoggedIn = Boolean(value);
+        if(this.isLoggedIn){
+          this.currentUser = value;
+          this.historyService.postHistory('post',this.postId!, null);
+        }
+      });
     } else {
       this.snackBar.open('Invalid URI','X', {
         duration: 5000,
         verticalPosition: 'top',
       });
     }
+  }
+
+  /**
+   * It unsubscribes from the subscriptionLanguage.
+   */
+  ngOnDestroy(){
+    this.subscriptionUser?.unsubscribe();
+  }
+
+  get userHasPermission(): boolean {
+    return <boolean>(this.currentUser && this.postRecord && (this.currentUser.id === this.postRecord.author?.id || this.currentUser.role?.includes(environment.constants.role.manager) || this.currentUser.role?.includes(environment.constants.role.admin)));
   }
 
   getFormatDate(date:string){

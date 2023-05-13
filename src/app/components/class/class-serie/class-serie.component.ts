@@ -72,6 +72,17 @@ export class ClassSerieComponent implements OnInit {
     }
   }
 
+  /**
+   * It unsubscribes from the subscriptionLanguage.
+   */
+  ngOnDestroy(){
+    this.subscriptionUser?.unsubscribe();
+  }
+
+  get userHasPermission(): boolean {
+    return <boolean>(this.currentUser && this.seriesRecord && (this.currentUser.id === this.seriesRecord.author?.id || this.currentUser.role?.includes(environment.constants.role.manager) || this.currentUser.role?.includes(environment.constants.role.admin)));
+  }
+
   openDialog(type: string, obj: (File | Comment)): void {
     if(type === 'pdf'){
       this.dialog.open(PreviewPdfDialogComponent, {
@@ -248,18 +259,20 @@ export class ClassSerieComponent implements OnInit {
   }
 
   onEditImage(){
-    const url = environment.domain + environment.apiEndpoints.series.updateThumbnail.replace('{:id}', this.seriesRecord!.id);
-    const dRes = this.dialog.open(ThumbnailEditFormDialogComponent, {
-      data: url,
-      disableClose: false,
-      width: '60',
-      height: '60'
-    })
-    dRes.afterClosed().subscribe(result => {
-      if(result == 'OK'){
-        this.getSeries();
-      }
-    });
+    if(this.userHasPermission){
+      const url = environment.domain + environment.apiEndpoints.series.updateThumbnail.replace('{:id}', this.seriesRecord!.id);
+      const dRes = this.dialog.open(ThumbnailEditFormDialogComponent, {
+        data: url,
+        disableClose: false,
+        width: '60',
+        height: '60'
+      })
+      dRes.afterClosed().subscribe(result => {
+        if(result == 'OK'){
+          this.getSeries();
+        }
+      });
+    }
   }
 
   private openCommonEditDialog(data: CommonEditData){

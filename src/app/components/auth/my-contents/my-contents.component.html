@@ -16,7 +16,11 @@
   class="general-body-margin"
   *ngIf="isLoggedIn"
 >
-  <mat-expansion-panel [expanded]="false" class="mt-1">
+  <mat-expansion-panel
+    [expanded]="false"
+    class="mt-1"
+    *ngIf="currentUser?.role && !currentUser.role.includes(environment.constants.role.student)"
+  >
     <mat-expansion-panel-header>
       <mat-panel-title>
         My Series
@@ -49,7 +53,11 @@
       (click)="onNewPost()"
     >Add New</button>
   </mat-expansion-panel>
-  <mat-expansion-panel [expanded]="false" class="mt-1">
+  <mat-expansion-panel
+    [expanded]="false"
+    class="mt-1"
+    *ngIf="currentUser?.role && !currentUser.role.includes(environment.constants.role.student)"
+  >
     <mat-expansion-panel-header>
       <mat-panel-title>
         My Tests
