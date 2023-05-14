@@ -189,7 +189,7 @@
                       </mat-list-item>
                       <mat-list-item>
                         <p>
-                          <span class="in-reply-to" *ngIf="subComm.in_reply_to_id">
+                          <span class="in-reply-to" *ngIf="subComm.in_reply_to_id && userMap.get(subComm.in_reply_to_id)?.name">
                             @{{userMap.get(subComm.in_reply_to_id)?.name}}
                           </span>
                           {{subComm.body}}

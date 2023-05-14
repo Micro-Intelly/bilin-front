@@ -94,8 +94,8 @@ export class ManageOrgUsersComponent implements OnInit {
   }
 
   private getOrgUsers() {
-    if(this.currentUser.organization?.id){
-      const url = environment.domain + environment.apiEndpoints.organization.user.index.replace('{:id}', this.currentUser.organization!.id);
+    if(this.currentUser.organization_id){
+      const url = environment.domain + environment.apiEndpoints.organization.user.index.replace('{:id}', this.currentUser.organization_id);
       axios.get(url).then((res) => {
         this.userList = (res.data as Organization[])[0].users ?? [];
       }).catch(err => {
