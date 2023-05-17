@@ -16,6 +16,8 @@ export const environment = {
       file: {
         create: '/api/series/{:idSerie}/files',
         delete: '/api/series/{:idSerie}/files/{:idFile}',
+        cancelUpload: '/api/file/cancel/{uniqueId}',
+        deleteUpload: '/api/file/delete'
       },
       note: {
         create: '/api/series/{:idSerie}/notes',

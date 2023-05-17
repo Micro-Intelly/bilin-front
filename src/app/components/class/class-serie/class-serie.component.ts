@@ -20,7 +20,6 @@ import {User} from "@app/models/user.model";
 import {
   ThumbnailEditFormDialogComponent
 } from "@app/components/shared/thumbnail-edit-form-dialog/thumbnail-edit-form-dialog.component";
-import {ComponentType} from "@angular/cdk/overlay";
 import {
   CommonEditData,
   CommonEditFormDialogComponent

@@ -76,8 +76,6 @@ import {
 import { CommonEditFormDialogComponent } from './components/class/common-edit-form-dialog/common-edit-form-dialog.component';
 import { UserGridComponent } from './components/shared/user-grid/user-grid.component';
 
-
-
 @NgModule({
   declarations: [
     AppComponent,

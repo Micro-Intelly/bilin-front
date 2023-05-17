@@ -7,7 +7,12 @@ import axios from "axios";
 import {Utils} from "@app/utils/utils";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {FormService} from "@app/services/form.service";
-import * as Dropzone from "dropzone";
+import {environment} from "@environments/environment";
+import Resumable from "resumablejs";
+import {CookieService} from "ngx-cookie-service";
+import {HttpXsrfTokenExtractor} from "@angular/common/http";
+import ResumableFile = Resumable.ResumableFile;
+import {CommonHttpResponse} from "@app/models/common-http-response.model";
 
 export interface CommonEditData {
   serie: Serie;
@@ -26,41 +31,59 @@ export interface CommonEditData {
 export class CommonEditFormDialogComponent implements OnInit {
   loading: Boolean = false;
   ready: boolean = false;
-  file: File | undefined;
   thumb: string = "";
   uploader = new FileUploader({url: ''});
 
   defaultName: string = '';
   defaultDescription: string = '';
   submitRecord: FormGroup | undefined;
+  progress: number = 0.0;
+  filePath: string = '';
+  fileId: string = '';
+  resumable = new Resumable({
+    target:environment.domain + '/api/file/upload',
+    chunkSize: 1024 * 1024,
+    simultaneousUploads: 3,
+    testChunks: false,
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest',
+      'X-XSRF-TOKEN': this.tokenService.getToken()
+    },
+    maxChunkRetries: 2,
+    maxFiles: 1,
+    withCredentials: true,
+    fileType: ['mp3', 'mp4', 'pdf'],
+  });
 
   constructor(private dialogRef: MatDialogRef<CommonEditFormDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: CommonEditData,
               private snackBar: MatSnackBar,
               public formService: FormService,
-              private formBuilder: FormBuilder) { }
+              private formBuilder: FormBuilder,
+              private tokenService: HttpXsrfTokenExtractor) { }
 
   ngOnInit(): void {
     let allowType: string[] = [];
+    let maxSize: number = 10 * 1024 * 1024;
     switch (this.data.obj) {
       case 'episode': {
-        allowType = ['mp3','mp4'];
+        if(this.data.serie.type == 'video'){
+          allowType = ['mp4'];
+        } else if(this.data.serie.type == 'podcast'){
+          allowType = ['mp3'];
+        }
+        maxSize = 200 * 1024 * 1024;
         break;
       }
       case 'file': {
         allowType = ['pdf'];
+        maxSize = 10 * 1024 * 1024;
         break;
       }
     }
-
-    this.uploader.onAfterAddingFile = (file) => {
-      // validate size
-
-      // validate type
-
-
-      this.file = file._file;
-    }
+    this.resumable.opts.fileType = allowType;
+    // @ts-ignore
+    this.resumable.opts.maxFileSize = maxSize;
 
     if(this.data.mode == 'edit'){
       this.defaultName = this.data.name ?? '';
@@ -71,29 +94,109 @@ export class CommonEditFormDialogComponent implements OnInit {
       name: [this.defaultName, [Validators.required,Validators.maxLength(100)]],
       description: [this.defaultDescription, [Validators.required,Validators.maxLength(500)]],
     });
+
+    if(this.data.mode == 'create' &&
+      (this.data.obj == 'episode' || this.data.obj == 'file')){
+      this.resumable.assignBrowse(document.getElementById('browseButton')!,false);
+
+    }
+    let thisComp = this;
+    this.resumable.on('fileAdded', function(file, event){
+      thisComp.dialogRef.disableClose = true;
+      thisComp.fileId = file.uniqueIdentifier;
+      thisComp.resumable.upload();
+    });
+    this.resumable.on('fileSuccess', function(response, message){
+      let res = JSON.parse(message);
+      thisComp.filePath = res.path + res.name;
+    });
+    this.resumable.on('fileError', function(file, message){
+      thisComp.snackBar.open(message, 'X', {
+        verticalPosition: 'top',
+      });
+    });
+    this.resumable.on('fileProgress', function(file, message){
+      thisComp.progress = thisComp.resumable.progress();
+    });
   }
 
-  get isFileUploaded(){
-    return this.data.obj != 'section' && this.data.mode == 'create' && this.file == undefined;
+  get isFileUploaded(): boolean{
+    return this.data.obj != 'section' && this.data.mode == 'create' && this.filePath == '';
+  }
+
+  get hideUpload(){
+    return ! (this.data.mode == 'create' &&
+    (this.data.obj == 'episode' || this.data.obj == 'file') && !this.loading && this.progress == 0)
+  }
+
+  get inProgress(){
+    return this.progress > 0 && this.progress < 1 && !this.loading;
+  }
+
+  get completed(){
+    return this.progress == 1 && !this.loading;
+  }
+
+  onFileCancel(){
+    this.resumable.pause();
+    const url = environment.domain + environment.apiEndpoints.series.file.cancelUpload.replace('{uniqueId}', this.fileId);
+    axios.post(url)
+      .then(res => {
+        const response = res.data as CommonHttpResponse;
+        this.snackBar.open(response.message, 'X', {
+          duration: 5000,
+          verticalPosition: 'top',
+        })
+        if(response.status === 200){
+          this.resumable.cancel();
+          this.progress = 0.0;
+        }
+      })
+      .catch(err => {
+        this.snackBar.open(err, 'X', {
+          duration: 5000,
+          verticalPosition: 'top',
+        });
+        this.resumable.upload();
+      })
+  }
+
+  onFileDelete(){
+    const url = environment.domain + environment.apiEndpoints.series.file.deleteUpload;
+    const body = {};
+    body['name'] = this.filePath.split('/').at(-1);
+    body['type'] = this.filePath.split('/').at(-2);
+
+    axios.post(url, body)
+      .then(res => {
+        const response = res.data as CommonHttpResponse;
+        this.snackBar.open(response.message, 'X', {
+          duration: 5000,
+          verticalPosition: 'top',
+        })
+        if(response.status === 200){
+          this.filePath = '';
+          this.progress = 0.0;
+          this.dialogRef.disableClose = false;
+        }
+      })
+      .catch(err => {
+        this.snackBar.open(err, 'X', {
+          duration: 5000,
+          verticalPosition: 'top',
+        });
+      })
   }
 
   onSubmit(){
     if(this.submitRecord?.valid && (
       this.data.mode == 'edit' || this.data.obj == 'section' ||
-      (this.data.mode == 'create' && this.file != undefined)
+      (this.data.mode == 'create' && this.filePath != '')
     ))
     {
       let body = this.submitRecord.getRawValue();
       body['title'] = body['name'];
-
-      let formData = new FormData();
-      formData.append('name', body['name']);
-      formData.append('title', body['name']);
-      formData.append('description', body['description']);
-      if(this.data.mode == 'create' && this.file != undefined){
-        formData.append('file', this.file!);
-        body = formData;
-      }
+      body['path'] = this.filePath;
 
       let axiosMethod = axios.post;
       switch (this.data.mode) {

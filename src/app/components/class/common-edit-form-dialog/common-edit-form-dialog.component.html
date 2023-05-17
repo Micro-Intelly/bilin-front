@@ -1,34 +1,62 @@
 <div *ngIf="loading">
   <mat-spinner></mat-spinner>
 </div>
-<form *ngIf="!loading" [formGroup]="submitRecord!" (ngSubmit)="onSubmit()">
-  <mat-form-field class="w-100">
-    <mat-label>Name</mat-label>
-    <input
-      matInput
-      formControlName="name">
-  </mat-form-field>
-  <mat-form-field class="w-100">
-    <mat-label>Description</mat-label>
-    <input
-      matInput
-      formControlName="description">
-  </mat-form-field>
-  <div
-    *ngIf="data.mode == 'create' &&
-    (data.obj == 'episode' || data.obj == 'file')"
-    class="mb-3"
-  >
-    <input type="file" ng2FileSelect [uploader]="uploader"><br/>
-    <div *ngIf="data.obj == 'episode'">
-      <mat-hint>Maximun allowed file size is 200MB and type .mp3 and .mp4</mat-hint>
-    </div>
-    <div *ngIf="data.obj == 'file'">
-      <mat-hint>Maximun allowed file size is 10MB and type .pdf</mat-hint>
-    </div>
+
+<button
+  mat-raised-button
+  type="button"
+  id="browseButton"
+  [hidden]="hideUpload"
+>Upload file</button>
+<p *ngIf="inProgress">Progress: {{(progress*100).toFixed(2)}} %</p>
+<p *ngIf="completed">Completed!</p>
+<p class="fst-italic" *ngIf="inProgress || completed">Your must cancel, delete or submit your uploaded file to close this dialog</p>
+<button
+  mat-raised-button
+  type="button"
+  (click)="onFileCancel()"
+  *ngIf="inProgress"
+>Cancel</button>
+<button
+  mat-raised-button
+  color="warn"
+  type="button"
+  (click)="onFileDelete()"
+  *ngIf="completed"
+>Delete Uploaded File</button>
+
+<div
+  *ngIf="!hideUpload"
+  class="mb-3"
+>
+  <div *ngIf="data.obj == 'episode'">
+    <mat-hint>Maximun allowed file size is 200MB and type .mp3 and .mp4</mat-hint>
   </div>
-  <button
-    mat-raised-button
-    [disabled]="submitRecord!.invalid || loading || isFileUploaded"
-  >Submit </button>
-</form>
+  <div *ngIf="data.obj == 'file'">
+    <mat-hint>Maximun allowed file size is 10MB and type .pdf</mat-hint>
+  </div>
+</div>
+
+<div *ngIf="!loading">
+  <form [formGroup]="submitRecord!" (ngSubmit)="onSubmit()">
+    <mat-form-field class="w-100">
+      <mat-label>Name</mat-label>
+      <input
+        matInput
+        formControlName="name">
+    </mat-form-field>
+    <mat-form-field class="w-100">
+      <mat-label>Description</mat-label>
+      <input
+        matInput
+        formControlName="description">
+    </mat-form-field>
+
+    <button
+      mat-raised-button
+      [disabled]="submitRecord!.invalid || loading || isFileUploaded"
+    >Submit </button>
+  </form>
+</div>
+
+

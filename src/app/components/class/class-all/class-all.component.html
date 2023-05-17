@@ -1,7 +1,12 @@
 <app-filters-template
   (filterChanged)="onFilterChange($event)"
 >
-  <mat-tab-group fxFlex="100" dynamicHeight mat-stretch-tabs="true" class="w-100" [(selectedIndex)]="tabIndex" (selectedTabChange)="keepFilters()">
+  <mat-tab-group
+    fxFlex="100"
+    dynamicHeight
+    class="w-100"
+    [(selectedIndex)]="tabIndex" (selectedTabChange)="keepFilters()"
+  >
     <mat-tab label="Videos">
       <div fxLayout="row" fxLayoutAlign="center top" class="mt-2 mb-5" *ngIf="loading">
         <mat-spinner></mat-spinner>
