@@ -161,12 +161,18 @@ export class RegisterComponent implements OnInit {
     }
   }
 
+  /**
+   * This function opens a privacy policy dialog component
+   */
   showPrivacyPolicy(){
     this.dialog.open(PrivacyPolicyDialogComponent, {
       height: '90%',
       width: '50%'
     });
   }
+  /**
+   * This function opens a dialog box displaying the terms of service.
+   */
   showTermService(){
     this.dialog.open(TermsOfServiceDialogComponent, {
       height: '90%',

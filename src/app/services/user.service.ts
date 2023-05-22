@@ -47,6 +47,10 @@ export class UserService {
     return isLogged;
   }
 
+  /**
+   * This function retrieves the current user data from an API endpoint and updates the user information if it is not
+   * empty.
+   */
   public getCurrentUserData() {
     axios.get(environment.domain + '/api/user/currentUser').then(res => {
       if(Object.keys(res.data).length !== 0){
@@ -60,6 +64,10 @@ export class UserService {
     })
   }
 
+  /**
+   * The function updates the user information.
+   * @param {User} user
+   */
   userChange(user: User) {
     this.user.next(user);
   }

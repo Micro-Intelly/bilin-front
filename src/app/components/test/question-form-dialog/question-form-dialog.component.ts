@@ -21,8 +21,15 @@ export class QuestionFormDialogComponent implements OnInit {
   deletedQuestionIds: string[] = [];
   submitQuestion: FormGroup | undefined;
 
-  test = '2';
-
+  /**
+   * Constructor function
+   * @param {MatDialogRef} dialogRef
+   * @param {string} data
+   * @param {MatSnackBar} snackBar
+   * @param {QuestionUtils} questionUtils
+   * @param {FormService} formService
+   * @param {FormBuilder} formBuilder
+   */
   constructor(public dialogRef: MatDialogRef<QuestionFormDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: string,
               private snackBar: MatSnackBar,
@@ -31,6 +38,10 @@ export class QuestionFormDialogComponent implements OnInit {
               private formBuilder: FormBuilder,
   ) { }
 
+  /**
+   * The ngOnInit function initializes a form with questions and answers, retrieved from an API, and sets up form controls
+   * with validators.
+   */
   ngOnInit(): void {
     this.questionUtils.getQuestions(this.data).subscribe(res => {
       this.submitQuestion = this.formBuilder.group({});
@@ -63,14 +74,28 @@ export class QuestionFormDialogComponent implements OnInit {
     });
   }
 
+  /**
+   * This function returns a boolean value indicating whether the submitQuestion form is invalid or empty.
+   * @returns {boolean}
+   */
   get disableSubmit() {
     return this.submitQuestion?.invalid || !Object.keys(this.submitQuestion?.getRawValue()).length;
   }
 
+  /**
+   * This function returns an array of keys from a given map.
+   * @param ansMap
+   * @returns An array of all the keys in the input `ansMap` map.
+   */
   getAnswerKeys(ansMap: Map<string,string>) {
     return Array.from(ansMap.keys());
   }
 
+  /**
+   * This function adds a new answer control to a form group if the number of answers is less than 8, and displays a
+   * message if the maximum number of answers has been reached.
+   * @param {string} qid
+   */
   addAnswer(qid: string){
     const answerMap = this.questions.find(elem=>elem.id==qid)!.answersMap;
     if(answerMap.size < 8){
@@ -92,6 +117,11 @@ export class QuestionFormDialogComponent implements OnInit {
     }
   }
 
+  /**
+   * This function deletes an answer from a question and updates the corresponding form controls.
+   * @param {string} qid
+   * @param {string} ansKey
+   */
   deleteAnswer(qid: string, ansKey: string){
     const answerMap = this.questions.find(elem=>elem.id==qid)!.answersMap;
     const size = answerMap.size;
@@ -129,6 +159,9 @@ export class QuestionFormDialogComponent implements OnInit {
     answerMap.delete(String(size));
   }
 
+  /**
+   * This function adds a new question to a list of questions if the list is not already at its maximum capacity of 30.
+   */
   addQuestion(){
     if(this.questions.length < 30){
 
@@ -163,6 +196,11 @@ export class QuestionFormDialogComponent implements OnInit {
     }
   }
 
+  /**
+   * The function deletes a question from an array and adds its ID to a list of deleted question IDs if it is not a new
+   * question.
+   * @param {string} qid
+   */
   deleteQuestion(qid: string){
     this.questions = this.questions.filter(elem => elem.id != qid);
     this.newQuestions = this.newQuestions.filter(elem => elem.id != qid);
@@ -172,6 +210,9 @@ export class QuestionFormDialogComponent implements OnInit {
     this.submitQuestion!.removeControl(qid);
   }
 
+  /**
+   * The function checks if a form is valid and either formats and posts the data or displays an error message.
+   */
   onSubmit(){
     if(!this.submitQuestion?.invalid){
       const body = this.formatBody(this.submitQuestion?.getRawValue());
@@ -184,6 +225,12 @@ export class QuestionFormDialogComponent implements OnInit {
     }
   }
 
+  /**
+   * This function formats the body of a request by extracting and organizing data from a set of questions and their
+   * answers.
+   * @param {any} body
+   * @returns {any} formatted body
+   */
   private formatBody(body: any): any {
     const res: any = {upsert:[], destroy: []};
     this.questions.forEach(elem => {
@@ -211,6 +258,10 @@ export class QuestionFormDialogComponent implements OnInit {
     return res;
   }
 
+  /**
+   * This function sends a POST request to update questions for a test using Axios in a TypeScript environment.
+   * @param {any} body
+   */
   private postQuestions(body: any){
     const url = environment.domain + environment.apiEndpoints.tests.updateQuestions.replace('{:id}', this.data);
     this.loading = true;

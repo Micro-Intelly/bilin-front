@@ -61,6 +61,16 @@ export class PostFormDialogComponent implements OnInit {
     ]
   };
 
+  /**
+   * This is a constructor function that initializes various dependencies for the PostFormDialogComponent.
+   * @param {MatDialogRef} dialogRef
+   * @param {PostEditDialogData} data
+   * @param {MatSnackBar} snackBar
+   * @param {FormService} formService
+   * @param {FormBuilder} formBuilder
+   * @param {HttpClient} httpClient
+   * @param {HttpXsrfTokenExtractor} tokenService
+   */
   constructor(private dialogRef: MatDialogRef<PostFormDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: PostEditDialogData,
               private snackBar: MatSnackBar,
@@ -69,6 +79,10 @@ export class PostFormDialogComponent implements OnInit {
               private httpClient: HttpClient,
               private tokenService: HttpXsrfTokenExtractor) { }
 
+  /**
+   * The ngOnInit function initializes the form with default values for body, title, and language tags if the mode is set
+   * to 'edit'.
+   */
   ngOnInit(): void {
     if(this.data.mode == 'edit'){
       this.defaultTitle = this.data.obj.title;
@@ -86,6 +100,10 @@ export class PostFormDialogComponent implements OnInit {
 
   }
 
+  /**
+   * The function checks if the submitted post is valid and either creates a new post or updates an existing one based on
+   * the mode.
+   */
   onSubmit(){
     if(this.submitPost?.valid){
       const body = this.submitPost.getRawValue();
@@ -99,12 +117,22 @@ export class PostFormDialogComponent implements OnInit {
     }
   }
 
+  /**
+   * This function formats the body of an object by extracting specific properties and converting them into arrays.
+   * @param {any} body
+   */
   private formatBody(body: any){
     body['language_id'] = body['lantag'].languageId;
     body['tags_id'] = body['lantag'].tagsId ? Array.from(body['lantag'].tagsId) : [];
     body['new_tags'] = body['lantag'].newTags ? Array.from(body['lantag'].newTags) : [];
   }
 
+  /**
+   * This function posts an image file to a specified URL using HttpClient in Angular, with options for observing events,
+   * reporting progress, and including headers and credentials.
+   * @param {File} file
+   * @returns The `postImage` function is returning an Observable of type `Observable<UploadResponse>`.
+   */
   private postImage(file: File){
     const url = environment.domain + environment.apiEndpoints.comments.fileUpload;
     let formData = new FormData();
@@ -121,6 +149,10 @@ export class PostFormDialogComponent implements OnInit {
     });
   }
 
+  /**
+   * This function sends a PATCH request to update a post using Axios in a TypeScript environment.
+   * @param {any} body
+   */
   private patchPost(body: any){
     const url = environment.domain + environment.apiEndpoints.posts.update.replace('{:id}', this.data.obj.id);
     axios.patch(url, body)
@@ -133,6 +165,11 @@ export class PostFormDialogComponent implements OnInit {
         this.loading = false;
       })
   }
+  /**
+   * This is a private function in TypeScript that creates a post by sending a POST request to a specified URL using Axios
+   * library and handles the response and error using Utils functions.
+   * @param {any} body
+   */
   private creatPost(body: any){
     const url = environment.domain + environment.apiEndpoints.posts.create;
     axios.post(url, body)

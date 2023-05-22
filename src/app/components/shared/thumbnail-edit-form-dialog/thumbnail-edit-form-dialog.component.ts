@@ -21,11 +21,20 @@ export class ThumbnailEditFormDialogComponent implements OnInit {
     maxFileSize: 1024 * 1024,
   });
 
+  /**
+   * Constructor function
+   * @param {MatDialogRef} dialogRef
+   * @param {string} data
+   * @param {MatSnackBar} snackBar
+   */
   constructor(private dialogRef: MatDialogRef<ThumbnailEditFormDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: string,
               private snackBar: MatSnackBar) {
   }
 
+  /**
+   * The function initializes the component and sets up file upload functionality with error handling.
+   */
   ngOnInit() {
     this.url = this.data;
     this.uploader.onAfterAddingFile = (file) => {
@@ -47,6 +56,9 @@ export class ThumbnailEditFormDialogComponent implements OnInit {
     }
   }
 
+  /**
+   * The function uploads a file using axios and displays a success or error message using a snackbar.
+   */
   onUpload(){
     let formData = new FormData();
     formData.append('thumbnail', this.file);

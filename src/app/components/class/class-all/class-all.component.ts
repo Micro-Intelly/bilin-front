@@ -32,11 +32,20 @@ export class ClassAllComponent implements OnInit {
   countP: number = 0; // puede indicar el total sin traer todo desde principio
   gridSizeP: number = 4;
 
+  /**
+   * This is a constructor function
+   * @param {ActivatedRoute} activatedRoute
+   * @param {Router} router
+   * @param {MatSnackBar} snackBar
+   */
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private snackBar: MatSnackBar) {
   }
 
+  /**
+   * The ngOnInit function initializes variables and calls the getSeries function based on the activated route parameters.
+   */
   ngOnInit(): void {
     this.pageV = ( this.activatedRoute.snapshot.params['pageV'] || 1 );
     this.pageP = ( this.activatedRoute.snapshot.params['pageP'] || 1 );
@@ -44,14 +53,26 @@ export class ClassAllComponent implements OnInit {
     this.getSeries();
   }
 
+  /**
+   * The function updates the current page number and calls another function to keep filters.
+   * @param {any} event
+   */
   onChangePageV(event: any) {
     this.pageV = event;
     this.keepFilters();
   }
+  /**
+   * The function updates the current page number and keeps the current filters.
+   * @param {any} event
+   */
   onChangePageP(event: any) {
     this.pageP = event;
     this.keepFilters();
   }
+  /**
+   * The function updates filter variables and applies them to filter a series.
+   * @param {any} event
+   */
   onFilterChange(event: any) {
     this.searchFilter = event.searchFilter;
     this.tagSelected = event.tagSelected;
@@ -61,6 +82,9 @@ export class ClassAllComponent implements OnInit {
     this.filterSeries();
   }
 
+  /**
+   * The function that replace current url to keep the filters
+   */
   keepFilters(){
     this.router.navigate(
       [
@@ -81,6 +105,9 @@ export class ClassAllComponent implements OnInit {
     );
   }
 
+  /**
+   * This function filters a list of videos and podcasts based on selected search criteria, language, and tags.
+   */
   filterSeries(){
     this.videosFiltered = Utils.getSearcher(this.videos,this.selectedSearch).search(this.searchFilter).filter((elem: Serie) => {
       return Utils.applyFilters(elem,this.selectedLanguage,this.tagSelected);
@@ -91,6 +118,9 @@ export class ClassAllComponent implements OnInit {
     this.pageP = 1; this.pageV = 1;
   }
 
+  /**
+   * This function retrieves a list of series from an API endpoint and filters them based on their type.
+   */
   private getSeries(){
     let endpoint: string = environment.domain + environment.apiEndpoints.series.index;
     axios.get(endpoint).then((res) => {

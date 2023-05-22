@@ -13,8 +13,16 @@ export class HistoryComponent implements OnInit {
   isLoggedIn: boolean = false;
   currentUser: User = null as any;
 
+  /**
+   * This is a constructor function
+   * @param {UserService} userService
+   */
   constructor(private userService: UserService) { }
 
+  /**
+   * The ngOnInit function subscribes to the userService's user observable and updates the isLoggedIn and currentUser
+   * variables accordingly.
+   */
   ngOnInit(): void {
     this.subscriptionUser = this.userService.user.subscribe((value) => {
       this.isLoggedIn = Boolean(value);

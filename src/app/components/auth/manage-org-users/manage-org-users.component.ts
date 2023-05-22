@@ -29,12 +29,24 @@ export class ManageOrgUsersComponent implements OnInit {
   submitAddUser: FormGroup | undefined;
   userEmail: string = '';
 
+  /**
+   * This is a constructor function that initializes various dependencies for a TypeScript class.
+   * @param {MatSnackBar} snackBar
+   * @param {UserService} userService
+   * @param {MatDialog} dialog
+   * @param {FormService} formService
+   * @param {FormBuilder} formBuilder
+   */
   constructor(private snackBar: MatSnackBar,
               private userService: UserService,
               private dialog: MatDialog,
               public formService: FormService,
               private formBuilder: FormBuilder) { }
 
+  /**
+   * The ngOnInit function initializes the component by subscribing to the user service and setting up a form group for
+   * adding a user.
+   */
   ngOnInit(): void {
     this.subscriptionUser = this.userService.user.subscribe((value) => {
       this.isLoggedIn = Boolean(value);
@@ -55,6 +67,10 @@ export class ManageOrgUsersComponent implements OnInit {
     this.subscriptionUser?.unsubscribe();
   }
 
+  /**
+   * The function handles a delete action for a user in an organization.
+   * @param {any} event
+   */
   actionHandler(event: any){
     if(event.user) {
       if (event.action == 'delete') {
@@ -69,6 +85,10 @@ export class ManageOrgUsersComponent implements OnInit {
     }
   }
 
+  /**
+   * This function submits a form to create a new user in an organization using axios and displays a success or error
+   * message using a snackbar.
+   */
   onSubmit(){
     if(this.submitAddUser?.valid){
       const body = this.submitAddUser.getRawValue();
@@ -93,6 +113,9 @@ export class ManageOrgUsersComponent implements OnInit {
     }
   }
 
+  /**
+   * This function retrieves a list of users belonging to the current user's organization using an API call.
+   */
   private getOrgUsers() {
     if(this.currentUser.organization_id){
       const url = environment.domain + environment.apiEndpoints.organization.user.index.replace('{:id}', this.currentUser.organization_id);

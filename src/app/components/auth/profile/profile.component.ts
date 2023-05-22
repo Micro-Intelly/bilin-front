@@ -43,11 +43,22 @@ export class ProfileComponent implements OnInit {
     test_limit_org: -1
   } as Limits;
 
+  /**
+   * This is a constructor function that takes in several dependencies for a TypeScript class.
+   * @param {UserService} userService
+   * @param {MatDialog} dialog
+   * @param {MatSnackBar} snackBar
+   * @param {Router} router
+   */
   constructor(private userService: UserService,
               private dialog: MatDialog,
               private snackBar: MatSnackBar,
               private router: Router) { }
 
+  /**
+   * The function initializes the component and subscribes to the user service to check if the user is logged in and sets
+   * the current user's thumbnail image.
+   */
   ngOnInit(): void {
     this.userService.getCurrentUserData();
     this.subscriptionUser = this.userService.user.subscribe((value) => {
@@ -62,15 +73,24 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  /**
+   * This function opens a dialog box for editing the current user's profile.
+   */
   onEditUser(){
     this.openDialog(ProfileEditFormDialogComponent, {obj:this.currentUser})
   }
 
+  /**
+   * This function opens a dialog box for editing the user's thumbnail image.
+   */
   onEditThumbnail(){
     const url = environment.domain + environment.apiEndpoints.user.updateThumbnail.replace('{:id}', this.currentUser.id);
     this.openDialog(ThumbnailEditFormDialogComponent, url);
   }
 
+  /**
+   * This function deletes a user and redirects to the home page.
+   */
   onDeleteUser(){
     const url = environment.domain + environment.apiEndpoints.user.delete.replace('{:id}', this.currentUser.id);
     const redirection = '/';
@@ -84,6 +104,9 @@ export class ProfileComponent implements OnInit {
       });
   }
 
+  /**
+   * The function opens a dialog box with a message indicating that the reset password function is not currently supported.
+   */
   resetPassword(){
     this.dialog.open(CloseRemindDialogComponent, {
       data: 'This function is not supported for now',
@@ -98,6 +121,12 @@ export class ProfileComponent implements OnInit {
     this.subscriptionUser?.unsubscribe();
   }
 
+  /**
+   * This function opens a dialog box with the specified component and data, and subscribes to the result to update user
+   * data if the result is "OK".
+   * @param component
+   * @param {any} dialogData
+   */
   private openDialog(component: ComponentType<any>, dialogData: any){
     const dRes = this.dialog.open(component, {
       data: dialogData,
@@ -110,6 +139,9 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  /**
+   * This function retrieves and sets the limits for the current user or organization from an API endpoint.
+   */
   private getLimits() {
     const url = environment.domain + environment.apiEndpoints.user.getLimits;
     axios.get(url).then((res) => {

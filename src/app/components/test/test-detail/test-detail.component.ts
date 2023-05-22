@@ -44,6 +44,15 @@ export class TestDetailComponent implements OnInit {
   animal:string = '';
 
 
+  /**
+   * This is a constructor function that initializes various services and dependencies for a TypeScript class.
+   * @param {MatDialog} dialog
+   * @param {ActivatedRoute} route
+   * @param {MatSnackBar} snackBar
+   * @param {UserService} userService
+   * @param {Router} router
+   * @param {HistoryService} historyService
+   */
   constructor(public dialog: MatDialog,
               private route: ActivatedRoute,
               private snackBar: MatSnackBar,
@@ -53,6 +62,10 @@ export class TestDetailComponent implements OnInit {
 
   }
 
+  /**
+   * The ngOnInit function checks for a test ID in the route parameters and retrieves the test if it exists, otherwise it
+   * displays an error message.
+   */
   ngOnInit(): void {
     this.testId = this.route.snapshot.paramMap.get('test-id') ?? undefined;
     if(this.testId) {
@@ -78,10 +91,20 @@ export class TestDetailComponent implements OnInit {
     this.subscriptionUser?.unsubscribe();
   }
 
+  /**
+   * This function returns a boolean value indicating whether the current user has permission to access a test record based
+   * on their role and authorship.
+   * @returns {boolean}
+   */
   getUserHasPermission(): boolean {
     return <boolean>(this.currentUser && this.testRecord && (this.currentUser.id === this.testRecord.author?.id || this.currentUser.role?.includes(environment.constants.role.manager) || this.currentUser.role?.includes(environment.constants.role.admin)));
   }
 
+  /**
+   * This function returns an object containing default test actions if the user has permission.
+   * @returns An object containing the default test action if the user has permission, or an empty object if the user does
+   * not have permission.
+   */
   get actions() {
     let action = {};
     if(this.getUserHasPermission()){
@@ -90,6 +113,9 @@ export class TestDetailComponent implements OnInit {
     return action;
   }
 
+  /**
+   * The function starts a test if there are questions available, otherwise it displays a message.
+   */
   startTest(){
     if(this.testRecord?.questions_count){
       if(this.isLoggedIn && this.testId){
@@ -112,12 +138,21 @@ export class TestDetailComponent implements OnInit {
       });
     }
   }
+  /**
+   * This function opens a dialog box to display the test result using the test ID as data.
+   */
   viewResult(){
     this.dialog.open(TestResultDialogComponent, {
       data: this.testId
     });
   }
 
+  /**
+   * The function handles different actions based on the input string and performs corresponding functions on the given
+   * test object.
+   * @param {string} action
+   * @param {Test} test
+   */
   onActionClick(action: string, test: Test){
     switch (action) {
       case 'editTest': {
@@ -135,6 +170,10 @@ export class TestDetailComponent implements OnInit {
     }
   }
 
+  /**
+   * The function opens a dialog box for editing a test record and updates the record if the user clicks "OK".
+   * @param {Test} testRecord
+   */
   onEditTest(testRecord: Test){
     const dRes = this.dialog.open(TestFormDialogComponent, {
       data: {obj:testRecord, mode:'edit', user: this.currentUser},
@@ -149,6 +188,10 @@ export class TestDetailComponent implements OnInit {
       }
     });
   }
+  /**
+   * The function opens a dialog box for editing test questions and updates the test record if changes are made.
+   * @param {Test} testRecord
+   */
   onEditQuestions(testRecord: Test){
     const dRes = this.dialog.open(QuestionFormDialogComponent, {
       data: testRecord.id,
@@ -164,6 +207,10 @@ export class TestDetailComponent implements OnInit {
     });
   }
 
+  /**
+   * This function handles the deletion of a test record and redirects the user to the test list page.
+   * @param {Test} testRecord
+   */
   onDeleteTest(testRecord: Test){
     const url = environment.domain + environment.apiEndpoints.tests.delete.replace('{:id}', testRecord.id);
     const redirection = '/test/all';
@@ -177,10 +224,18 @@ export class TestDetailComponent implements OnInit {
       });
   }
 
+  /**
+   * The function calls a method from the Utils class to format a given date string.
+   * @param {string} date
+   * @returns {string} formatted date
+   */
   getFormatDate(date:string){
     return Utils.getFormatDate(date);
   }
 
+  /**
+   * This function retrieves a test record from an API endpoint using Axios in a TypeScript environment.
+   */
   private getTest(){
     let endpoint: string = environment.domain + environment.apiEndpoints.tests.show.replace('{:id}', this.testId!);
     axios.get(endpoint).then((res) => {

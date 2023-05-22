@@ -23,23 +23,44 @@ export class HistoriesListComponent implements OnInit {
 
   historyList: History[] = [];
 
+  /**
+   * This is a constructor function that takes in two parameters, a MatSnackBar and a Router, and initializes them as
+   * private properties of the class.
+   * @param {MatSnackBar} snackBar
+   * @param {Router} router
+   */
   constructor(private snackBar: MatSnackBar,
               private router: Router) { }
 
+  /**
+   * The ngOnInit function checks if userId and type are defined and calls the getRecords function if they are.
+   */
   ngOnInit(): void {
     if(this.userId && this.type){
       this.getRecords();
     }
   }
 
+  /**
+   * The function updates the current page based on the input event.
+   * @param {any} event
+   */
   onChangePage(event: any) {
     this.page = event;
   }
 
+  /**
+   * The function calls a method from the Utils class to format a given date string.
+   * @param {string} date
+   */
   getFormatDate(date:string){
     return Utils.getFormatDate(date);
   }
 
+  /**
+   * The function takes a history object and navigates to a specific page based on the type of history.
+   * @param {History} his
+   */
   goLink(his: History){
     let res = ''
     switch (this.type) {
@@ -50,12 +71,21 @@ export class HistoriesListComponent implements OnInit {
     this.router.navigate([res]);
   }
 
+  /**
+   * This TypeScript function returns the title of a history object, including the title of its associated series if
+   * applicable.
+   * @param {History} his
+   * @returns {string} title
+   */
   getTitle(his: History){
     return his.serie_id?
       his.history_able.title + ' | ' + his.serie?.title:
       his.history_able.title;
   }
 
+  /**
+   * This function retrieves a list of history records from an API endpoint based on the type of record and user ID.
+   */
   private getRecords(){
     let endAux = '';
     switch (this.type) {

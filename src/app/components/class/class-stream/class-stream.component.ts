@@ -19,12 +19,22 @@ export class ClassStreamComponent implements OnInit {
   api: VgApiService | undefined;
   isFirstTime: boolean = true;
 
+  /**
+   * This is a constructor function that takes in two services, HistoryService and UserService, as parameters.
+   * @param {HistoryService} historyService
+   * @param {UserService} userService
+   */
   constructor(private historyService: HistoryService,
               private userService: UserService) { }
 
   ngOnInit(): void {
   }
 
+  /**
+   * This function sets up a subscription to the playing event of a video player and posts a history entry if it is the
+   * first time the user is watching the episode and is logged in.
+   * @param {VgApiService} api
+   */
   onPlayerReady(api: VgApiService) {
     this.api = api;
     this.api.getDefaultMedia().subscriptions.playing.subscribe(
@@ -37,9 +47,17 @@ export class ClassStreamComponent implements OnInit {
     );
   }
 
+  /**
+   * This function checks if the episode type is 'video'.
+   * @returns {boolean} isVideo
+   */
   isVideo() {
     return this.episode?.type == 'video';
   }
+  /**
+   * This function checks if the episode type is a podcast.
+   * @returns {boolean} isPodcast
+   */
   isPodcast() {
     return this.episode?.type == 'podcast';
   }

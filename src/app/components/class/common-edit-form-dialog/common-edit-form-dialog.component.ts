@@ -55,6 +55,15 @@ export class CommonEditFormDialogComponent implements OnInit {
     fileType: ['mp3', 'mp4', 'pdf'],
   });
 
+  /**
+   * This is a constructor function
+   * @param {MatDialogRef} dialogRef
+   * @param {CommonEditData} data
+   * @param {MatSnackBar} snackBar
+   * @param {FormService} formService
+   * @param {FormBuilder} formBuilder
+   * @param {HttpXsrfTokenExtractor} tokenService
+   */
   constructor(private dialogRef: MatDialogRef<CommonEditFormDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: CommonEditData,
               private snackBar: MatSnackBar,
@@ -62,6 +71,10 @@ export class CommonEditFormDialogComponent implements OnInit {
               private formBuilder: FormBuilder,
               private tokenService: HttpXsrfTokenExtractor) { }
 
+  /**
+   * The function initializes variables and sets options for a file upload process using Resumable.js, based on the type of
+   * file being uploaded and the mode of operation.
+   */
   ngOnInit(): void {
     let allowType: string[] = [];
     let maxSize: number = 10 * 1024 * 1024;
@@ -120,23 +133,42 @@ export class CommonEditFormDialogComponent implements OnInit {
     });
   }
 
+  /**
+   * This function checks if a file has been uploaded in a specific mode and context.
+   * @returns {boolean} isFileUploaded
+   */
   get isFileUploaded(): boolean{
     return this.data.obj != 'section' && this.data.mode == 'create' && this.filePath == '';
   }
 
+  /**
+   * This function returns a boolean value indicating whether the upload section should be hidden or not
+   * @returns {boolean} hideUpload
+   */
   get hideUpload(){
     return ! (this.data.mode == 'create' &&
     (this.data.obj == 'episode' || this.data.obj == 'file') && !this.loading && this.progress == 0)
   }
 
+  /**
+   * This function checks if a task is in progress based on its progress and loading status.
+   * @returns {boolean} inProgress
+   */
   get inProgress(){
     return this.progress > 0 && this.progress < 1 && !this.loading;
   }
 
+  /**
+   * This function returns true if the progress is 1 and the loading is false.
+   * @returns {boolean} completed
+   */
   get completed(){
     return this.progress == 1 && !this.loading;
   }
 
+  /**
+   * The function cancels a file upload and sends a request to the server to cancel the upload.
+   */
   onFileCancel(){
     this.resumable.pause();
     const url = environment.domain + environment.apiEndpoints.series.file.cancelUpload.replace('{uniqueId}', this.fileId);
@@ -161,6 +193,9 @@ export class CommonEditFormDialogComponent implements OnInit {
       })
   }
 
+  /**
+   * This function sends a request to delete a file from a server and displays a message based on the response.
+   */
   onFileDelete(){
     const url = environment.domain + environment.apiEndpoints.series.file.deleteUpload;
     const body = {};
@@ -188,6 +223,9 @@ export class CommonEditFormDialogComponent implements OnInit {
       })
   }
 
+  /**
+   * The function handles form submission and sends a POST or PATCH request to create or edit records.
+   */
   onSubmit(){
     if(this.submitRecord?.valid && (
       this.data.mode == 'edit' || this.data.obj == 'section' ||

@@ -35,16 +35,28 @@ export class TestResultDialogComponent implements OnInit {
 
   public chartOptions: Partial<ChartOptions> | any;
 
+  /**
+   * This is a constructor function that initializes variables for a dialog component in Angular
+   * @param dialogRef
+   * @param {string} data
+   * @param {MatSnackBar} snackBar
+   */
   constructor(public dialogRef: MatDialogRef<TestResultDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: string,
               private snackBar: MatSnackBar) {
   }
 
+  /**
+   * The ngOnInit function sets chart options and retrieves results.
+   */
   ngOnInit(): void {
     this.setChartOptions();
     this.getResults();
   }
 
+  /**
+   * This function retrieves test results from an API endpoint and updates a chart with the average results.
+   */
   private getResults(){
     let endpoint: string = environment.domain + environment.apiEndpoints.tests.showResultAverage.replace('{:id}', this.data);
     axios.get(endpoint).then((res) => {
@@ -60,6 +72,9 @@ export class TestResultDialogComponent implements OnInit {
     });
   }
 
+  /**
+   * This function sets the options for a line chart displaying average results.
+   */
   private setChartOptions(){
     this.chartOptions = {
       series: [

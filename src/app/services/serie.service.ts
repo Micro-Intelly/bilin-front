@@ -12,6 +12,10 @@ export class SerieService {
   series: BehaviorSubject<Serie[]> = new BehaviorSubject<Serie[]>([]);
   constructor(private snackBar: MatSnackBar) { }
 
+  /**
+   * This function retrieves a user's series data from an API endpoint using Axios in a TypeScript environment.
+   * @param {string} userId - The `userId` parameter is a string that represents the unique identifier of a user.
+   */
   public getUsersSeries(userId: string) {
     let endpoint: string = environment.domain + environment.apiEndpoints.user.seriesIndex.replace('{:id}', userId);
     axios.get(endpoint).then((res) => {
@@ -26,6 +30,10 @@ export class SerieService {
     });
   }
 
+  /**
+   * The function updates the value of a BehaviorSubject with a new array of Serie objects.
+   * @param {Serie[]} series - An array of objects of type Serie.
+   */
   seriesChange(series: Serie[]) {
     this.series.next(series);
   }

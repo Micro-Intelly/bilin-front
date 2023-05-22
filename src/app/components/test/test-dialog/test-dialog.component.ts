@@ -25,6 +25,14 @@ export class TestDialogComponent implements OnInit {
   questions: Question[] = [];
   result: number = -1;
 
+  /**
+   * This is a constructor function that initializes various dependencies for the TestDialogComponent.
+   * @param {MatDialog} dialog
+   * @param dialogRef
+   * @param {string} data
+   * @param {MatSnackBar} snackBar
+   * @param {QuestionUtils} questionUtils
+   */
   constructor(
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<TestDialogComponent>,
@@ -33,6 +41,10 @@ export class TestDialogComponent implements OnInit {
     private questionUtils: QuestionUtils
   ) {}
 
+  /**
+   * The ngOnInit function retrieves questions using the questionUtils service and assigns the response to the questions
+   * variable, while also setting the loading variable to false.
+   */
   ngOnInit() {
     this.questionUtils.getQuestions(this.data).subscribe(res => {
       this.questions = res;
@@ -40,6 +52,10 @@ export class TestDialogComponent implements OnInit {
     });
   }
 
+  /**
+   * The function checks if a loading flag is set and either closes a dialog or opens a confirmation dialog before setting
+   * the loading flag and posting answers.
+   */
   onOkClick(): void {
     if(this.loading){
       this.dialogRef.close();
@@ -57,6 +73,10 @@ export class TestDialogComponent implements OnInit {
     }
   }
 
+  /**
+   * This function sends a POST request to a server with answers to questions and displays a result and message in a dialog
+   * box.
+   */
   private postAnswers(){
     const body: any = {answers: []};
     this.questions.forEach(elem => {

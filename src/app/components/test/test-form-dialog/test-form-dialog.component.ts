@@ -54,6 +54,16 @@ export class TestFormDialogComponent implements OnInit {
 
   accessLevel = {...this.DEFAULT_ACC_LEV}
 
+  /**
+   * This is a constructor function that initializes various dependencies for a dialog component used for editing test
+   * data.
+   * @param {MatDialogRef} dialogRef
+   * @param {TestEditDialogData} data
+   * @param {MatSnackBar} snackBar
+   * @param {FormService} formService
+   * @param {FormBuilder} formBuilder
+   * @param {SerieService} serieService
+   */
   constructor(private dialogRef: MatDialogRef<TestFormDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: TestEditDialogData,
               private snackBar: MatSnackBar,
@@ -61,6 +71,9 @@ export class TestFormDialogComponent implements OnInit {
               private formBuilder: FormBuilder,
               private serieService: SerieService) { }
 
+  /**
+   * The ngOnInit function initializes form values and retrieves series data for a component in an Angular application.
+   */
   ngOnInit(): void {
     if(this.data.mode == 'edit'){
       this.defaultTitle = this.data.obj.title;
@@ -91,10 +104,16 @@ export class TestFormDialogComponent implements OnInit {
     });
   }
 
+  /**
+   * The ngOnDestroy function unsubscribes from a subscription if it exists.
+   */
   ngOnDestroy() {
     this.subscriptionSerie?.unsubscribe();
   }
 
+  /**
+   * The function checks if a form is valid and then either creates or updates a test based on the mode.
+   */
   onSubmit(){
     if(this.submitTest?.valid){
       const body = this.submitTest.getRawValue();
@@ -108,6 +127,9 @@ export class TestFormDialogComponent implements OnInit {
     }
   }
 
+  /**
+   * This function updates the access level, organization, and language based on the selected series.
+   */
   onChangeSerie(){
     if(this.selectedSerie){
       const serie = this.seriesList.filter(elem => elem.id == this.selectedSerie)[0];
@@ -129,6 +151,10 @@ export class TestFormDialogComponent implements OnInit {
     }
   }
 
+  /**
+   * This function formats the body of an object by assigning values to specific keys.
+   * @param {any} body
+   */
   private formatBody(body: any){
     body['language_id'] = body['lantag'].languageId;
     body['tags_id'] = body['lantag'].tagsId ? Array.from(body['lantag'].tagsId) : [];
@@ -139,6 +165,10 @@ export class TestFormDialogComponent implements OnInit {
     body['organization_id'] = body['accesslevel'].selectedOrg;
   }
 
+  /**
+   * This function sends a PATCH request to update a test object using Axios in a TypeScript environment.
+   * @param {any} body
+   */
   private patchTest(body: any){
     const url = environment.domain + environment.apiEndpoints.tests.update.replace('{:id}', this.data.obj.id);
     this.loading = true;
@@ -152,6 +182,10 @@ export class TestFormDialogComponent implements OnInit {
         this.loading = false;
       })
   }
+  /**
+   * This function creates a test by sending a POST request to a specified API endpoint using Axios library in TypeScript.
+   * @param {any} body
+   */
   private creatTest(body: any){
     const url = environment.domain + environment.apiEndpoints.tests.create;
     this.loading = true;

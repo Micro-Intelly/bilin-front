@@ -29,10 +29,19 @@ export class NoteFormDialogComponent implements OnInit {
   defaultNoteBody: string = '';
 
 
+  /**
+   * This is a constructor function that initializes the properties of a dialog component with data and services.
+   * @param {MatDialogRef} dialogRef
+   * @param {NoteFormDialogData} data
+   * @param {MatSnackBar} snackBar
+   */
   constructor(private dialogRef: MatDialogRef<NoteFormDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: NoteFormDialogData,
               private snackBar: MatSnackBar) { }
 
+  /**
+   * The ngOnInit function assigns values to variables based on input data.
+   */
   ngOnInit(): void {
     this.serieId = this.data.obj.id;
     this.masterRecord = this.data.obj.id;
@@ -44,11 +53,19 @@ export class NoteFormDialogComponent implements OnInit {
     }
   }
 
+  /**
+   * The function sends data and sets a loading flag to true before posting a note.
+   * @param {any} event
+   */
   sendData(event: any){
     this.loading = true;
     this.postNote(event);
   }
 
+  /**
+   * This function posts or updates a note using Axios in TypeScript, depending on the mode specified in the data object.
+   * @param {any} body
+   */
   postNote(body: any){
     let url = environment.domain + environment.apiEndpoints.comments.postNote;
     let axiosMethod = axios.post;

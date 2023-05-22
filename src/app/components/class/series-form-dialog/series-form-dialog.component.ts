@@ -55,12 +55,25 @@ export class SeriesFormDialogComponent implements OnInit {
 
   accessLevel = {...this.DEFAULT_ACC_LEV}
 
+  /**
+   * This is a constructor function
+   * series data.
+   * @param {MatDialogRef} dialogRef
+   * @param {SerieEditDialogData} data
+   * @param {MatSnackBar} snackBar
+   * @param {FormService} formService
+   * @param {FormBuilder} formBuilder
+   */
   constructor(private dialogRef: MatDialogRef<SeriesFormDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: SerieEditDialogData,
               private snackBar: MatSnackBar,
               public formService: FormService,
               private formBuilder: FormBuilder) { }
 
+  /**
+   * The ngOnInit function initializes form values based on data passed in, including setting default values and applying
+   * validators.
+   */
   ngOnInit(): void {
     if(this.data.mode == 'edit'){
       this.defaultTitle = this.data.obj.title;
@@ -82,10 +95,17 @@ export class SeriesFormDialogComponent implements OnInit {
     });
   }
 
+  /**
+   * The ngOnDestroy function unsubscribes from a subscription if it exists.
+   */
   ngOnDestroy() {
     this.subscriptionSerie?.unsubscribe();
   }
 
+  /**
+   * The function checks if a form is valid, gets its raw value, formats the body, and either patches or creates a series
+   * depending on the mode.
+   */
   onSubmit(){
     if(this.submitSerie?.valid){
       const body = this.submitSerie.getRawValue();
@@ -99,6 +119,10 @@ export class SeriesFormDialogComponent implements OnInit {
     }
   }
 
+  /**
+   * This function formats the body of an object by extracting specific properties and assigning them to new keys.
+   * @param {any} body
+   */
   private formatBody(body: any){
     body['language_id'] = body['lantag'].languageId;
     body['tags_id'] = body['lantag'].tagsId ? Array.from(body['lantag'].tagsId) : [];
@@ -108,6 +132,10 @@ export class SeriesFormDialogComponent implements OnInit {
     body['organization_id'] = body['accesslevel'].selectedOrg;
   }
 
+  /**
+   * This function sends a PATCH request to update a series object using Axios in a TypeScript environment.
+   * @param {any} body
+   */
   private patchSerie(body: any){
     const url = environment.domain + environment.apiEndpoints.series.update.replace('{:id}', this.data.obj.id);
     this.loading = true;
@@ -121,6 +149,10 @@ export class SeriesFormDialogComponent implements OnInit {
         this.loading = false;
       })
   }
+  /**
+   * This function creates a new series by sending a POST request to a specified API endpoint using Axios library.
+   * @param {any} body
+   */
   private creatSerie(body: any){
     const url = environment.domain + environment.apiEndpoints.series.create;
     this.loading = true;

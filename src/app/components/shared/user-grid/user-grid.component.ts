@@ -2,9 +2,6 @@ import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {User} from "@app/models/user.model";
 import {environment} from "@environments/environment";
 import {Utils} from "@app/utils/utils";
-import {Serie} from "@app/models/serie.model";
-import {Post} from "@app/models/post.model";
-import {Test} from "@app/models/test.model";
 
 @Component({
   selector: 'app-user-grid',
@@ -46,23 +43,42 @@ export class UserGridComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  /**
+   * The function updates the filtered user list based on a search query and resets the page count.
+   */
   onSearchChange(){
     this.filteredUserList = this.getFilteredUserList();
     this.count = this.filteredUserList.length;
     this.page = 1;
   }
 
+  /**
+   * The function updates the current page based on the input event.
+   * @param {any} event
+   */
   onChangePage(event: any) {
     this.page = event;
   }
 
+  /**
+   * The function emits an event with the action "edit" and the user object as parameters.
+   * @param {User} user
+   */
   onEditUser(user: User){
     this.onActionClicked.emit({action : 'edit', user: user});
   }
+  /**
+   * The function onDeleteUser emits an event with the action 'delete' and the user object as parameters.
+   * @param {User} user
+   */
   onDeleteUser(user: User){
     this.onActionClicked.emit({action : 'delete', user: user});
   }
 
+  /**
+   * This function returns a filtered list of users based on a selected search criteria and search filter.
+   * @returns {User[]} users
+   */
   private getFilteredUserList(): User[]{
     return Utils.getSearcher(this.userList,this.selectedSearch).search(this.searchFilter);
   }

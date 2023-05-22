@@ -46,12 +46,24 @@ export class ClassSerieComponent implements OnInit {
   subscriptionUser: Subscription | undefined;
   currentUser: User = null as any;
 
+  /**
+   * This is a constructor function
+   * @param {ActivatedRoute} activatedRoute
+   * @param {MatSnackBar} snackBar
+   * @param {MatDialog} dialog
+   * @param {UserService} userService
+   * @param {Router} router
+   */
   constructor(private activatedRoute: ActivatedRoute,
               private snackBar: MatSnackBar,
               private dialog: MatDialog,
               private userService: UserService,
               private router: Router) { }
 
+  /**
+   * The ngOnInit function checks if the seriesId is a valid UUID, gets the series and subscribes to the userService user
+   * observable if the user is logged in, otherwise it displays an error message.
+   */
   ngOnInit(): void {
     this.seriesId = this.activatedRoute.snapshot!.params['series-id'];
     this.episodeId = this.activatedRoute.firstChild?.snapshot!.params['episode-id'];
@@ -78,10 +90,20 @@ export class ClassSerieComponent implements OnInit {
     this.subscriptionUser?.unsubscribe();
   }
 
+  /**
+   * This function returns a boolean value indicating whether the current user has permission to access a certain series
+   * record based on their role and authorship.
+   * @returns {boolean} userHasPermission
+   */
   get userHasPermission(): boolean {
     return <boolean>(this.currentUser && this.seriesRecord && (this.currentUser.id === this.seriesRecord.author?.id || this.currentUser.role?.includes(environment.constants.role.manager) || this.currentUser.role?.includes(environment.constants.role.admin)));
   }
 
+  /**
+   * The function opens a dialog box based on the type of file passed as an argument.
+   * @param {string} type
+   * @param {(File | Comment)} obj
+   */
   openDialog(type: string, obj: (File | Comment)): void {
     if(type === 'pdf'){
       this.dialog.open(PreviewPdfDialogComponent, {
@@ -103,10 +125,19 @@ export class ClassSerieComponent implements OnInit {
     }
   }
 
+  /**
+   * The function returns the icon type based on the episode type.
+   * @param {Episode} ep
+   * @returns {string} icon
+   */
   getIcon(ep: Episode){
     return ep.type == 'podcast' ? 'radio' : 'movie';
   }
 
+  /**
+   * The function sets a flag to show episode details, selects a specific episode, and scrolls to the top of the page.
+   * @param {Episode} ep
+   */
   goToDetailPage(ep: Episode){
     this.showDetail = true;
     this.selectedEpisode = ep;
@@ -117,6 +148,10 @@ export class ClassSerieComponent implements OnInit {
     });
   }
 
+  /**
+   * This function opens a dialog box for editing a series and updates the series list upon closure.
+   * @param {Serie} serieRec
+   */
   onEditSerie(serieRec: Serie){
     const dRes = this.dialog.open(SeriesFormDialogComponent, {
       data: {obj:serieRec, mode:'edit', user: this.currentUser},
@@ -131,6 +166,10 @@ export class ClassSerieComponent implements OnInit {
       }
     });
   }
+  /**
+   * This function handles the deletion of a series and redirects the user to the class page.
+   * @param {Serie} serieRec
+   */
   onDeleteSerie(serieRec: Serie){
     const url = environment.domain + environment.apiEndpoints.series.delete.replace('{:id}', serieRec.id);
     const redirection = '/class/all';
@@ -145,6 +184,9 @@ export class ClassSerieComponent implements OnInit {
   }
 
 
+  /**
+   * The function opens a dialog box for creating a new file in a series.
+   */
   onAddFile(){
     const commEditData: CommonEditData = {
       serie: this.seriesRecord!,
@@ -156,12 +198,20 @@ export class ClassSerieComponent implements OnInit {
     }
     this.openCommonEditDialog(commEditData);
   }
+  /**
+   * This function deletes a file associated with a series record.
+   * @param {Event} event
+   * @param {File} file
+   */
   onDeleteFile(event: Event,file: File){
     event.stopPropagation();
     const url = environment.domain + environment.apiEndpoints.series.file.delete.replace('{:idSerie}', this.seriesRecord!.id).replace('{:idFile}', file.id);
     this.deleteRecord(url);
   }
 
+  /**
+   * The function opens a dialog box for creating a new section in a series.
+   */
   onAddSection(){
     const commEditData: CommonEditData = {
       serie: this.seriesRecord!,
@@ -173,6 +223,10 @@ export class ClassSerieComponent implements OnInit {
     }
     this.openCommonEditDialog(commEditData);
   }
+  /**
+   * The function opens a common edit dialog for a given section in a series.
+   * @param {Section} section
+   */
   onEditSection(section: Section){
     const commEditData: CommonEditData = {
       serie: this.seriesRecord!,
@@ -184,11 +238,19 @@ export class ClassSerieComponent implements OnInit {
     }
     this.openCommonEditDialog(commEditData);
   }
+  /**
+   * This function deletes a section from a series using a specific URL.
+   * @param {Section} section
+   */
   onDeleteSection(section: Section){
     const url = environment.domain + environment.apiEndpoints.series.sections.delete.replace('{:idSerie}', this.seriesRecord!.id).replace('{:idSection}', section.id);
     this.deleteRecord(url);
   }
 
+  /**
+   * The function opens a dialog box for creating a new episode in a specific section of a series.
+   * @param {Section} section
+   */
   onAddEpisode(section: Section){
     const commEditData: CommonEditData = {
       serie: this.seriesRecord!,
@@ -200,6 +262,11 @@ export class ClassSerieComponent implements OnInit {
     }
     this.openCommonEditDialog(commEditData);
   }
+  /**
+   * The function opens a common edit dialog for a specific episode within a section of a series.
+   * @param {Section} section
+   * @param {Episode} episode
+   */
   onEditEpisode(section: Section,episode: Episode){
     const commEditData: CommonEditData = {
       serie: this.seriesRecord!,
@@ -211,6 +278,11 @@ export class ClassSerieComponent implements OnInit {
     }
     this.openCommonEditDialog(commEditData);
   }
+  /**
+   * This function handles the deletion of an episode from a section of a series.
+   * @param {Section} section
+   * @param {Episode} episode
+   */
   onDeleteEpisode(section: Section,episode: Episode){
     const url = environment.domain + environment.apiEndpoints.series.sections.episodes.delete.replace('{:idSerie}', this.seriesRecord!.id).replace('{:idSection}', section.id).replace('{:idEpisode}',episode.id);
     Utils.onDeleteDialog(url,this.dialog,this.snackBar)
@@ -221,6 +293,10 @@ export class ClassSerieComponent implements OnInit {
       });
   }
 
+  /**
+   * This function opens a dialog box for creating a new note and updates the series record if the note is successfully
+   * created.
+   */
   onAddNote(){
     const dRes = this.dialog.open(NoteFormDialogComponent, {
       data: {obj: this.seriesRecord, mode: 'create', note: null},
@@ -234,6 +310,10 @@ export class ClassSerieComponent implements OnInit {
       }
     });
   }
+  /**
+   * This function opens a dialog box for editing a note and updates the series record if the user clicks "OK".
+   * @param {Comment} note
+   */
   onEditNote(note: Comment){
     const dRes = this.dialog.open(NoteFormDialogComponent, {
       data: {obj: this.seriesRecord, mode: 'edit', note: note},
@@ -247,6 +327,10 @@ export class ClassSerieComponent implements OnInit {
       }
     });
   }
+  /**
+   * This function deletes a comment and updates the series if the deletion is successful.
+   * @param {Comment} note
+   */
   onDeleteNote(note: Comment){
     const url = environment.domain + environment.apiEndpoints.comments.delete.replace('{:id}', note.id);
     Utils.onDeleteDialog(url,this.dialog,this.snackBar)
@@ -257,6 +341,9 @@ export class ClassSerieComponent implements OnInit {
       });
   }
 
+  /**
+   * This function opens a dialog box for editing a thumbnail image if the user has permission.
+   */
   onEditImage(){
     if(this.userHasPermission){
       const url = environment.domain + environment.apiEndpoints.series.updateThumbnail.replace('{:id}', this.seriesRecord!.id);
@@ -274,6 +361,10 @@ export class ClassSerieComponent implements OnInit {
     }
   }
 
+  /**
+   * This function opens a dialog box for editing common data and updates the series if the result is "OK".
+   * @param {CommonEditData} data
+   */
   private openCommonEditDialog(data: CommonEditData){
     const dRes = this.dialog.open(CommonEditFormDialogComponent, {
       data: data,
@@ -288,6 +379,10 @@ export class ClassSerieComponent implements OnInit {
     });
   }
 
+  /**
+   * This function retrieves a series record from an API endpoint and checks if a specific episode ID is contained within
+   * it.
+   */
   private getSeries(){
     let endpoint: string = environment.domain + environment.apiEndpoints.series.show.replace('{:id}', this.seriesId);
     axios.get(endpoint).then((res) => {
@@ -314,6 +409,10 @@ export class ClassSerieComponent implements OnInit {
     });
   }
 
+  /**
+   * This function retrieves a list of episodes from a series record.
+   * @returns {Episode[]} episodes
+   */
   private getListOfEpisodes(): Episode[]{
     let episodes: Episode[] = [];
     this.seriesRecord?.sections?.forEach(elem => {
@@ -324,6 +423,10 @@ export class ClassSerieComponent implements OnInit {
     return episodes;
   }
 
+  /**
+   * This function deletes a record using a confirmation dialog and updates the series list if the deletion is successful.
+   * @param {string} url
+   */
   private deleteRecord(url: string){
     Utils.onDeleteDialog(url,this.dialog,this.snackBar)
       .subscribe(responseStatus => {

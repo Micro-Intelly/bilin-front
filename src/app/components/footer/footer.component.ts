@@ -19,12 +19,18 @@ export class FooterComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  /**
+   * This function opens a privacy policy dialog component with a specific height and width.
+   */
   showPrivacyPolicy(){
     this.dialog.open(PrivacyPolicyDialogComponent, {
       height: '90%',
       width: '50%'
     });
   }
+  /**
+   * This function opens a dialog box displaying the terms of service.
+   */
   showTermService(){
     this.dialog.open(TermsOfServiceDialogComponent, {
       height: '90%',

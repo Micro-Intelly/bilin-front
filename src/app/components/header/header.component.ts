@@ -28,6 +28,7 @@ export class HeaderComponent implements OnInit {
     history: {icon: 'history', name: 'History', link:'/history', order:4}
   };
 
+  environment = environment;
   isLoggedIn: boolean = false;
   subscriptionUser: Subscription | undefined;
   dropdownLanguageItem:Map<string,DropdownItem> = new Map<string,DropdownItem>();
@@ -53,6 +54,10 @@ export class HeaderComponent implements OnInit {
   constructor(private router: Router,private userService: UserService) {
   }
 
+  /**
+   * The ngOnInit function initializes various properties and subscriptions, including checking if the user is logged in
+   * and modifying the profile menu based on the user's role.
+   */
   ngOnInit(): void {
     this.userService.isLoggedIn();
     this.subscriptionUser = this.userService.user.subscribe((value) => {
@@ -85,6 +90,11 @@ export class HeaderComponent implements OnInit {
     })
   }
 
+  /**
+   * This function returns the class of a language dropdown item based on its language code.
+   * @param {string} langCode
+   * @returns The function `getLangClass` is returning a string that represents the class of a language dropdown item
+   */
   getLangClass(langCode: string){
     return this.dropdownLanguageItem.get(langCode)?.class.join(' ');
   }
@@ -108,6 +118,9 @@ export class HeaderComponent implements OnInit {
     this.activeLanguage = langCode;
   }
 
+  /**
+   * This function changes the color of a toolbar based on the user's scrolling position.
+   */
   onwindowScroll(){
     if (window.scrollY === 0) {
       this.toolbarColor = '';

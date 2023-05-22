@@ -36,23 +36,44 @@ export class TestsPostsListComponent implements OnInit {
 
   recordList: (Test | Post) [] = [];
 
+  /**
+   * Constructor function
+   * @param {MatSnackBar} snackBar
+   * @param {Router} router
+   */
   constructor(private snackBar: MatSnackBar,
               private router: Router) { }
 
+  /**
+   * The ngOnInit function checks if userId and type are defined and calls the getRecords function if they are.
+   */
   ngOnInit(): void {
     if(this.userId && this.type){
       this.getRecords();
     }
   }
 
+  /**
+   * The function updates the current page based on the input event.
+   * @param {any} event
+   */
   onChangePage(event: any) {
     this.page = event;
   }
 
+  /**
+   * The function calls a method from the Utils class to format a given date string.
+   * @param {string} date
+   * @returns {string} formatted date
+   */
   getFormatDate(date:string){
     return Utils.getFormatDate(date);
   }
 
+  /**
+   * The function takes a record of type Test or Post and navigates to a specific page based on the type of record.
+   * @param {(Test | Post)} record
+   */
   goLink(record: (Test | Post)){
     let res = ''
     switch (this.type) {
@@ -62,6 +83,10 @@ export class TestsPostsListComponent implements OnInit {
     this.router.navigate([res]);
   }
 
+  /**
+   * This function retrieves records from an API endpoint based on the type of record and user ID, and updates the record
+   * list and count.
+   */
   private getRecords(){
     let endAux = '';
     switch (this.type) {

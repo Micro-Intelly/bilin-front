@@ -7,9 +7,18 @@ import {Observable, Subject} from "rxjs";
 
 @Injectable()
 export class QuestionUtils {
+  /**
+   * Constructor function
+   * @param {MatSnackBar} snackBar
+   */
   constructor(private snackBar: MatSnackBar) {
   }
 
+  /**
+   * This function retrieves questions from an API endpoint and returns them as an observable.
+   * @param {string} qId
+   * @returns An Observable of type Question[] is being returned.
+   */
   getQuestions(qId: string): Observable<Question[]> {
     const loading: Subject<Question[]> = new Subject<Question[]>();
     let endpoint: string = environment.domain + environment.apiEndpoints.questions.index.replace('{:id}', qId);

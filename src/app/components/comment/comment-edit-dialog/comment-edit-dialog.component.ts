@@ -35,10 +35,19 @@ export class CommentEditDialogComponent implements OnInit {
   defaultNoteBody: string = '';
 
 
+  /**
+   * This is a constructor function that initializes the properties of a dialog component with injected dependencies.
+   * @param dialogRef
+   * @param {CommEditDialogData} data
+   * @param {MatSnackBar} snackBar
+   */
   constructor(private dialogRef: MatDialogRef<CommentEditDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: CommEditDialogData,
               private snackBar: MatSnackBar) { }
 
+  /**
+   * The ngOnInit function initializes variables based on the mode and type of data passed to it.
+   */
   ngOnInit(): void {
     this.serieId = this.data.serieId;
     this.mode = this.data.mode;
@@ -74,6 +83,10 @@ export class CommentEditDialogComponent implements OnInit {
     }
   }
 
+  /**
+   * The function handles sending data based on the mode specified in the data object.
+   * @param {any} event
+   */
   sendData(event: any){
     this.loading = true;
     switch (this.data.mode) {
@@ -81,6 +94,10 @@ export class CommentEditDialogComponent implements OnInit {
       case 'reply': {this.postReply(event);break;}
     }
   }
+  /**
+   * This function updates a comment using Axios in a TypeScript environment.
+   * @param {any} body
+   */
   updateComm(body: any){
     const url = environment.domain + environment.apiEndpoints.comments.update.replace('{:id}', this.data.obj.id);
     axios.patch(url, body)
@@ -94,6 +111,10 @@ export class CommentEditDialogComponent implements OnInit {
       })
   }
 
+  /**
+   * This function posts a comment using Axios in a TypeScript environment and handles the response and errors.
+   * @param {any} body
+   */
   postReply(body: any){
     const url = environment.domain + environment.apiEndpoints.comments.postComment;
     axios.post(url, body)

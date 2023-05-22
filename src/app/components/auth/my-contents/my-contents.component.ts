@@ -23,9 +23,17 @@ export class MyContentsComponent implements OnInit {
   reloadTestToggle: boolean = false;
   environment = environment;
 
+  /**
+   * This is a constructor function that takes in a UserService and MatDialog as parameters.
+   * @param {UserService} userService
+   * @param {MatDialog} dialog
+   */
   constructor(private userService: UserService,
               private dialog: MatDialog) { }
 
+  /**
+   * The ngOnInit function checks if the user is logged in and subscribes to changes in the user's login status.
+   */
   ngOnInit(): void {
     this.userService.isLoggedIn();
     this.subscriptionUser = this.userService.user.subscribe((value) => {
@@ -42,18 +50,33 @@ export class MyContentsComponent implements OnInit {
     this.subscriptionUser?.unsubscribe();
   }
 
+  /**
+   * The function opens a dialog box for creating a new series using a component called SeriesFormDialogComponent.
+   */
   onNewSerie(){
     this.openCreateDialog(SeriesFormDialogComponent, 'serie');
   }
 
+  /**
+   * The function opens a dialog box for creating a new post.
+   */
   onNewPost(){
     this.openCreateDialog(PostFormDialogComponent, 'post');
   }
 
+  /**
+   * The function opens a dialog box for creating a new test using a TestFormDialogComponent.
+   */
   onNewTest(){
     this.openCreateDialog(TestFormDialogComponent, 'test');
   }
 
+  /**
+   * This function opens a dialog box for creating a new component and updates the corresponding toggle based on the user's
+   * input.
+   * @param component
+   * @param {string} toggle
+   */
   private openCreateDialog(component: ComponentType<any>, toggle: string){
     const dRes = this.dialog.open(component, {
       data: {obj:null, mode:'create', user: this.currentUser},

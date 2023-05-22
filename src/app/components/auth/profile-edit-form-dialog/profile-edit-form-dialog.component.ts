@@ -22,12 +22,25 @@ export class ProfileEditFormDialogComponent implements OnInit {
   loading: Boolean = false;
   submitUser: FormGroup | undefined;
 
+  /**
+   * This is a constructor function that initializes various dependencies for a dialog component used for editing user
+   * profiles.
+   * @param dialogRef
+   * @param {ProfileEditData} data
+   * @param {MatSnackBar} snackBar
+   * @param {FormService} formService
+   * @param {FormBuilder} formBuilder
+   */
   constructor(private dialogRef: MatDialogRef<ProfileEditFormDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: ProfileEditData,
               private snackBar: MatSnackBar,
               public formService: FormService,
               private formBuilder: FormBuilder,) { }
 
+  /**
+   * The ngOnInit function initializes a form group with pre-filled values for name, email, organization name, and
+   * organization description.
+   */
   ngOnInit(): void {
     this.submitUser = this.formBuilder.group({
       name: [this.data.obj.name, [Validators.required,Validators.maxLength(50)]],
@@ -37,6 +50,10 @@ export class ProfileEditFormDialogComponent implements OnInit {
     });
   }
 
+  /**
+   * This function submits a patch request to update a user's information and handles the response and errors using Axios
+   * and Utils.
+   */
   onSubmit(){
     if(this.submitUser?.valid){
       const body = this.submitUser.getRawValue();

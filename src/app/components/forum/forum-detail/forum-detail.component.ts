@@ -26,6 +26,15 @@ export class ForumDetailComponent implements OnInit {
   subscriptionUser: Subscription | undefined;
   currentUser: User = null as any;
 
+  /**
+   * This is a constructor function that initializes various dependencies for a TypeScript class.
+   * @param {ActivatedRoute} route
+   * @param {MatSnackBar} snackBar
+   * @param {Router} router
+   * @param {MatDialog} dialog
+   * @param {HistoryService} historyService
+   * @param {UserService} userService
+   */
   constructor(private route: ActivatedRoute,
               private snackBar: MatSnackBar,
               private router: Router,
@@ -33,6 +42,10 @@ export class ForumDetailComponent implements OnInit {
               private historyService: HistoryService,
               private userService: UserService) { }
 
+  /**
+   * The ngOnInit function checks if a post ID is present in the URL and if so, retrieves the post and subscribes to the
+   * user service to track user history.
+   */
   ngOnInit(): void {
     this.postId = this.route.snapshot.paramMap.get('post-id') ?? undefined;
     if(this.postId) {
@@ -59,14 +72,27 @@ export class ForumDetailComponent implements OnInit {
     this.subscriptionUser?.unsubscribe();
   }
 
+  /**
+   * This function checks if the current user has permission to access a post record based on their role and authorship.
+   * @returns {boolean} user has permission
+   */
   get userHasPermission(): boolean {
     return <boolean>(this.currentUser && this.postRecord && (this.currentUser.id === this.postRecord.author?.id || this.currentUser.role?.includes(environment.constants.role.manager) || this.currentUser.role?.includes(environment.constants.role.admin)));
   }
 
+  /**
+   * The function calls a method from the Utils class to format a given date string.
+   * @param {string} date
+   * @returns {string} formatted date
+   */
   getFormatDate(date:string){
     return Utils.getFormatDate(date);
   }
 
+  /**
+   * This function opens a dialog box for editing a post and updates the post list upon successful editing.
+   * @param {Post} postRecord
+   */
   onEditPost(postRecord: Post){
     const dRes = this.dialog.open(PostFormDialogComponent, {
       data: {obj:postRecord, mode:'edit'},
@@ -82,6 +108,10 @@ export class ForumDetailComponent implements OnInit {
     });
   }
 
+  /**
+   * This function handles the deletion of a post and redirects the user to the forum page.
+   * @param {Post} postRecord
+   */
   onDeletePost(postRecord: Post){
     const url = environment.domain + environment.apiEndpoints.posts.delete.replace('{:id}', postRecord.id);
     const redirection = '/forum/all';
@@ -95,6 +125,9 @@ export class ForumDetailComponent implements OnInit {
     });
   }
 
+  /**
+   * This function retrieves a specific post from an API endpoint using Axios in a TypeScript environment.
+   */
   private getPosts(){
     let endpoint: string = environment.domain + environment.apiEndpoints.posts.show.replace('{:id}', this.postId!);
     axios.get(endpoint).then((res) => {

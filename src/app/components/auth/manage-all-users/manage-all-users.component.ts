@@ -21,13 +21,25 @@ export class ManageAllUsersComponent implements OnInit {
 
   userList: User[] = [];
 
+  /**
+   * This is a constructor function that takes in two parameters, a MatSnackBar and a MatDialog, for use in the class.
+   * @param {MatSnackBar} snackBar
+   * @param {MatDialog} dialog
+   */
   constructor(private snackBar: MatSnackBar,
               private dialog: MatDialog) { }
 
+  /**
+   * The ngOnInit function calls the getAllUsers function.
+   */
   ngOnInit(): void {
     this.getAllUsers();
   }
 
+  /**
+   * The function handles edit and delete actions for a user and updates the user list accordingly.
+   * @param {any} event
+   */
   actionHandler(event: any){
     if(event.user){
       switch (event.action) {
@@ -56,6 +68,10 @@ export class ManageAllUsersComponent implements OnInit {
     }
   }
 
+  /**
+   * This function retrieves all users from a specified API endpoint and stores them in a variable, with error handling
+   * using a snackbar.
+   */
   private getAllUsers() {
     const url = environment.domain + environment.apiEndpoints.user.index;
     axios.get(url).then((res) => {

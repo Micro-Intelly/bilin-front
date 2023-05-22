@@ -123,6 +123,17 @@ export class CommentComponent implements OnInit {
     ]
   };
 
+  /**
+   * This is a constructor function that initializes various services and dependencies for a TypeScript class.
+   * @param {FormBuilder} formBuilder
+   * @param {UserService} userService
+   * @param {MatSnackBar} snackBar
+   * @param {MatDialog} dialog
+   * @param {FormService} formServiceC
+   * @param {FormService} formServiceN
+   * @param {HttpClient} httpClient
+   * @param {HttpXsrfTokenExtractor} tokenService
+   */
   constructor(private formBuilder: FormBuilder,
               private userService: UserService,
               private snackBar: MatSnackBar,
@@ -133,10 +144,20 @@ export class CommentComponent implements OnInit {
               private tokenService: HttpXsrfTokenExtractor) {
   }
 
+  /**
+   * The function calls a method from the Utils class to format a given date string.
+   * @param {string} date
+   * @returns {string} formatted date
+   */
   getFormatDate(date:string){
     return Utils.getFormatDate(date);
   }
 
+  /**
+   * This function returns a CSS class based on the properties of a Comment object.
+   * @param {Comment} note
+   * @returns The function `getNoteCardClass` returns a string that represents the CSS class name for a note card
+   */
   getNoteCardClass(note: Comment){
     if(note.title && note.description){
       return 'note-card';
@@ -149,10 +170,20 @@ export class CommentComponent implements OnInit {
     }
   }
 
+  /**
+   * The function calculates the absolute index of an item on a specific page based on the page size and current page
+   * number.
+   * @param {PageSetting} page
+   * @param {number} indexOnPage
+   * @returns The function `absoluteIndex` is returning the absolute index of an item on a given page
+   */
   absoluteIndex(page: PageSetting, indexOnPage: number): number {
     return page.gridSize * (page.currentPage - 1) + indexOnPage;
   }
 
+  /**
+   * The ngOnInit function initializes form groups and sets up subscriptions for user authentication.
+   */
   ngOnInit(): void {
     this.submitComment = this.formBuilder.group({
       comment: [this.defaultCommBody, [Validators.required, Validators.maxLength(500)]],
@@ -183,10 +214,23 @@ export class CommentComponent implements OnInit {
     this.subscriptionUser?.unsubscribe();
   }
 
+  /**
+   * This function checks if the current user has permission to access a comment based on their role and the author of the
+   * comment.
+   * @param {Comment} comm
+   * user.
+   * @returns A boolean value is being returned.
+   */
   getUserHasPermission(comm: Comment): boolean {
     return <boolean>(this.currentUser && comm && (this.currentUser.id === comm.author?.id || this.currentUser.role?.includes(environment.constants.role.manager) || this.currentUser.role?.includes(environment.constants.role.admin)));
   }
 
+  /**
+   * This function returns a set of comment actions, with the edit and delete actions removed if the user does not have
+   * permission.
+   * @param {Comment} comm
+   * @returns The function `getCommActions` is returning an object `action`
+   */
   getCommActions(comm: Comment) {
     let action = {...this.DEFAULT_COMM_ACTION};
     if(! this.getUserHasPermission(comm)){
@@ -198,6 +242,12 @@ export class CommentComponent implements OnInit {
     return action
   }
 
+  /**
+   * This function handles page changes for different types of pagination.
+   * @param {number} event
+   * @param {string} id
+   * @param {number} index
+   */
   onChangePage(event: number, id: string, index: number){
     switch (id) {
       case 'commPagination': {
@@ -215,6 +265,10 @@ export class CommentComponent implements OnInit {
     }
   }
 
+  /**
+   * This function opens a dialog box with a preview of a comment when the comment is clicked.
+   * @param {Comment} obj
+   */
   onNoteClick(obj: Comment) {
     this.dialog.open(PreviewNoteDialogComponent, {
       data: obj,
@@ -223,6 +277,9 @@ export class CommentComponent implements OnInit {
     });
   }
 
+  /**
+   * This function handles the submission of a comment and sends it to the appropriate endpoint.
+   */
   onSubmitComment(){
     if(this.submitComment?.valid){
       const body = this.submitComment.getRawValue();
@@ -236,6 +293,10 @@ export class CommentComponent implements OnInit {
       }
     }
   }
+  /**
+   * The function onSubmitNote checks if the submitted note is valid, formats the body, and either emits the body or posts
+   * it to the notePostEndpoint depending on the mode and parentType.
+   */
   onSubmitNote(){
     if(this.submitNote?.valid){
       const body = this.submitNote.getRawValue();
@@ -250,6 +311,11 @@ export class CommentComponent implements OnInit {
     }
   }
 
+  /**
+   * The function handles different actions (edit, reply, delete) for a comment.
+   * @param {string} action
+   * @param {Comment} comm
+   */
   onActionClick(action: string, comm: Comment){
     switch (action) {
       case 'edit': {
@@ -267,6 +333,10 @@ export class CommentComponent implements OnInit {
     }
   }
 
+  /**
+   * This function opens a dialog box for editing a comment and updates the comments list upon closure.
+   * @param {Comment} comm
+   */
   onEdit(comm: Comment){
     const dRes = this.dialog.open(CommentEditDialogComponent, {
       data: {obj:comm, mode:'edit', serieId: this.serieId},
@@ -281,6 +351,10 @@ export class CommentComponent implements OnInit {
       }
     });
   }
+  /**
+   * This function opens a dialog box for replying to a comment and updates the comments section upon closure.
+   * @param {Comment} comm
+   */
   onReply(comm: Comment){
     const dRes = this.dialog.open(CommentEditDialogComponent, {
       data: {obj:comm, mode:'reply', serieId: this.serieId},
@@ -295,6 +369,10 @@ export class CommentComponent implements OnInit {
       }
     });
   }
+  /**
+   * This function deletes a comment and updates the comments list.
+   * @param {Comment} comm
+   */
   onDeleteComm(comm: Comment){
     const url = environment.domain + environment.apiEndpoints.comments.delete.replace('{:id}', comm.id);
     Utils.onDeleteDialog(url,this.dialog,this.snackBar)
@@ -306,6 +384,11 @@ export class CommentComponent implements OnInit {
   }
 
 
+  /**
+   * This function formats the body of a comment by assigning values to various properties.
+   * @param {any} body
+   * @param {string} key
+   */
   private formatBody(body: any, key: string){
     body['body'] = body[key];
     body[key] = null;
@@ -317,6 +400,10 @@ export class CommentComponent implements OnInit {
     body['serie_id'] = this.serieId;
   }
 
+  /**
+   * This function retrieves comments and notes from an API endpoint and stores them in arrays while also setting page
+   * settings and user mappings.
+   */
   private getComments(){
     this.commentList = [];
     this.noteList = [];
@@ -350,6 +437,12 @@ export class CommentComponent implements OnInit {
     });
   }
 
+  /**
+   * This function posts an image file to a specified URL using HttpClient in Angular, with options for observing events,
+   * reporting progress, and including headers and credentials.
+   * @param {File} file
+   * @returns The `postImage` function is returning an Observable of type `Observable<UploadResponse>`.
+   */
   private postImage(file: File){
     const url = environment.domain + environment.apiEndpoints.comments.fileUpload;
     let formData = new FormData();
@@ -366,6 +459,12 @@ export class CommentComponent implements OnInit {
     });
   }
 
+  /**
+   * This function sends a POST request to create comment or note with a given body and displays a message based on the response
+   * status.
+   * @param {string} url
+   * @param {any} body
+   */
   private postCommNote(url: string, body: any){
     this.loading = true;
     axios.post(url, body).then((res) => {
