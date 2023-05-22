@@ -10,7 +10,7 @@
           <span>Home</span>
         </button>
 <!--        <button mat-menu-item [matMenuTriggerFor]="vertebrates" >-->
-        <button mat-menu-item>
+        <button mat-menu-item routerLink="/class/all">
           <mat-icon>class</mat-icon>
           <span>Class</span>
         </button>
@@ -18,11 +18,11 @@
 <!--          <button mat-menu-item routerLink="/class/all" >All classes</button>-->
 <!--          <button mat-menu-item>Mammals</button>-->
 <!--        </mat-menu>-->
-        <button mat-menu-item>
+        <button mat-menu-item routerLink="/forum/all">
           <mat-icon>forum</mat-icon>
           <span>Forum</span>
         </button>
-        <button mat-menu-item>
+        <button mat-menu-item routerLink="/test/all">
           <mat-icon>library_books</mat-icon>
           <span>Test</span>
         </button>
@@ -30,12 +30,12 @@
     </div>
     <div fxShow="true" fxHide.lt-md="true" class="mx-5" fxFlex="20" fxLayout="row" fxLayoutAlign="center center">
       <a href="#" class="navbar-brand">
-        <img src="./assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt="">
+        <img src="{{environment.domain + environment.logo}}" width="40" height="50" class="d-inline-block align-top" alt="">
       </a>
     </div>
     <div fxShow="true" fxHide.gt-sm="true" class="mx-5" fxFlex="80" fxLayout="row" fxLayoutAlign="center center">
       <a href="#" class="navbar-brand">
-        <img src="./assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt="">
+        <img src="{{environment.domain + environment.logo}}" width="40" height="50" class="d-inline-block align-top" alt="">
       </a>
     </div>
     <div fxShow="true" fxHide.lt-md="true" fxFlex="60" class="w-100">
@@ -78,7 +78,7 @@
           width="28px"
           src="{{currentUserThumbnail}}"
         />
-        {{currentUser.name}}
+        <span fxHide.lt-md="true" class="ms-2">{{currentUser.name}}</span>
       </button>
 
       <mat-menu #accMenu1="matMenu">
@@ -92,22 +92,40 @@
         </button>
       </mat-menu>
       <mat-menu #accMenu2="matMenu">
-        <button mat-menu-item routerLink="/profile">
-          <mat-icon>manage_accounts</mat-icon>
-          <span>Profile</span>
+        <button
+          mat-menu-item
+          routerLink="{{item.value.link}}"
+          *ngFor="let item of profileMenu | keyvalue: menuOrder"
+        >
+          <mat-icon>{{item.value.icon}}</mat-icon>
+          <span>{{item.value.name}}</span>
         </button>
-        <button mat-menu-item routerLink="/mycontents">
-          <mat-icon>dashboard</mat-icon>
-          <span>My Content</span>
-        </button>
+<!--        <button mat-menu-item routerLink="/mycontents">-->
+<!--          <mat-icon>dashboard</mat-icon>-->
+<!--          <span>My Content</span>-->
+<!--        </button>-->
 <!--        <button mat-menu-item routerLink="/profile/favorite">-->
 <!--          <mat-icon>star</mat-icon>-->
 <!--          <span>Favorite</span>-->
 <!--        </button>-->
-        <button mat-menu-item routerLink="/history">
-          <mat-icon>history</mat-icon>
-          <span>History</span>
-        </button>
+<!--        <button-->
+<!--          mat-menu-item-->
+<!--          routerLink="/manage-org-user"-->
+<!--        >-->
+<!--          <mat-icon>settings</mat-icon>-->
+<!--          <span>Manage Org Users</span>-->
+<!--        </button>-->
+<!--        <button-->
+<!--          mat-menu-item-->
+<!--          routerLink="/manage-all-user"-->
+<!--        >-->
+<!--          <mat-icon>settings</mat-icon>-->
+<!--          <span>Manage Users</span>-->
+<!--        </button>-->
+<!--        <button mat-menu-item routerLink="/history">-->
+<!--          <mat-icon>history</mat-icon>-->
+<!--          <span>History</span>-->
+<!--        </button>-->
         <mat-divider class="mx-2"></mat-divider>
         <button mat-menu-item (click)="logout()">
           <mat-icon>logout</mat-icon>

@@ -1,6 +1,6 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA  } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -53,8 +53,28 @@ import { SeriesGridComponent } from './components/shared/series-grid/series-grid
 import { TestsPostsListComponent } from './components/shared/tests-posts-list/tests-posts-list.component';
 import { CommentsNotesListComponent } from './components/shared/comments-notes-list/comments-notes-list.component';
 import { HistoriesListComponent } from './components/shared/histories-list/histories-list.component';
-
-
+import { PostFormDialogComponent } from './components/forum/post-form-dialog/post-form-dialog.component';
+import { TestFormDialogComponent } from './components/test/test-form-dialog/test-form-dialog.component';
+import { QuestionFormDialogComponent } from './components/test/question-form-dialog/question-form-dialog.component';
+import { PrivacyPolicyDialogComponent } from './components/shared/privacy-policy-dialog/privacy-policy-dialog.component';
+import { TermsOfServiceDialogComponent } from './components/shared/terms-of-service-dialog/terms-of-service-dialog.component';
+import { SafeDataDirectiveDirective } from './shared/safe-data-directive.directive';
+import { SafeHtmlPipe } from './safe-html.pipe';
+import { CommentEditDialogComponent } from './components/comment/comment-edit-dialog/comment-edit-dialog.component';
+import { LanguageTagFormFieldComponent } from './components/shared/language-tag-form-field/language-tag-form-field.component';
+import { ProfileEditFormDialogComponent } from './components/auth/profile-edit-form-dialog/profile-edit-form-dialog.component';
+import {FileUploadModule} from "ng2-file-upload";
+import {QuestionUtils} from "@app/components/test/question-utils";
+import { AccessLevelSelectorsComponent } from './components/shared/access-level-selectors/access-level-selectors.component';
+import { SeriesFormDialogComponent } from './components/class/series-form-dialog/series-form-dialog.component';
+import { ManageOrgUsersComponent } from './components/auth/manage-org-users/manage-org-users.component';
+import { ManageAllUsersComponent } from './components/auth/manage-all-users/manage-all-users.component';
+import { NoteFormDialogComponent } from './components/class/note-form-dialog/note-form-dialog.component';
+import {
+  ThumbnailEditFormDialogComponent
+} from "@app/components/shared/thumbnail-edit-form-dialog/thumbnail-edit-form-dialog.component";
+import { CommonEditFormDialogComponent } from './components/class/common-edit-form-dialog/common-edit-form-dialog.component';
+import { UserGridComponent } from './components/shared/user-grid/user-grid.component';
 
 @NgModule({
   declarations: [
@@ -87,6 +107,24 @@ import { HistoriesListComponent } from './components/shared/histories-list/histo
     TestsPostsListComponent,
     CommentsNotesListComponent,
     HistoriesListComponent,
+    PostFormDialogComponent,
+    TestFormDialogComponent,
+    QuestionFormDialogComponent,
+    PrivacyPolicyDialogComponent,
+    TermsOfServiceDialogComponent,
+    SafeDataDirectiveDirective,
+    SafeHtmlPipe,
+    CommentEditDialogComponent,
+    LanguageTagFormFieldComponent,
+    ProfileEditFormDialogComponent,
+    AccessLevelSelectorsComponent,
+    SeriesFormDialogComponent,
+    ManageOrgUsersComponent,
+    ManageAllUsersComponent,
+    NoteFormDialogComponent,
+    ThumbnailEditFormDialogComponent,
+    CommonEditFormDialogComponent,
+    UserGridComponent
 
   ],
   imports: [
@@ -116,9 +154,10 @@ import { HistoriesListComponent } from './components/shared/histories-list/histo
         deps: [HttpClient]
       }
     }),
+    FileUploadModule,
 
   ],
-  providers: [CookieService,AuthGuard],
+  providers: [CookieService,AuthGuard,QuestionUtils],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

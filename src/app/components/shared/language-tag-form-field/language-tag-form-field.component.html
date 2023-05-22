@@ -1,0 +1,39 @@
+<mat-form-field appearance="outline" class="w-100">
+  <mat-label>Language</mat-label>
+  <mat-select
+    [(value)]="lanTags.language"
+    (selectionChange)="onLanguageChange()"
+    [disabled]="disableLanguage"
+  >
+    <mat-option *ngFor="let lan of searchLanguage" [value]="lan.code">
+      {{lan.language}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+<mat-form-field appearance="outline" class="w-100">
+  <mat-label>Tag filter</mat-label>
+  <mat-chip-list #chipList aria-label="Tag selection">
+    <mat-chip
+      *ngFor="let tag of tagSelected"
+      (removed)="remove(tag)">
+      {{tag}}
+      <button matChipRemove>
+        <mat-icon>cancel</mat-icon>
+      </button>
+    </mat-chip>
+    <input
+      placeholder="New tag..."
+      #tagInput
+      [formControl]="tagCtrl"
+      [matAutocomplete]="auto"
+      [matChipInputFor]="chipList"
+      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+      (matChipInputTokenEnd)="add($event)">
+  </mat-chip-list>
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+    <mat-option *ngFor="let tag of filteredTags | async" [value]="tag.name">
+      {{tag.name}}
+    </mat-option>
+  </mat-autocomplete>
+  <mat-hint>Max num of tags: 10</mat-hint>
+</mat-form-field>

@@ -22,23 +22,45 @@ export class CommentsNotesListComponent implements OnInit {
 
   recordList: Comment[] = [];
 
+  /**
+   * Constructor function
+   * private properties of the class.
+   * @param {MatSnackBar} snackBar
+   * @param {Router} router
+   */
   constructor(private snackBar: MatSnackBar,
               private router: Router) { }
 
+  /**
+   * The ngOnInit function checks if a userId exists and calls the getRecords function if it does.
+   */
   ngOnInit(): void {
     if(this.userId){
       this.getRecords();
     }
   }
 
+  /**
+   * The function updates the current page based on the input event.
+   * @param {any} event
+   */
   onChangePage(event: any) {
     this.page = event;
   }
 
+  /**
+   * The function calls a method from the Utils class to format a given date string.
+   * @param {string} date
+   * @returns {string} formatted date
+   */
   getFormatDate(date:string){
     return Utils.getFormatDate(date);
   }
 
+  /**
+   * The function takes a comment object and navigates to a specific page based on the type of commentable object.
+   * @param {Comment} comment
+   */
   goLink(comment: Comment){
     let res = ''
     if(comment.commentable_type.endsWith('Serie')){
@@ -53,6 +75,9 @@ export class CommentsNotesListComponent implements OnInit {
     this.router.navigate([res]);
   }
 
+  /**
+   * This function retrieves comments for a user from an API endpoint using Axios in TypeScript.
+   */
   private getRecords(){
     let endpoint: string = environment.domain + environment.apiEndpoints.user.commentsIndex.replace('{:id}', this.userId);
     axios.get(endpoint).then((res) => {

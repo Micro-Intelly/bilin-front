@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
   }
 
   /**
-   * onSubmit method to submit the login form
+   * This function handles form submission for user login and sends a POST request to the server to authenticate the user.
    */
   onSubmit() {
     this.onSubmitted = true;

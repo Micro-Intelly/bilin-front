@@ -14,6 +14,8 @@ import {ProfileComponent} from "@app/components/auth/profile/profile.component";
 import {HistoryComponent} from "@app/components/auth/history/history.component";
 import {MyContentsComponent} from "@app/components/auth/my-contents/my-contents.component";
 import {PageNotFoundComponent} from "@app/components/common/page-not-found/page-not-found.component";
+import {ManageOrgUsersComponent} from "@app/components/auth/manage-org-users/manage-org-users.component";
+import {ManageAllUsersComponent} from "@app/components/auth/manage-all-users/manage-all-users.component";
 
 const routes: Routes = [
   { path: '', title: 'Home', component: HomeComponent },
@@ -31,6 +33,8 @@ const routes: Routes = [
   { path: 'test/detail/:test-id', title: 'Test detail', component: TestDetailComponent },
   { path: 'test/:language', title: 'Test', component: TestAllComponent },
   { path: 'profile', title: 'Profile', component: ProfileComponent },
+  { path: 'manage-org-user', title: 'Manage Org User', component: ManageOrgUsersComponent },
+  { path: 'manage-all-user', title: 'Manage User', component: ManageAllUsersComponent },
   { path: 'mycontents', title: 'My Contents', component: MyContentsComponent },
   { path: 'history', title: 'History', component: HistoryComponent },
   { path: 'class', redirectTo: "/class/all" },

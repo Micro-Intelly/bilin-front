@@ -16,7 +16,11 @@
   class="general-body-margin"
   *ngIf="isLoggedIn"
 >
-  <mat-expansion-panel [expanded]="false" class="mt-1">
+  <mat-expansion-panel
+    [expanded]="false"
+    class="mt-1"
+    *ngIf="currentUser?.role && !currentUser.role.includes(environment.constants.role.student)"
+  >
     <mat-expansion-panel-header>
       <mat-panel-title>
         My Series
@@ -24,7 +28,13 @@
     </mat-expansion-panel-header>
     <app-series-grid
       [userId]="currentUser.id"
+      [reloadToggle]="reloadSerieToggle"
     ></app-series-grid>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="onNewSerie()"
+    >Add New</button>
   </mat-expansion-panel>
   <mat-expansion-panel [expanded]="false" class="mt-1">
     <mat-expansion-panel-header>
@@ -35,9 +45,19 @@
     <app-tests-posts-list
       [userId]="currentUser.id"
       [type]="'posts'"
+      [reloadToggle]="reloadPostToggle"
     ></app-tests-posts-list>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="onNewPost()"
+    >Add New</button>
   </mat-expansion-panel>
-  <mat-expansion-panel [expanded]="false" class="mt-1">
+  <mat-expansion-panel
+    [expanded]="false"
+    class="mt-1"
+    *ngIf="currentUser?.role && !currentUser.role.includes(environment.constants.role.student)"
+  >
     <mat-expansion-panel-header>
       <mat-panel-title>
         My Tests
@@ -46,7 +66,13 @@
     <app-tests-posts-list
       [userId]="currentUser.id"
       [type]="'tests'"
+      [reloadToggle]="reloadTestToggle"
     ></app-tests-posts-list>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="onNewTest()"
+    >Add New</button>
   </mat-expansion-panel>
   <mat-expansion-panel [expanded]="false" class="mt-1">
     <mat-expansion-panel-header>

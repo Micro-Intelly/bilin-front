@@ -7,7 +7,7 @@ export interface Post {
   title: string;
   body: string;
   author: User;
-  language: Language;
+  language?: Language;
   comments?:Comment[];
   tags?:Tag[];
   created_at:string;

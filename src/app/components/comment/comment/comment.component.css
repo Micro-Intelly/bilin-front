@@ -14,6 +14,12 @@
   color: grey;
 }
 .note-card {
+  height: 300px;
+}
+.note-card-without1row {
+  height: 250px;
+}
+.note-card-without2row {
   height: 200px;
 }
 .note-body {

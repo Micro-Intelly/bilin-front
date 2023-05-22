@@ -9,6 +9,15 @@ import {
 } from "@angular/forms";
 import { Router } from "@angular/router";
 import {FormService} from "@app/services/form.service";
+import {MatDialog} from "@angular/material/dialog";
+import {
+  PrivacyPolicyDialogComponent
+} from "@app/components/shared/privacy-policy-dialog/privacy-policy-dialog.component";
+import {
+  TermsOfServiceDialogComponent
+} from "@app/components/shared/terms-of-service-dialog/terms-of-service-dialog.component";
+import {CommonHttpResponse} from "@app/models/common-http-response.model";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 interface Role {
   id: string;
@@ -36,22 +45,30 @@ export class RegisterComponent implements OnInit {
    * @param router  - Router service to redirect page
    * @param formBuilder - Form Builder service to create form group
    * @param formService - Form service to check form errors
+   * @param dialog - Dialog
+   * @param snackBar
    */
   constructor(private router: Router,
               private formBuilder: FormBuilder,
-              public formService: FormService) {
+              public formService: FormService,
+              private dialog: MatDialog,
+              private snackBar:MatSnackBar) {
     this.userRegisterFormGroup = this.formBuilder.group({
       username: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
-      email: ['', [Validators.required, Validators.maxLength(50),Validators.email]],
+      email: ['', [Validators.required, Validators.maxLength(100),Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8),Validators.maxLength(50)]],
       passwordRepeat: ['', [Validators.required]],
       role: ['', [Validators.required]],
       verificationKey: ['', []],
+      orgName: ['', []],
+      orgDescription: ['', []],
       privacy: ['', [Validators.requiredTrue]]
     }, {
       validators: [
         this.formService.matchValues('password', 'passwordRepeat'),
         this.keyRequired('role', 'verificationKey'),
+        this.keyRequired('role', 'orgName'),
+        this.keyRequired('role', 'orgDescription'),
       ]
     } as AbstractControlOptions);
 
@@ -73,6 +90,8 @@ export class RegisterComponent implements OnInit {
    * @return {boolean} - Require or not a verification key
    */
   getNeedKey(){return this.roles.find(r => r.id == this.selectedRoleId)?.need_key;}
+
+  getNeedOrgData(){return this.roles.find(r => r.id == this.selectedRoleId)?.name == 'Organization'}
 
   /**
    * Method that check whether there is error for verification key required
@@ -96,8 +115,13 @@ export class RegisterComponent implements OnInit {
       if (matchingControl.errors && !matchingControl.errors?.['keyRequired']) {
         return;
       }
-      if (this.rolesIdMap.get(control.value)?.need_key && !matchingControl.value) {
-        matchingControl.setErrors({ keyRequired: true });
+      if (!matchingControl.value) {
+        if(matchingControlName == 'verificationKey' && this.rolesIdMap.get(control.value)?.need_key){
+          matchingControl.setErrors({ keyRequired: true });
+        }
+        if(matchingControlName == 'orgName' || matchingControlName == 'orgDescription'){
+          matchingControl.setErrors({ keyRequired: true });
+        }
       } else {
         matchingControl.setErrors(null);
       }
@@ -119,13 +143,40 @@ export class RegisterComponent implements OnInit {
       body['role'] = this.rolesIdMap.get(body['role'])?.name;
       this.loading = true;
       axios.post('/api/signup', body).then(res => {
+        let response = res.data as CommonHttpResponse;
+        if(response.status == 200){
+          this.router.navigate(['/login']);
+        } else {
+          this.snackBar.open(response.message,'X', {
+            duration: 5000,
+            verticalPosition: 'top',
+          });
+        }
         this.loading = false;
-        this.router.navigate(['/login']);
       }).catch(err => {
         this.loading = false;
         this.errorAxios = true;
         console.log(err);
       })
     }
+  }
+
+  /**
+   * This function opens a privacy policy dialog component
+   */
+  showPrivacyPolicy(){
+    this.dialog.open(PrivacyPolicyDialogComponent, {
+      height: '90%',
+      width: '50%'
+    });
+  }
+  /**
+   * This function opens a dialog box displaying the terms of service.
+   */
+  showTermService(){
+    this.dialog.open(TermsOfServiceDialogComponent, {
+      height: '90%',
+      width: '50%'
+    });
   }
 }

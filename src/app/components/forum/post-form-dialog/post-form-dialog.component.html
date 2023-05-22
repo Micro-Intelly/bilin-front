@@ -1,0 +1,38 @@
+<div *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</div>
+<div *ngIf="!loading">
+  <form [formGroup]="submitPost!" (ngSubmit)="onSubmit()">
+    <div class="my-2">
+      <mat-form-field class="w-100">
+        <mat-label>Title</mat-label>
+        <input
+          matInput
+          formControlName="title">
+      </mat-form-field>
+    </div>
+    <div class="my-2">
+      <angular-editor
+        formControlName="body"
+        [config]="editorConfig"
+      ></angular-editor>
+    </div>
+    <mat-hint>Max title length (HTML count): 100</mat-hint><br/>
+    <mat-hint>Max body length (HTML count): 10000</mat-hint><br/>
+    <mat-hint>Max size per image: 2MB</mat-hint><br/>
+    <mat-error *ngIf="formService.checkHasErrors('title')">
+      <mat-error *ngIf="formService.checkRequired('title')">{{'field-required' | translate}}</mat-error>
+      <mat-error *ngIf="formService.checkMaxLength('title')">Title require maximum length 100 characters
+      </mat-error>
+    </mat-error>
+    <mat-error *ngIf="formService.checkHasErrors('body')">
+      <mat-error *ngIf="formService.checkRequired('body')">{{'field-required' | translate}}</mat-error>
+      <mat-error *ngIf="formService.checkMaxLength('body')">Body require maximum length 10000 characters (count on HTML code mode)
+      </mat-error>
+    </mat-error>
+    <app-language-tag-form-field formControlName="lantag"></app-language-tag-form-field>
+    <button mat-raised-button [disabled]="submitPost!.invalid || loading">
+      Submit
+    </button>
+  </form>
+</div>
