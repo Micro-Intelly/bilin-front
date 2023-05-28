@@ -65,7 +65,7 @@ export class ProfileComponent implements OnInit {
       this.isLoggedIn = Boolean(value); // this.username will hold your value and modify it every time it changes
       if(this.isLoggedIn){
         this.currentUser = value;
-        this.currentUserThumbnail = environment.domain + '/'+ value.thumbnail;
+        this.currentUserThumbnail = environment.cdnDomain + '/'+ value.thumbnail;
         if(this.currentlimits.episode_limit < 0 || this.currentlimits.test_limit < 0){
           this.getLimits();
         }

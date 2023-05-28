@@ -1,7 +1,8 @@
 export const environment = {
   production: true,
   domain: 'http://localhost:8000',
-  logo: '/storage/image/application/logo/8a21ac2044494159bd0db18c06482bfa.png',
+  cdnDomain: 'https://bilin.fra1.cdn.digitaloceanspaces.com',
+  logo: '/public/image/application/logo/8a21ac2044494159bd0db18c06482bfa.png',
   apiEndpoints: {
     series: {
       index: '/api/series',

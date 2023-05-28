@@ -12,7 +12,7 @@ import {Utils} from "@app/utils/utils";
   styleUrls: ['./class-all.component.css']
 })
 export class ClassAllComponent implements OnInit {
-  domain: string = environment.domain;
+  domain: string = environment.cdnDomain;
   loading: boolean = true;
 
   tagSelected: Set<string> = new Set<string>();

@@ -14,6 +14,6 @@ export class PreviewNoteDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // console.log(this.data.body);
+    this.data.body = this.data.body.replace('img', 'img style="max-width: 100%;"')
   }
 }

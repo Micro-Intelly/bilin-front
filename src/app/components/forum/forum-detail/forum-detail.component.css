@@ -4,3 +4,7 @@
   border: 1px solid black;
   margin-top: 25px;
 }
+
+.image-max-size ::ng-deep img {
+  max-width: 100% !important;
+}

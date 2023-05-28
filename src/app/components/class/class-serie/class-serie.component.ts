@@ -33,6 +33,7 @@ import {NoteFormDialogComponent} from "@app/components/class/note-form-dialog/no
   styleUrls: ['./class-serie.component.css']
 })
 export class ClassSerieComponent implements OnInit {
+  environment = environment;
   domain: string = environment.domain;
   loading: boolean = true;
   showDetail: boolean = false;

@@ -3,6 +3,9 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {File} from "@app/models/file.model";
 import {environment} from "@environments/environment";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import axios, {Axios} from "axios";
+import {User} from "@app/models/user.model";
+import {CommonHttpResponse} from "@app/models/common-http-response.model";
 
 @Component({
   selector: 'app-preview-pdf-dialog',
@@ -20,7 +23,15 @@ export class PreviewPdfDialogComponent implements OnInit {
    * The ngOnInit function sets the pdfSrc variable to a URL that displays a file with a specific ID.
    */
   ngOnInit(): void {
-    this.pdfSrc = environment.domain + environment.apiEndpoints.files.show.replace('{:id}', this.data.id);
+    const url = environment.domain + environment.apiEndpoints.files.show.replace('{:id}', this.data.id);
+    axios.get(url).then((res) => {
+      this.pdfSrc = (res.data as CommonHttpResponse).message;
+    }).catch(err => {
+      this.snackBar.open(err, 'X', {
+        duration: 5000,
+        verticalPosition: 'top',
+      });
+    });
   }
 
   /**

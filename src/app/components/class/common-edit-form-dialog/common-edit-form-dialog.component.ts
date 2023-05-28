@@ -121,7 +121,8 @@ export class CommonEditFormDialogComponent implements OnInit {
     });
     this.resumable.on('fileSuccess', function(response, message){
       let res = JSON.parse(message);
-      thisComp.filePath = res.path + res.name;
+      // thisComp.filePath = res.path + res.name;
+      thisComp.filePath = res.path;
     });
     this.resumable.on('fileError', function(file, message){
       thisComp.snackBar.open(message, 'X', {
