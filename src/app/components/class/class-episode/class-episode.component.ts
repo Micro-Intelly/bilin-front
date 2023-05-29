@@ -16,7 +16,7 @@ export class ClassEpisodeComponent implements OnInit {
 
   @Input() currentEpisode: Episode | undefined;
   @Input() series: Serie | undefined;
-  streamUrl: string = '';
+  stream: string = '';
 
   /**
    * This is a constructor function
@@ -61,7 +61,7 @@ export class ClassEpisodeComponent implements OnInit {
     // this.streamUrl = environment.domain + environment.apiEndpoints.episodes.stream.replace('{:id}', this.currentEpisode!.id);
     const url = environment.domain + environment.apiEndpoints.episodes.streamUrl.replace('{:id}', this.currentEpisode!.id);
     axios.get(url).then((res) => {
-      this.streamUrl = (res.data as CommonHttpResponse).message;
+      this.stream = (res.data as CommonHttpResponse).message;
     }).catch(err => {
       this.snackBar.open(err, 'X', {
         duration: 5000,
