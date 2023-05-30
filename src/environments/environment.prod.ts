@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  domain: 'https://dolphin-app-74xri.ondigitalocean.app',
+  domain: 'https://dolphin-app-74xri.ondigitalocean.app/bilin-back',
   cdnDomain: 'https://bilin.fra1.cdn.digitaloceanspaces.com',
   logo: '/public/image/application/logo/8a21ac2044494159bd0db18c06482bfa.png',
   apiEndpoints: {
