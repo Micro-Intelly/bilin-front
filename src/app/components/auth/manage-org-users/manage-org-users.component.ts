@@ -101,6 +101,7 @@ export class ManageOrgUsersComponent implements OnInit {
             verticalPosition: 'top',
           })
           if(response.status === 200){
+            this.userEmail = '';
             this.getOrgUsers();
           }
         })
