@@ -3,6 +3,9 @@ import {Serie} from "@app/models/serie.model";
 import {Episode} from "@app/models/episode.model";
 import {environment} from "@environments/environment";
 import {Location} from "@angular/common";
+import axios from "axios";
+import {CommonHttpResponse} from "@app/models/common-http-response.model";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-class-episode',
@@ -13,13 +16,15 @@ export class ClassEpisodeComponent implements OnInit {
 
   @Input() currentEpisode: Episode | undefined;
   @Input() series: Serie | undefined;
-  streamUrl: string = '';
+  stream: string = '';
 
   /**
    * This is a constructor function
    * @param {Location} location
+   * @param snackBar
    */
-  constructor(private location: Location) { }
+  constructor(private location: Location,
+              private snackBar: MatSnackBar) { }
 
   /**
    * The ngOnInit function calls the refreshStreamUrl function.
@@ -53,7 +58,16 @@ export class ClassEpisodeComponent implements OnInit {
    * the domain and API endpoint.
    */
   refreshStreamUrl(){
-    this.streamUrl = environment.domain + environment.apiEndpoints.episodes.stream.replace('{:id}', this.currentEpisode!.id);
+    // this.streamUrl = environment.domain + environment.apiEndpoints.episodes.stream.replace('{:id}', this.currentEpisode!.id);
+    const url = environment.domain + environment.apiEndpoints.episodes.streamUrl.replace('{:id}', this.currentEpisode!.id);
+    axios.get(url).then((res) => {
+      this.stream = (res.data as CommonHttpResponse).message;
+    }).catch(err => {
+      this.snackBar.open(err, 'X', {
+        duration: 5000,
+        verticalPosition: 'top',
+      });
+    });
   }
 
   /**

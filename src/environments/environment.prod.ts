@@ -1,7 +1,8 @@
 export const environment = {
   production: true,
-  domain: 'http://localhost:8000',
-  logo: '/storage/image/application/logo/8a21ac2044494159bd0db18c06482bfa.png',
+  domain: 'https://dolphin-app-74xri.ondigitalocean.app/bilin-back',
+  cdnDomain: 'https://bilin.fra1.cdn.digitaloceanspaces.com',
+  logo: '/public/image/application/logo/8a21ac2044494159bd0db18c06482bfa.png',
   apiEndpoints: {
     series: {
       index: '/api/series',
@@ -57,7 +58,8 @@ export const environment = {
       show: '/api/files/{:id}'
     },
     episodes: {
-      stream: '/api/stream/{:id}'
+      stream: '/api/stream/{:id}',
+      streamUrl: '/api/streamUrl/{:id}'
     },
     comments: {
       index: '/api/comments/{:id}',

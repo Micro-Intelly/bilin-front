@@ -74,7 +74,7 @@ export class ManageOrgUsersComponent implements OnInit {
   actionHandler(event: any){
     if(event.user) {
       if (event.action == 'delete') {
-        const url = environment.domain + environment.apiEndpoints.organization.user.delete.replace('{:id}', this.currentUser.organization!.id).replace('{:idU}', event.user.id);
+        const url = environment.domain + environment.apiEndpoints.organization.user.delete.replace('{:id}', this.currentUser.organization_id!).replace('{:idU}', event.user.id);
         Utils.onDeleteDialog(url, this.dialog, this.snackBar)
           .subscribe(responseStatus => {
             if (responseStatus) {
@@ -92,7 +92,7 @@ export class ManageOrgUsersComponent implements OnInit {
   onSubmit(){
     if(this.submitAddUser?.valid){
       const body = this.submitAddUser.getRawValue();
-      const url = environment.domain + environment.apiEndpoints.organization.user.create.replace('{:id}', this.currentUser.organization!.id);
+      const url = environment.domain + environment.apiEndpoints.organization.user.create.replace('{:id}', this.currentUser.organization_id!);
       axios.post(url, body)
         .then(res => {
           const response = res.data as CommonHttpResponse;
@@ -101,6 +101,7 @@ export class ManageOrgUsersComponent implements OnInit {
             verticalPosition: 'top',
           })
           if(response.status === 200){
+            this.userEmail = '';
             this.getOrgUsers();
           }
         })

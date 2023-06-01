@@ -10,7 +10,7 @@
                fxFlex="20%"
                class="w-100 m-1 img-thumbnail"
                style="object-fit: contain;"
-               src="{{domain+'/'+seriesRecord?.image}}"
+               src="{{environment.cdnDomain+'/'+seriesRecord?.image}}"
                alt="series thumbnail"
                (click)="onEditImage()"
           >

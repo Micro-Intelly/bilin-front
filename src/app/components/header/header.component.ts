@@ -64,7 +64,7 @@ export class HeaderComponent implements OnInit {
       this.isLoggedIn = Boolean(value); // this.username will hold your value and modify it every time it changes
       if(this.isLoggedIn){
         this.currentUser = value;
-        this.currentUserThumbnail = environment.domain + '/'+ value.thumbnail;
+        this.currentUserThumbnail = environment.cdnDomain + '/'+ value.thumbnail;
         this.profileMenu = {...this.DEFAULT_MENU};
         if(! this.currentUser.role?.includes(environment.constants.role.organization)){
           // @ts-ignore

@@ -24,7 +24,7 @@ export class UserGridComponent implements OnInit {
   @Output()
   onActionClicked = new EventEmitter<{action: string, user: User}>();
 
-  domain: string = environment.domain;
+  domain: string = environment.cdnDomain;
 
   searchBy = [
     {value: 'Name', label: 'Name'},

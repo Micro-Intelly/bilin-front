@@ -29,7 +29,7 @@ export class SeriesGridComponent implements OnInit {
     return this._reloadToggle;
   }
 
-  domain: string = environment.domain;
+  domain: string = environment.cdnDomain;
   loading: boolean = true;
   gridSize: number = 4;
   page: number = 1;

@@ -12,7 +12,7 @@ import {Utils} from "@app/utils/utils";
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  domain: string = environment.domain;
+  domain: string = environment.cdnDomain;
   url: string = this.domain + '/api/video';
   languageList: Language[] = [];
   loading: boolean = true;
