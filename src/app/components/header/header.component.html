@@ -59,9 +59,9 @@
       </div>
     </div>
     <div fxFlex="20" fxLayoutAlign="end center">
-      <button mat-icon-button [matMenuTriggerFor]="lanMenu">
-        <mat-icon>language</mat-icon>
-      </button>
+<!--      <button mat-icon-button [matMenuTriggerFor]="lanMenu">-->
+<!--        <mat-icon>language</mat-icon>-->
+<!--      </button>-->
       <mat-menu #lanMenu="matMenu">
         <div *ngFor="let dropLan of dropdownLanguageItem | keyvalue">
           <button mat-menu-item class="{{ getLangClass(dropLan.key) }}" (click)="switchLanguage(dropLan.key)">

@@ -116,12 +116,17 @@ export class RegisterComponent implements OnInit {
         return;
       }
       if (!matchingControl.value) {
+        let noError = true;
         if(matchingControlName == 'verificationKey' && this.rolesIdMap.get(control.value)?.need_key){
           matchingControl.setErrors({ keyRequired: true });
-        }
-        if(matchingControlName == 'orgName' || matchingControlName == 'orgDescription'){
+          noError = false;
+        } else {noError = noError && true;}
+        if((matchingControlName == 'orgName' || matchingControlName == 'orgDescription') &&
+        this.rolesIdMap.get(control.value)?.name == 'Organization'){
           matchingControl.setErrors({ keyRequired: true });
-        }
+          noError = false;
+        } else {noError = noError && true;}
+        if(noError) { matchingControl.setErrors(null); }
       } else {
         matchingControl.setErrors(null);
       }
