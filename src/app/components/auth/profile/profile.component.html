@@ -34,7 +34,7 @@
         <div fxLayout="row wrap" fxLayoutAlign="start center">
           <p fxFlex="50"><b>Email: </b>{{currentUser.email}}</p>
           <p fxFlex="50"><b>Role: </b>{{currentUser.role}}</p>
-          <p fxFlex="100"><b>Usage: </b>Episode({{currentUser.episode_used}}/{{currentlimits.episode_limit}}) Test({{currentUser.test_used}}/{{currentlimits.test_limit}})</p>
+          <p fxFlex="100" *ngIf="currentUser.role == 'Org' || currentUser.role == 'Teacher'"><b>Usage: </b>Episode({{currentUser.episode_used}}/{{currentlimits.episode_limit}}) Test({{currentUser.test_used}}/{{currentlimits.test_limit}})</p>
           <p
             fxFlex="100"
             *ngIf="currentUser.organization"
@@ -62,13 +62,13 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
     <mat-list>
-      <mat-list-item class="mt-1">
-        <h4 matLine> Reset password </h4>
-        <button
-          mat-stroked-button color="primary"
-          (click)="resetPassword()"
-        >Reset</button>
-      </mat-list-item>
+<!--      <mat-list-item class="mt-1">-->
+<!--        <h4 matLine> Reset password </h4>-->
+<!--        <button-->
+<!--          mat-stroked-button color="primary"-->
+<!--          (click)="resetPassword()"-->
+<!--        >Reset</button>-->
+<!--      </mat-list-item>-->
       <mat-divider></mat-divider>
       <mat-list-item class="mt-1">
         <h4 matLine> Delete your account </h4>
