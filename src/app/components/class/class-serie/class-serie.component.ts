@@ -258,7 +258,7 @@ export class ClassSerieComponent implements OnInit {
       obj: 'episode',
       name: '',
       description: '',
-      url: environment.domain + environment.apiEndpoints.series.sections.episodes.create.replace('{:idSerie}', this.seriesRecord!.id).replace(':idSection', section.id),
+      url: environment.domain + environment.apiEndpoints.series.sections.episodes.create.replace('{:idSerie}', this.seriesRecord!.id).replace('{:idSection}', section.id),
       mode: 'create',
     }
     this.openCommonEditDialog(commEditData);
